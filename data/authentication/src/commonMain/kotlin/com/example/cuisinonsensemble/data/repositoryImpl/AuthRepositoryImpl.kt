@@ -5,6 +5,7 @@ import com.example.cuisinonsensemble.data.repository.AuthRepository
 import com.example.cuisinonsensemble.data.repository.AuthState
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +20,7 @@ class AuthRepositoryImpl(
     override suspend fun login(email: String, password: String): Result<Unit> {
         return try {
             _authState.value = AuthState.Loading
-            supabaseClient.auth.signInWith {
+            supabaseClient.auth.signInWith(Email) {
                 this.email = email
                 this.password = password
             }
@@ -39,7 +40,7 @@ class AuthRepositoryImpl(
     override suspend fun register(email: String, password: String): Result<Unit> {
         return try {
             _authState.value = AuthState.Loading
-            supabaseClient.auth.signUpWith {
+            supabaseClient.auth.signUpWith(Email) {
                 this.email = email
                 this.password = password
             }
