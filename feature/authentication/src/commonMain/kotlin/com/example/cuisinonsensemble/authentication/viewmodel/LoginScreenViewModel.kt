@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.example.cuisinonsensemble.data.repository.AuthRepository
 
 data class LoginScreenUiState(
     val email: String = "",
