@@ -97,6 +97,7 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    implementation(project(":data"))
     implementation(project(":feature:authentication"))
     implementation(project(":feature:shared"))
     implementation(project(":feature:splash"))

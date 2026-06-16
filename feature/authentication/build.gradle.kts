@@ -20,7 +20,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":data"))
             implementation(project(":feature:shared"))
+
             implementation(libs.koin.core)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
@@ -30,6 +32,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
         }
