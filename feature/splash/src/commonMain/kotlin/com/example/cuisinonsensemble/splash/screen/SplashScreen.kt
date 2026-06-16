@@ -1,4 +1,4 @@
-package com.example.cuisinonsensemble.ui.splash
+package com.example.cuisinonsensemble.splash.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +9,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+
+import com.example.cuisinonsensemble.splash.viewmodel.SplashScreenUiState
+import com.example.cuisinonsensemble.splash.viewmodel.SplashScreenViewModel
 
 @Composable
 fun SplashScreen(
@@ -23,7 +26,10 @@ fun SplashScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
         CircularProgressIndicator()
     }
 }

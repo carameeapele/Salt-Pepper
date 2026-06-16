@@ -44,12 +44,6 @@ kotlin {
             implementation(libs.kotlin.test)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -103,5 +97,8 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    implementation(project(":feature:authentication"))
+    implementation(project(":feature:shared"))
+    implementation(project(":feature:splash"))
 }
 
