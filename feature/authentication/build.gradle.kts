@@ -20,7 +20,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":data"))
+            implementation(project(":data:authentication"))
             implementation(project(":feature:shared"))
 
             implementation(libs.koin.core)

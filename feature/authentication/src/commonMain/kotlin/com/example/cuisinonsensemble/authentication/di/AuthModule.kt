@@ -1,9 +1,10 @@
 package com.example.cuisinonsensemble.authentication.di
 
 import com.example.cuisinonsensemble.authentication.viewmodel.LoginScreenViewModel
-import org.koin.core.module.dsl.viewModelOf
+import com.example.cuisinonsensemble.data.repository.AuthRepository
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val authModule = module {
-    viewModelOf(::LoginScreenViewModel)
+    viewModel { LoginScreenViewModel(get<AuthRepository>()) }
 }
