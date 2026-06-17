@@ -42,7 +42,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.cuisinonsensemble.splash"
+    namespace = "com.example.cuisinonsensemble.feature.splash"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

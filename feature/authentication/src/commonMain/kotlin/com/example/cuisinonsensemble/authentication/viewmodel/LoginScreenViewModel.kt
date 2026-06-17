@@ -41,7 +41,7 @@ class LoginScreenViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
-                authRepository.signIn(state.email, state.password)
+                authRepository.login(state.email, state.password)
                 _uiState.update { it.copy(isLoading = false, isLoginSuccessful = true) }
             } catch (e: Exception) {
                 _uiState.update {

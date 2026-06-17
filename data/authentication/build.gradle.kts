@@ -12,7 +12,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "DataModule"
+            baseName = "DataAuthentication"
             isStatic = true
         }
     }
@@ -22,6 +22,9 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
+
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
 
             // Supabase
             implementation(project.dependencies.platform(libs.supabase.bom))
@@ -40,7 +43,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.cuisinonsensemble.data"
+    namespace = "com.example.cuisinonsensemble.data.authentication"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

@@ -13,7 +13,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "SplashFeature"
+            baseName = "AuthenticationFeature"
             isStatic = true
         }
     }
@@ -48,7 +48,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.cuisinonsensemble.splash"
+    namespace = "com.example.cuisinonsensemble.feature.authentication"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
