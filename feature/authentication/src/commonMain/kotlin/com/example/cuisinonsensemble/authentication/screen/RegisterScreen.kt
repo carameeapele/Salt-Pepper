@@ -25,7 +25,7 @@ import com.example.cuisinonsensemble.authentication.viewmodel.RegisterScreenView
 fun RegisterScreen(
     modifier: Modifier = Modifier,
     viewModel: RegisterScreenViewModel,
-    onNavigateBack: () -> Unit,
+    onNavigateToLogin: () -> Unit,
     onRegisterSuccess: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -106,7 +106,7 @@ fun RegisterScreen(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
-            onClick = onNavigateBack,
+            onClick = onNavigateToLogin,
             enabled = !state.isLoading
         ) {
             Text(text = "Already have an account? Login")

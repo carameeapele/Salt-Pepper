@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -26,40 +25,49 @@ kotlin {
     }
     
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.activity.compose)
-        }
         commonMain.dependencies {
+            // Compose
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
+
+            // Lifecycle
+            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-        commonMain.dependencies {
+
+            // Koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-            implementation(libs.androidx.lifecycle.viewmodel)
-
+            // Navigation
             implementation(libs.navigation.compose)
 
+            // Coroutines & Serialization
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
 
+            // Supabase
             implementation(project.dependencies.platform(libs.supabase.bom))
             implementation(libs.supabase.auth)
             implementation(libs.ktor.client.core)
+
+            // Feature & data modules
+            implementation(projects.feature.authentication)
+            implementation(projects.feature.shared)
+            implementation(projects.feature.splash)
+            implementation(projects.data.authentication)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
         androidMain.dependencies {
+            implementation(libs.compose.uiToolingPreview)
+            implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
         }
         iosMain.dependencies {
@@ -97,9 +105,5 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
-    implementation(project(":data:authentication"))
-    implementation(project(":feature:authentication"))
-    implementation(project(":feature:shared"))
-    implementation(project(":feature:splash"))
 }
 

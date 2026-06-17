@@ -8,27 +8,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.cuisinonsensemble.navigation.RootNavigation
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 
 @Serializable
 object HomeDestination
 
-@Serializable
-data class DetailDestination(val itemId: String)
-
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        Surface {
-            val navController: NavHostController = rememberNavController()
-            NavHost(navController = navController, startDestination = HomeDestination) {
-                composable<HomeDestination> {
-                    val viewModel = koinViewModel<HomeViewModel>()
-
-                }
-            }
-        }
+        RootNavigation()
     }
 }
