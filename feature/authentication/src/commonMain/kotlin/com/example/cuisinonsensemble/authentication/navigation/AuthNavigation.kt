@@ -9,12 +9,14 @@ import org.koin.compose.viewmodel.koinViewModel
 fun NavGraphBuilder.authNavigation(
     onNavigateToRegister: () -> Unit,
     onNavigateToLogin: () -> Unit,
+    onLoginSuccess: () -> Unit,
+    onRegisterSuccess: () -> Unit
 ) {
     composable<AuthDestinations.Login> {
         LoginScreen(
             viewModel = koinViewModel(),
             onNavigateToRegister = onNavigateToRegister,
-            onLoginSuccess = TODO()
+            onLoginSuccess = onLoginSuccess
         )
     }
 
@@ -22,7 +24,7 @@ fun NavGraphBuilder.authNavigation(
         RegisterScreen(
             viewModel = koinViewModel(),
             onNavigateToLogin = onNavigateToLogin,
-            onRegisterSuccess = TODO()
+            onRegisterSuccess = onRegisterSuccess
         )
     }
 }

@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.cuisinonsensemble.authentication.navigation.AuthDestinations
 import com.example.cuisinonsensemble.authentication.navigation.authNavigation
+import com.example.cuisinonsensemble.splash.navigation.SplashDestination
+import com.example.cuisinonsensemble.splash.navigation.splashNavigation
 
 @Composable
 fun RootNavigation(
@@ -13,19 +15,28 @@ fun RootNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AuthDestinations.Login
+        startDestination = SplashDestination
     ) {
+        splashNavigation(
+            onNavigateToLogin = {
+                navController.navigate(AuthDestinations.Login) {
+                    popUpTo(SplashDestination) { inclusive = true }
+                }
+            }
+        )
         authNavigation(
             onNavigateToRegister = {
                 navController.navigate(AuthDestinations.Register) {
-                    popUpTo(AuthDestinations.Login) { saveState = true }
+                    popUpTo(AuthDestinations.Login) { inclusive = true }
                 }
             },
             onNavigateToLogin = {
                 navController.navigate(AuthDestinations.Login) {
                     popUpTo(AuthDestinations.Register) { inclusive = true }
                 }
-            }
+            },
+            onLoginSuccess = { },
+            onRegisterSuccess = { }
         )
     }
 }

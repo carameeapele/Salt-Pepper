@@ -3,6 +3,7 @@ package com.example.cuisinonsensemble.di
 import com.example.cuisinonsensemble.HomeViewModel
 import com.example.cuisinonsensemble.authentication.di.authModule
 import com.example.cuisinonsensemble.data.di.dataModule
+import com.example.cuisinonsensemble.splash.di.splashModule
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
@@ -15,6 +16,7 @@ val appModule = module {
 val allModules = listOf(
     dataModule,
     authModule,
+    splashModule,
     appModule
 )
 
