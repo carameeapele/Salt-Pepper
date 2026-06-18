@@ -20,11 +20,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.cuisinonsensemble.authentication.viewmodel.RegisterScreenViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    viewModel: RegisterScreenViewModel,
+    viewModel: RegisterScreenViewModel = koinViewModel(),
     onNavigateToLogin: () -> Unit,
     onRegisterSuccess: () -> Unit
 ) {
