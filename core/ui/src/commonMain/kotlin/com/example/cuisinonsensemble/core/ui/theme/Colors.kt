@@ -1,4 +1,5 @@
-package com.example.cuisinonsensemble.ui.theme
+package com.example.cuisinonsensemble.core.ui.theme
+
 import androidx.compose.ui.graphics.Color
 
 // Primary

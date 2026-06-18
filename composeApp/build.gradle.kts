@@ -61,6 +61,7 @@ kotlin {
             implementation(projects.feature.shared)
             implementation(projects.feature.splash)
             implementation(projects.data.authentication)
+            implementation(projects.core.ui)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
