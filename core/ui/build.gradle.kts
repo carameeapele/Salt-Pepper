@@ -29,6 +29,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(compose.components.resources)
         }
 
         androidMain.dependencies {
@@ -36,6 +37,11 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
     }
+}
+
+compose.resources{
+    publicResClass = true
+    generateResClass = always
 }
 
 android {
