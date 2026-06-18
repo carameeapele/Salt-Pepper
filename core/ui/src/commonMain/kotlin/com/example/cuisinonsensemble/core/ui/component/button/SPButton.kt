@@ -1,8 +1,8 @@
-    package com.example.cuisinonsensemble.core.ui.component.button
+package com.example.cuisinonsensemble.core.ui.component.button
 
-    import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Composable
 
-    @Composable
-    fun SPButton() {
+@Composable
+fun SPButton() {
 
-    }
+}
