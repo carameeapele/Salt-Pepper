@@ -29,3 +29,7 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":feature:authentication")
+include(":feature:shared")
+include(":feature:splash")
+include(":data:authentication")
