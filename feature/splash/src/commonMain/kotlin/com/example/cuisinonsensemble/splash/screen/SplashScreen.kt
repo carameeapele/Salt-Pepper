@@ -16,13 +16,13 @@ import com.example.cuisinonsensemble.splash.viewmodel.SplashScreenViewModel
 @Composable
 fun SplashScreen(
     viewModel: SplashScreenViewModel,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLanding: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(state) {
         if (state is SplashScreenUiState.Success) {
-            onNavigateToLogin()
+            onNavigateToLanding()
         }
     }
 

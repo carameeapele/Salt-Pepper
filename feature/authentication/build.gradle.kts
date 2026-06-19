@@ -22,6 +22,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":data:authentication"))
             implementation(project(":feature:shared"))
+            implementation(project(":core:ui"))
 
             // Koin
             implementation(libs.koin.core)
@@ -51,6 +52,11 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
     }
+}
+
+compose.resources{
+    publicResClass = true
+    generateResClass = always
 }
 
 android {
