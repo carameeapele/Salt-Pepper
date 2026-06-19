@@ -10,7 +10,8 @@ fun NavGraphBuilder.authNavigation(
     onNavigateToRegister: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onLoginSuccess: () -> Unit,
-    onRegisterSuccess: () -> Unit
+    onRegisterSuccess: () -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     composable<AuthDestinations.Landing> {
         LandingScreen(
@@ -22,7 +23,8 @@ fun NavGraphBuilder.authNavigation(
     composable<AuthDestinations.Login> {
         LoginScreen(
             onNavigateToRegister = onNavigateToRegister,
-            onLoginSuccess = onLoginSuccess
+            onLoginSuccess = onLoginSuccess,
+            onNavigateBack = onNavigateBack
         )
     }
 

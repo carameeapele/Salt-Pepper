@@ -36,7 +36,8 @@ fun RootNavigation(
                 }
             },
             onLoginSuccess = { },
-            onRegisterSuccess = { }
+            onRegisterSuccess = { },
+            onNavigateBack = { }
         )
     }
 }
