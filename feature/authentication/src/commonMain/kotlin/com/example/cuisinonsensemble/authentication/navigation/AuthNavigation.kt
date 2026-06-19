@@ -5,7 +5,6 @@ import androidx.navigation.compose.composable
 import com.example.cuisinonsensemble.authentication.screen.LandingScreen
 import com.example.cuisinonsensemble.authentication.screen.LoginScreen
 import com.example.cuisinonsensemble.authentication.screen.RegisterScreen
-import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.authNavigation(
     onNavigateToRegister: () -> Unit,
@@ -22,7 +21,6 @@ fun NavGraphBuilder.authNavigation(
 
     composable<AuthDestinations.Login> {
         LoginScreen(
-            viewModel = koinViewModel(),
             onNavigateToRegister = onNavigateToRegister,
             onLoginSuccess = onLoginSuccess
         )
@@ -30,7 +28,6 @@ fun NavGraphBuilder.authNavigation(
 
     composable<AuthDestinations.Register> {
         RegisterScreen(
-            viewModel = koinViewModel(),
             onNavigateToLogin = onNavigateToLogin,
             onRegisterSuccess = onRegisterSuccess
         )

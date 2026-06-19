@@ -10,7 +10,6 @@ fun NavGraphBuilder.splashNavigation(
 ) {
     composable<SplashDestination> {
         SplashScreen(
-            viewModel = koinViewModel(),
             onNavigateToLanding = onNavigateToLanding,
         )
     }
