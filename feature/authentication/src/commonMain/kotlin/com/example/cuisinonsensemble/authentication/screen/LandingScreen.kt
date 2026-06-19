@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.sp
 import cuisinonsensemble.feature.authentication.generated.resources.Res
 import cuisinonsensemble.feature.authentication.generated.resources.logosp
 import org.jetbrains.compose.resources.painterResource
+import ui.theme.NanumFont
+import ui.theme.RobotoMonoFont
 
 @Composable
 fun LandingScreen(
@@ -48,7 +50,7 @@ fun LandingScreenContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xffF3F9EB))
+            .background(Color(0xff263710))
             .padding(horizontal = 24.dp, vertical = 48.dp)
     ) {
         Column(
@@ -64,7 +66,8 @@ fun LandingScreenContent(
             Text(
                 text = "salt & pepper",
                 color = Color.White,
-                fontSize = 32.sp,
+                fontFamily = NanumFont(),
+                fontSize = 46.sp,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -73,7 +76,7 @@ fun LandingScreenContent(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Button(
                 onClick = onNavigateToLogin,
@@ -88,7 +91,8 @@ fun LandingScreenContent(
             ) {
                 Text(
                     text = "Se connecter",
-                    fontSize = 16.sp,
+                    fontFamily = RobotoMonoFont(),
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -106,7 +110,8 @@ fun LandingScreenContent(
             ) {
                 Text(
                     text = "S'inscrire",
-                    fontSize = 16.sp,
+                    fontFamily = RobotoMonoFont(),
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
             }
