@@ -37,7 +37,11 @@ fun RootNavigation(
             },
             onLoginSuccess = { },
             onRegisterSuccess = { },
-            onNavigateBack = { }
+            onNavigateBack = {
+                navController.navigate(AuthDestinations.Landing) {
+                    popUpTo(AuthDestinations.Landing) { inclusive = true }
+                }
+            }
         )
     }
 }

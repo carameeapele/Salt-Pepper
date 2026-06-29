@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -42,9 +43,14 @@ import androidx.compose.ui.unit.sp
 import com.example.cuisinonsensemble.authentication.viewmodel.LoginScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import ui.theme.RobotoMonoFont
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.IconButton
 
 private val PrimaryGreen = Color(0xff8CC63F)
-private val TextGray = Color(0xFF9E9E9E)
+private val TextGray = Color(0xff7293A0)
 private val BorderColor = Color(0xFFE0E0E0)
 
 @Composable
@@ -78,6 +84,7 @@ fun LoginScreen(
 
 @Composable
 fun LoginScreenContent(
+    modifier: Modifier = Modifier,
     email: String = "",
     password: String = "",
     isLoading: Boolean = false,
@@ -92,12 +99,12 @@ fun LoginScreenContent(
     var passwordVisible by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp)
     ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(top = 60.dp)
         ) {
@@ -106,12 +113,12 @@ fun LoginScreenContent(
                 onClick = onNavigateBack,
                 colors = ButtonDefaults.textButtonColors(contentColor = Color(0xff8CC63F))
             ) {
-//                Icon(
-//                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//                    contentDescription = "Retour",
-//                    modifier = Modifier.size(18.dp)
-//                )
-//                Spacer(modifier = Modifier.size(4.dp))
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Retour",
+                    modifier = modifier.size(18.dp)
+                )
+                Spacer(modifier = modifier.size(4.dp))
                 Text(
                     text = "Retour",
                     fontFamily = RobotoMonoFont(),
@@ -132,7 +139,7 @@ fun LoginScreenContent(
             Text(
                 text = "Connectez-vous pour continuer",
                 fontFamily = RobotoMonoFont(),
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 color = TextGray
             )
 
@@ -141,11 +148,14 @@ fun LoginScreenContent(
             Text(
                 text = "Email",
                 fontFamily = RobotoMonoFont(),
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 color = Color.Black
             )
+
             Spacer(modifier = Modifier.height(8.dp))
+
             OutlinedTextField(
+                modifier = modifier.fillMaxWidth(),
                 value = email,
                 onValueChange = onEmailChange,
                 placeholder = {
@@ -155,13 +165,13 @@ fun LoginScreenContent(
                         color = TextGray
                     )
                               },
-//                    leadingIcon = {
-//                        Icon(
-//                            imageVector = Icons.Default.Email,
-//                            contentDescription = null,
-//                            tint = PrimaryGreen
-//                        )
-//                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Email,
+                            contentDescription = null,
+                            tint = PrimaryGreen
+                        )
+                    },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -169,42 +179,45 @@ fun LoginScreenContent(
                     unfocusedBorderColor = BorderColor,
                     focusedLeadingIconColor = PrimaryGreen
                 ),
-                modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading,
                 singleLine = true
             )
+
             Spacer(modifier = Modifier.height(28.dp))
 
             Text(
                 text = "Password",
                 fontFamily = RobotoMonoFont(),
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 color = Color.Black
             )
+
             Spacer(modifier = Modifier.height(8.dp))
+
             OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = password,
                 onValueChange = onPasswordChange,
                 placeholder = { Text("••••••••••••", color = TextGray) },
-//                    leadingIcon = {
-//                        Icon(
-//                            imageVector = Icons.Default.Lock,
-//                            contentDescription = null,
-//                            tint = PrimaryGreen
-//                        )
-//                    },
-//                    trailingIcon = {
-//                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
-//                            Icon(
-//                                imageVector = if (passwordVisible)
-//                                    Icons.Default.Lock
-//                                else
-//                                    Icons.Default.Lock, // swap for eye icon if you have one
-//                                contentDescription = if (passwordVisible) "Masquer" else "Afficher",
-//                                tint = PrimaryGreen
-//                            )
-//                        }
-//                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null,
+                            tint = PrimaryGreen
+                        )
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(
+                                imageVector = if (passwordVisible)
+                                    Icons.Default.Lock
+                                else
+                                    Icons.Default.Lock,
+                                contentDescription = if (passwordVisible) "Masquer" else "Afficher",
+                                tint = PrimaryGreen
+                            )
+                        }
+                    },
                 visualTransformation = if (passwordVisible)
                     VisualTransformation.None
                 else
@@ -215,11 +228,20 @@ fun LoginScreenContent(
                     focusedBorderColor = PrimaryGreen,
                     unfocusedBorderColor = BorderColor
                 ),
-                modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading,
                 singleLine = true
             )
+            errorMessage?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = it,
+                    color = Color.Red,
+                    fontSize = 13.sp
+                )
+            }
+
             Spacer(modifier = Modifier.height(10.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
@@ -231,19 +253,10 @@ fun LoginScreenContent(
                     Text(
                         text = "Mot de passe oublié ?",
                         fontFamily = RobotoMonoFont(),
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
-            }
-
-            errorMessage?.let {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    fontSize = 13.sp
-                )
             }
         }
 
@@ -251,14 +264,14 @@ fun LoginScreenContent(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(bottom = 40.dp),
+                .padding(bottom = 60.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = onLoginClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
+                onClick = onLoginClick,
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = PrimaryGreen,
@@ -268,8 +281,8 @@ fun LoginScreenContent(
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
-                        color = Color.White,
                         modifier = Modifier.size(24.dp),
+                        color = Color.White,
                         strokeWidth = 2.dp
                     )
                 } else {
@@ -282,7 +295,7 @@ fun LoginScreenContent(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
                 text = buildAnnotatedString {
@@ -293,11 +306,11 @@ fun LoginScreenContent(
                         append("S'inscrire")
                     }
                 },
-                modifier = androidx.compose.ui.Modifier.then(
+                modifier = Modifier.then(
                     Modifier.padding(0.dp)
                 ),
                 fontFamily = RobotoMonoFont(),
-                fontSize = 14.sp
+                fontSize = 16.sp
             )
         }
     }
