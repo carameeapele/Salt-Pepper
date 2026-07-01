@@ -48,6 +48,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.IconButton
+import com.example.cuisinonsensemble.authentication.component.AuthBottomButtons
 
 private val PrimaryGreen = Color(0xff8CC63F)
 private val TextGray = Color(0xff7293A0)
@@ -263,54 +264,14 @@ fun LoginScreenContent(
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(bottom = 60.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                onClick = onLoginClick,
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PrimaryGreen,
-                    contentColor = Color.White
-                ),
-                enabled = !isLoading
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Color.White,
-                        strokeWidth = 2.dp
-                    )
-                } else {
-                    Text(
-                        text = "Se connecter",
-                        fontFamily = RobotoMonoFont(),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(SpanStyle(color = TextGray)) {
-                        append("Pas encore de compte ?  ")
-                    }
-                    withStyle(SpanStyle(color = PrimaryGreen, fontWeight = FontWeight.Bold)) {
-                        append("S'inscrire")
-                    }
-                },
-                modifier = Modifier.then(
-                    Modifier.padding(0.dp)
-                ),
-                fontFamily = RobotoMonoFont(),
-                fontSize = 16.sp
+            AuthBottomButtons(
+                mainButtonText ="Se connecter",
+                onMainButtonClick = onLoginClick,
+                helperText = "Pas encore de compte ?",
+                redirectionButtonText = "S'inscrire",
+                onRedirectionButtonClick = onNavigateToRegister,
+                isLoading = isLoading
             )
         }
     }

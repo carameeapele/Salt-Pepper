@@ -100,3 +100,7 @@ internal val Secondary900 = Color(0xff402107)
 
 // Surface Color
 internal val surfaceLight = Color(0xffFBFBFB)
+
+// Text Color
+internal val lightText = Color(0xffFFFFFF)
+internal val darkGreyText = Color(0xff7293A0)
