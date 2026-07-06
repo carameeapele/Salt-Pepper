@@ -29,8 +29,8 @@ private val LightColorScheme = lightColorScheme(
     errorContainer = Red50,
     onErrorContainer = Red900,
 
-    outline = Grey300,
-    outlineVariant = Grey100,
+    outline = Grey500,
+    outlineVariant = Grey300,
 )
 
 private val DarkColorScheme = darkColorScheme(

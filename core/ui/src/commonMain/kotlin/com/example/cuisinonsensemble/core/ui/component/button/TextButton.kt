@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,19 +31,22 @@ fun TextButton(
     onClick: () -> Unit,
     text: String,
     color: Color = MaterialTheme.colorScheme.primary,
-    leftIcon: Painter? = null,
-    rightIcon: Painter? = null,
+    leftIcon: ImageVector? = null,
+    rightIcon: ImageVector? = null,
     enabled: Boolean = true
 ) {
     Button(
-        modifier = modifier,
+        modifier = modifier.height(buttonVariant.textOnlyHeight),
         onClick = onClick,
         shape = RoundedCornerShape(buttonVariant.cornerRadius),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
             contentColor = color
         ),
-        contentPadding = PaddingValues(horizontal = buttonVariant.horizontalPadding, vertical = buttonVariant.verticalPadding),
+        contentPadding = PaddingValues(
+            horizontal = 4.dp,
+            vertical = 2.dp
+        ),
         enabled = enabled
     ) {
         Row(
@@ -51,7 +55,7 @@ fun TextButton(
         ) {
             if (leftIcon != null) {
                 Icon(
-                    painter = leftIcon,
+                    imageVector = leftIcon,
                     contentDescription = null,
                     modifier = Modifier.size(buttonVariant.iconSize)
                 )
@@ -65,7 +69,7 @@ fun TextButton(
             if (rightIcon != null) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
-                    painter = rightIcon,
+                    imageVector = rightIcon,
                     contentDescription = null,
                     modifier = Modifier.size(buttonVariant.iconSize)
                 )

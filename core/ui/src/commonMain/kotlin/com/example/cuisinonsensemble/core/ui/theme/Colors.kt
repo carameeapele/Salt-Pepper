@@ -103,4 +103,3 @@ internal val surfaceLight = Color(0xffFBFBFB)
 
 // Text Color
 internal val lightText = Color(0xffFFFFFF)
-internal val darkGreyText = Color(0xff7293A0)

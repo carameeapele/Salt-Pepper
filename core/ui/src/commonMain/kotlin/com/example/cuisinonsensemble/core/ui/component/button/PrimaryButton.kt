@@ -1,6 +1,7 @@
 package com.example.cuisinonsensemble.core.ui.component.button
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -41,6 +42,10 @@ fun PrimaryButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor
+        ),
+        contentPadding = PaddingValues(
+            horizontal = buttonVariant.horizontalPadding,
+            vertical = buttonVariant.verticalPadding
         ),
         enabled = enabled
     ) {

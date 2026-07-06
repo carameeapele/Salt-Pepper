@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.sp
 
 enum class ButtonVariant(
     val height: Dp,
+    val textOnlyHeight: Dp,
     val textSize: TextUnit,
     val iconSize: Dp,
     val horizontalPadding: Dp,
@@ -15,6 +16,7 @@ enum class ButtonVariant(
 ) {
     GIANT(
         height = 56.dp,
+        textOnlyHeight = 36.dp,
         textSize = 20.sp,
         iconSize = 24.dp,
         horizontalPadding = 24.dp,
@@ -23,6 +25,7 @@ enum class ButtonVariant(
     ),
     LARGE(
         height = 48.dp,
+        textOnlyHeight = 32.dp,
         textSize = 18.sp,
         iconSize = 22.dp,
         horizontalPadding = 20.dp,
@@ -31,6 +34,7 @@ enum class ButtonVariant(
     ),
     MEDIUM(
         height = 40.dp,
+        textOnlyHeight = 28.dp,
         textSize = 16.sp,
         iconSize = 20.dp,
         horizontalPadding = 16.dp,
@@ -39,6 +43,7 @@ enum class ButtonVariant(
     ),
     SMALL(
         height = 32.dp,
+        textOnlyHeight = 24.dp,
         textSize = 13.sp,
         iconSize = 18.dp,
         horizontalPadding = 12.dp,
@@ -47,8 +52,9 @@ enum class ButtonVariant(
     ),
     TINY(
         height = 24.dp,
+        textOnlyHeight = 16.dp,
         textSize = 10.sp,
-        iconSize = 16.dp,
+        iconSize = 12.dp,
         horizontalPadding = 8.dp,
         verticalPadding = 6.dp,
         cornerRadius = 6.dp
