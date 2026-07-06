@@ -1,4 +1,4 @@
-package ui.theme
+package com.example.cuisinonsensemble.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable

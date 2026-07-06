@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.sp
 import cuisinonsensemble.feature.authentication.generated.resources.Res
 import cuisinonsensemble.feature.authentication.generated.resources.logosp
 import org.jetbrains.compose.resources.painterResource
-import ui.theme.NanumFont
-import ui.theme.RobotoMonoFont
+import com.example.cuisinonsensemble.core.ui.theme.NanumFont
+import com.example.cuisinonsensemble.core.ui.theme.RobotoMonoFont
 
 @Composable
 fun LandingScreen(
