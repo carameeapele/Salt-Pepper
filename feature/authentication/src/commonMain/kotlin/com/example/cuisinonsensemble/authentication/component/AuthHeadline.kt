@@ -20,7 +20,7 @@ fun AuthHeadline(
     subtitle: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
             text = title,
