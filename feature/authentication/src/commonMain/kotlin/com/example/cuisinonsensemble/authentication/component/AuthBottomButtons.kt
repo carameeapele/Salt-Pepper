@@ -17,8 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cuisinonsensemble.core.ui.component.button.ButtonVariant
 import com.example.cuisinonsensemble.core.ui.component.button.PrimaryButton
-import com.example.cuisinonsensemble.core.ui.component.button.TextButton
+import com.example.cuisinonsensemble.core.ui.component.button.CustomTextButton
 import com.example.cuisinonsensemble.core.ui.theme.SaltPepperTheme
+import cuisinonsensemble.core.ui.generated.resources.Res
+import cuisinonsensemble.core.ui.generated.resources.login_button_text
+import cuisinonsensemble.core.ui.generated.resources.no_account_helper_text
+import cuisinonsensemble.core.ui.generated.resources.register_redirection_button_text
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -54,7 +59,7 @@ fun AuthBottomButtons(
                 fontSize = 16.sp
             )
             Spacer(modifier = Modifier.width(12.dp))
-            TextButton(
+            CustomTextButton(
                 buttonVariant = ButtonVariant.MEDIUM,
                 onClick = onRedirectionButtonClick,
                 text = redirectionButtonText,
@@ -70,10 +75,10 @@ fun AuthBottomButtons(
 fun AuthBottomButtonsPreview() {
     SaltPepperTheme {
         AuthBottomButtons(
-            mainButtonText = "Se connecter",
+            mainButtonText = stringResource(Res.string.login_button_text),
             onMainButtonClick = { },
-            helperText = "Pas encore de compte ?",
-            redirectionButtonText = "S'inscrire",
+            helperText = stringResource(Res.string.no_account_helper_text),
+            redirectionButtonText = stringResource(Res.string.register_redirection_button_text),
             onRedirectionButtonClick = { }
         )
     }

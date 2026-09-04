@@ -1,0 +1,28 @@
+<resources>
+    <string name="back">Back</string>
+    <string name="ok">OK</string>
+    <string name="error_dialog_title">Something went wrong</string>
+
+    // LoginScreen
+    <string name="login_title">Welcome back</string>
+    <string name="login_subtitle">Login to continue</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">jean.dupont@mail.com</string>
+    <string name="password_label">Password</string>
+    <string name="password_placeholder">••••••••••••</string>
+    <string name="login_button_text">Login</string>
+    <string name="no_account_helper_text">Don't have an account yet?</string>
+    <string name="register_redirection_button_text">Sign up</string>
+
+    // RegisterScreen
+    <string name="register_title">Create an account</string>
+    <string name="register_subtitle">Start your culinary adventure</string>
+    <string name="full_name_label">Full name</string>
+    <string name="full_name_placeholder">Jean Dupont</string>
+    <string name="confirm_password_label">Confirm password</string>
+    <string name="accept_terms_of_use_label">I accept the</string>
+    <string name="terms_of_use_button">Terms of Use</string>
+    <string name="register_button_text">Register</string>
+    <string name="already_registered_helper_text">Do you already have an account?</string>
+    <string name="signin_redirection_button_text">Log in</string>
+</resources>

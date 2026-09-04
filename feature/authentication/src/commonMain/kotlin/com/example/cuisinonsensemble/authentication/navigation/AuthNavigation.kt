@@ -31,7 +31,8 @@ fun NavGraphBuilder.authNavigation(
     composable<AuthDestinations.Register> {
         RegisterScreen(
             onNavigateToLogin = onNavigateToLogin,
-            onRegisterSuccess = onRegisterSuccess
+            onRegisterSuccess = onRegisterSuccess,
+            onNavigateBack = onNavigateBack
         )
     }
 }

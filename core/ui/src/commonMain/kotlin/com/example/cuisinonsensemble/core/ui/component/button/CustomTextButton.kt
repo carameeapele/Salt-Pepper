@@ -22,10 +22,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.cuisinonsensemble.core.ui.theme.SaltPepperTheme
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun TextButton(
+fun CustomTextButton(
     modifier: Modifier = Modifier,
     buttonVariant: ButtonVariant,
     onClick: () -> Unit,
@@ -80,10 +81,12 @@ fun TextButton(
 
 @Preview
 @Composable
-fun TextButtonPreview() {
-    TextButton(
-        buttonVariant = ButtonVariant.GIANT,
-        onClick = { },
-        text = "Button"
-    )
+fun CustomTextButtonPreview() {
+    SaltPepperTheme {
+        CustomTextButton(
+            buttonVariant = ButtonVariant.GIANT,
+            onClick = { },
+            text = "Button"
+        )
+    }
 }

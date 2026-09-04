@@ -31,9 +31,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cuisinonsensemble.core.ui.theme.SaltPepperTheme
+import cuisinonsensemble.core.ui.generated.resources.Res
+import cuisinonsensemble.core.ui.generated.resources.email_label
+import cuisinonsensemble.core.ui.generated.resources.email_placeholder
+import cuisinonsensemble.core.ui.generated.resources.password_label
+import cuisinonsensemble.core.ui.generated.resources.password_placeholder
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun SPOutlinedTextField(
+fun CustomOutlinedTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
@@ -143,13 +149,13 @@ fun SPOutlinedTextField(
 
 @Preview
 @Composable
-fun SPOutlinedTextFieldPreview() {
+fun CustomOutlinedTextFieldPreview() {
     SaltPepperTheme {
-        SPOutlinedTextField(
+        CustomOutlinedTextField(
             value = "",
-            label = "Email",
+            label = stringResource(Res.string.email_label),
             onValueChange = { },
-            placeholder = "example@mail.com",
+            placeholder = stringResource(Res.string.email_placeholder),
             leadingIcon = Icons.Outlined.Email,
             visibilityToggle = false,
             keyboardType = KeyboardType.Email,
@@ -161,13 +167,13 @@ fun SPOutlinedTextFieldPreview() {
 
 @Preview
 @Composable
-fun SPOutlinedTextFieldPreviewWithVisibilityToggle() {
+fun CustomOutlinedTextFieldPreviewWithVisibilityToggle() {
     SaltPepperTheme {
-        SPOutlinedTextField(
+        CustomOutlinedTextField(
             value = "",
-            label = "Password",
+            label = stringResource(Res.string.password_label),
             onValueChange = { },
-            placeholder = "---------",
+            placeholder = stringResource(Res.string.password_placeholder),
             leadingIcon = Icons.Outlined.Lock,
             visibilityToggle = true,
             keyboardType = KeyboardType.Password,

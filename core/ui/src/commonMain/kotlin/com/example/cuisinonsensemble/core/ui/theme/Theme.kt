@@ -23,6 +23,7 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Grey900,
     surfaceVariant = Grey50,
     onSurfaceVariant = Grey700,
+    surfaceTint = Grey100,
 
     error = Red500,
     onError = surfaceLight,
@@ -30,7 +31,7 @@ private val LightColorScheme = lightColorScheme(
     onErrorContainer = Red900,
 
     outline = Grey500,
-    outlineVariant = Grey300,
+    outlineVariant = Grey200,
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -45,11 +46,12 @@ private val DarkColorScheme = darkColorScheme(
     onSecondaryContainer = Secondary50,
 
     background = Primary900,
-    onBackground = Grey50,
+    onBackground = Grey500,
     surface = Primary800,
     onSurface = Grey50,
     surfaceVariant = Grey900,
     onSurfaceVariant = Grey300,
+    surfaceTint = Grey100,
 
     error = Red300,
     onError = Red900,
@@ -69,7 +71,7 @@ fun SaltPepperTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = RobotoMonoTypography(),
+        typography = SaltPepperTypography(),
         content = content
     )
 }
