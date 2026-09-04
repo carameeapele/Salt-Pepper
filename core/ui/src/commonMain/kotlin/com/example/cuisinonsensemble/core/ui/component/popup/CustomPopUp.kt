@@ -78,20 +78,36 @@ fun CustomPopUp(
                     placeholder = "Placeholder"
                 )
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+            if (popUpVariant == PopUpVariant.HORIZONTAL_BUTTONS) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    dismissButtonText?.let {
+                        CustomOutlinedButton(
+                            modifier = Modifier.weight(1f),
+                            onClick = onDismiss,
+                            text = dismissButtonText,
+                            borderColor = MaterialTheme.colorScheme.outline
+                        )
+                    }
+                    PrimaryButton(
+                        modifier = Modifier.weight(1f),
+                        onClick = onConfirm,
+                        text = confirmButtonText,
+                    )
+                }
+            } else {
                 dismissButtonText?.let {
                     CustomOutlinedButton(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxWidth(),
                         onClick = onDismiss,
                         text = dismissButtonText,
                         borderColor = MaterialTheme.colorScheme.outline
                     )
                 }
                 PrimaryButton(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = onConfirm,
                     text = confirmButtonText,
                 )
@@ -110,6 +126,24 @@ private fun CustomPopUpPreview() {
             message = "Keep your messages short, but make sure they cover everything you need to say.",
             confirmButtonText = "Confirm",
             onConfirm = { },
+            dismissButtonText = "Dismiss",
+            onDismiss = { },
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun CustomPopUpWithTextFieldPreview() {
+    SaltPepperTheme {
+        CustomPopUp(
+            title = "Title",
+            popUpVariant = PopUpVariant.VERTICAL_BUTTONS,
+            icon = Icons.Default.ErrorOutline,
+            message = "Keep your messages short, but make sure they cover everything you need to say.",
+            confirmButtonText = "Confirm",
+            onConfirm = { },
+            hasTextField = true,
             dismissButtonText = "Dismiss",
             onDismiss = { },
         )
