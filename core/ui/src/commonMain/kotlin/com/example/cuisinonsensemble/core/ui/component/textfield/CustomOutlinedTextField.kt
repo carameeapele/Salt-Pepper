@@ -22,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -67,7 +66,10 @@ fun CustomOutlinedTextField(
         if (label != null) {
             Text(
                 text = label,
-                color = MaterialTheme.colorScheme.outline,
+                color = if (isError)
+                    MaterialTheme.colorScheme.error
+                else
+                    MaterialTheme.colorScheme.outline,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(bottom = 8.dp)
@@ -90,10 +92,7 @@ fun CustomOutlinedTextField(
                 Icon(
                     imageVector = leadingIcon,
                     contentDescription = null,
-                    tint = if (isError)
-                        MaterialTheme.colorScheme.error
-                    else
-                        MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary
                 )}
             } else null,
             trailingIcon = when {
@@ -123,8 +122,8 @@ fun CustomOutlinedTextField(
                 else -> null
             },
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
                 unfocusedBorderColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
                 focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
@@ -142,7 +141,7 @@ fun CustomOutlinedTextField(
         if (helperText != null) {
             Text(
                 text = helperText,
-                color = MaterialTheme.colorScheme.outline,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(top = 4.dp)
             )
@@ -162,7 +161,6 @@ fun CustomOutlinedTextFieldPreview() {
             leadingIcon = Icons.Outlined.Email,
             visibilityToggle = false,
             keyboardType = KeyboardType.Email,
-            helperText = "This field is mandatory",
             enabled = true
         )
     }
@@ -181,7 +179,8 @@ fun CustomOutlinedTextFieldPreviewWithVisibilityToggle() {
             visibilityToggle = true,
             keyboardType = KeyboardType.Password,
             helperText = "This field is mandatory",
-            enabled = true
+            enabled = true,
+            isError = true
         )
     }
 }

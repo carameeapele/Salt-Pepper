@@ -23,6 +23,6 @@
     <string name="accept_terms_of_use_label">I accept the</string>
     <string name="terms_of_use_button">Terms of Use</string>
     <string name="register_button_text">Register</string>
-    <string name="already_registered_helper_text">Do you already have an account?</string>
+    <string name="already_registered_helper_text">Already have an account?</string>
     <string name="signin_redirection_button_text">Log in</string>
 </resources>

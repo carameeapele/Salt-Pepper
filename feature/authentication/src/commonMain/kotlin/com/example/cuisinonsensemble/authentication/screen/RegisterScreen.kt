@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Lock
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.cuisinonsensemble.authentication.component.AuthBottomButtons
+import com.example.cuisinonsensemble.authentication.component.AuthHeadline
 import com.example.cuisinonsensemble.authentication.model.RegisterScreenUiModel
 import com.example.cuisinonsensemble.authentication.viewmodel.RegisterScreenEvent
 import com.example.cuisinonsensemble.authentication.viewmodel.RegisterScreenViewModel
@@ -42,6 +44,8 @@ import cuisinonsensemble.core.ui.generated.resources.ok
 import cuisinonsensemble.core.ui.generated.resources.password_label
 import cuisinonsensemble.core.ui.generated.resources.password_placeholder
 import cuisinonsensemble.core.ui.generated.resources.register_button_text
+import cuisinonsensemble.core.ui.generated.resources.register_subtitle
+import cuisinonsensemble.core.ui.generated.resources.register_title
 import cuisinonsensemble.core.ui.generated.resources.signin_redirection_button_text
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -95,9 +99,10 @@ fun RegisterScreenContent(
         CustomPopUp(
             title = stringResource(Res.string.error_dialog_title),
             message = message,
+            icon = Icons.Default.ErrorOutline,
             confirmButtonText = stringResource(Res.string.ok),
             onDismiss = onDismissSubmitError,
-            onConfirm = { }
+            onConfirm = onDismissSubmitError
         )
     }
 
@@ -117,6 +122,15 @@ fun RegisterScreenContent(
                 leftIcon = Icons.AutoMirrored.Filled.ArrowBack
             )
 
+            Spacer(modifier = modifier.height(28.dp))
+
+            AuthHeadline(
+                title = stringResource(Res.string.register_title),
+                subtitle = stringResource(Res.string.register_subtitle)
+            )
+
+            Spacer(modifier = modifier.height(52.dp))
+
             CustomOutlinedTextField(
                 value = uiModel.name,
                 onValueChange = onNameChange,
@@ -126,7 +140,7 @@ fun RegisterScreenContent(
                 enabled = !isLoading
             )
 
-            Spacer(modifier = modifier.height(28.dp))
+            Spacer(modifier = modifier.height(16.dp))
 
             CustomOutlinedTextField(
                 value = uiModel.email,
@@ -162,7 +176,7 @@ fun RegisterScreenContent(
                 value = uiModel.confirmPassword,
                 onValueChange = onConfirmPasswordChange,
                 label = stringResource(Res.string.confirm_password_label),
-                placeholder = "",
+                placeholder = stringResource(Res.string.password_placeholder),
                 leadingIcon = Icons.Outlined.Lock,
                 visibilityToggle = true,
                 keyboardType = KeyboardType.Password,

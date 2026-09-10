@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cuisinonsensemble.core.ui.component.button.ButtonVariant
-import com.example.cuisinonsensemble.core.ui.component.button.PrimaryButton
 import com.example.cuisinonsensemble.core.ui.component.button.CustomTextButton
+import com.example.cuisinonsensemble.core.ui.component.button.PrimaryButton
 import com.example.cuisinonsensemble.core.ui.theme.SaltPepperTheme
 import cuisinonsensemble.core.ui.generated.resources.Res
 import cuisinonsensemble.core.ui.generated.resources.login_button_text

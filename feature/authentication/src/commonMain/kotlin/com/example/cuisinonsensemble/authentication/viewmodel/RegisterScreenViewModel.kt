@@ -79,19 +79,22 @@ class RegisterScreenViewModel(
         viewModelScope.launch {
             _uiModel.update { it.copy(isLoading = true, submitErrorMessage = null) }
 
-            try {
-                authRepository.register(currentModel.email.trim(), currentModel.password)
-                _uiModel.update { it.copy(isLoading = false) }
-                _events.send(RegisterScreenEvent.RegisterSucceeded)
-            } catch (e: Exception) {
-                _uiModel.update {
-                    it.copy(
-                        isLoading = false,
-                        submitErrorMessage = e.message
-                            ?: "Registration failed. Please check your connection and try again."
-                    )
+            val result = authRepository.register(currentModel.email.trim(), currentModel.password)
+
+            result.fold(
+                onSuccess = {
+                    _uiModel.update { it.copy(isLoading = false) }
+                    _events.send(RegisterScreenEvent.RegisterSucceeded)
+                },
+                onFailure = {
+                    _uiModel.update {
+                        it.copy(
+                            isLoading = false,
+                            submitErrorMessage = "The service is currently unavailable. Please try again later."
+                        )
+                    }
                 }
-            }
+            )
         }
     }
 
@@ -138,7 +141,7 @@ class RegisterScreenViewModel(
             return ValidationError(Field.CONFIRM_PASSWORD, "Please confirm your password")
         }
         if (password != state.confirmPassword) {
-            return ValidationError(Field.CONFIRM_PASSWORD, "Passwords do not match")
+            return ValidationError(Field.CONFIRM_PASSWORD, "Passwords must match")
         }
 
         return null

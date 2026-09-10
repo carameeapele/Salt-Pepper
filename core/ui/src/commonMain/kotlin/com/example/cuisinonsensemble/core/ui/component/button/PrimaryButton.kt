@@ -33,7 +33,7 @@ fun PrimaryButton(
     onClick: () -> Unit,
     text: String,
     containerColor: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = Color.White,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
     leftIcon: Painter? = null,
     rightIcon: Painter? = null,
     enabled: Boolean = true,

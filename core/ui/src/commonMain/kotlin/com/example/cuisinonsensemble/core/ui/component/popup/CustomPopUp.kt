@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +46,7 @@ fun CustomPopUp(
         modifier = modifier
             .border(
                 width = 1.5.dp,
-                color = MaterialTheme.colorScheme.surfaceTint,
+                color = MaterialTheme.colorScheme.outlineVariant,
                 shape = RoundedCornerShape(size = 12.dp)
             )
             .background(
@@ -59,16 +60,23 @@ fun CustomPopUp(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            icon?.let {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMediumEmphasized,
+                style = MaterialTheme.typography.titleLargeEmphasized,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Justify
+                textAlign = TextAlign.Center
             )
             if (hasTextField) {
                 CustomOutlinedTextField(
@@ -139,7 +147,6 @@ private fun CustomPopUpWithTextFieldPreview() {
         CustomPopUp(
             title = "Title",
             popUpVariant = PopUpVariant.VERTICAL_BUTTONS,
-            icon = Icons.Default.ErrorOutline,
             message = "Keep your messages short, but make sure they cover everything you need to say.",
             confirmButtonText = "Confirm",
             onConfirm = { },

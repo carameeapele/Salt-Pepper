@@ -42,9 +42,9 @@ fun SaltPepperTypography() = Typography().run {
 
     copy(
         displayLarge = displayLarge.copy(
-            fontFamily = robotoFont,
+            fontFamily = nanumFont,
             fontWeight = FontWeight.Bold,
-            fontSize = 48.sp
+            fontSize = 46.sp
         ),
         displayMedium = displayMedium.copy(
             fontFamily = robotoFont,
@@ -55,11 +55,23 @@ fun SaltPepperTypography() = Typography().run {
         headlineLarge = headlineLarge.copy(fontFamily = robotoFont),
         headlineMedium = headlineMedium.copy(fontFamily = robotoFont),
         headlineSmall = headlineSmall.copy(fontFamily = robotoFont),
-        titleLarge = titleLarge.copy(fontFamily = robotoFont),
-        titleMedium = titleMedium.copy(fontFamily = robotoFont),
+        titleLarge = titleLarge.copy(
+            fontFamily = robotoFont,
+            fontSize = 18.sp
+            ),
+        titleLargeEmphasized = titleLargeEmphasized.copy(
+            fontFamily = robotoFont,
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp
+        ),
+        titleMedium = titleMedium.copy(
+            fontFamily = robotoFont,
+            fontSize = 16.sp
+            ),
         titleMediumEmphasized = titleMedium.copy(
             fontFamily = robotoFont,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
         ),
         titleSmall = titleSmall.copy(fontFamily = robotoFont),
         bodyLarge = bodyLarge.copy(fontFamily =  robotoFont),
