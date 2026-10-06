@@ -1,7 +1,36 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeCompiler)
+    id("com.codingfeline.buildkonfig") version "0.17.1"
+}
+
+val localSecrets = Properties().apply {
+    providers.fileContents(rootProject.layout.projectDirectory.file("secrets.properties"))
+        .asText.orNull?.let { contents ->
+            contents.reader().use { load(it) }
+        }
+}
+
+fun requiredSupabaseConfig(name: String): String =
+    providers.environmentVariable(name).orNull?.takeIf { it.isNotBlank() }
+        ?: localSecrets.getProperty(name)?.takeIf { it.isNotBlank() }
+        ?: error("Set $name in root secret.properties or the build environment")
+
+buildkonfig {
+    packageName = "com.example.cuisinonsensemble.data.config"
+
+    defaultConfigs {
+        buildConfigField(STRING, "SUPABASE_URL", requiredSupabaseConfig("SUPABASE_URL"))
+        buildConfigField(
+            STRING,
+            "SUPABASE_PUBLISHABLE_KEY",
+            requiredSupabaseConfig("SUPABASE_PUBLISHABLE_KEY")
+        )
+    }
 }
 
 kotlin {
