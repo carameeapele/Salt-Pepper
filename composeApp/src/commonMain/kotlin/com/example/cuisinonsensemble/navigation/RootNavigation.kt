@@ -18,8 +18,8 @@ fun RootNavigation(
         startDestination = SplashDestination
     ) {
         splashNavigation(
-            onNavigateToLogin = {
-                navController.navigate(AuthDestinations.Login) {
+            onNavigateToLanding = {
+                navController.navigate(AuthDestinations.Landing) {
                     popUpTo(SplashDestination) { inclusive = true }
                 }
             }
@@ -36,7 +36,12 @@ fun RootNavigation(
                 }
             },
             onLoginSuccess = { },
-            onRegisterSuccess = { }
+            onRegisterSuccess = { },
+            onNavigateBack = {
+                navController.navigate(AuthDestinations.Landing) {
+                    popUpTo(AuthDestinations.Landing) { inclusive = true }
+                }
+            }
         )
     }
 }

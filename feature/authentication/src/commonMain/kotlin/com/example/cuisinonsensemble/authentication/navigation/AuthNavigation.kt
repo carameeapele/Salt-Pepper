@@ -2,6 +2,7 @@ package com.example.cuisinonsensemble.authentication.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.cuisinonsensemble.authentication.screen.LandingScreen
 import com.example.cuisinonsensemble.authentication.screen.LoginScreen
 import com.example.cuisinonsensemble.authentication.screen.RegisterScreen
 
@@ -9,19 +10,29 @@ fun NavGraphBuilder.authNavigation(
     onNavigateToRegister: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onLoginSuccess: () -> Unit,
-    onRegisterSuccess: () -> Unit
+    onRegisterSuccess: () -> Unit,
+    onNavigateBack: () -> Unit
 ) {
+    composable<AuthDestinations.Landing> {
+        LandingScreen(
+            onNavigateToLogin = onNavigateToLogin,
+            onNavigateToRegister = onNavigateToRegister
+        )
+    }
+
     composable<AuthDestinations.Login> {
         LoginScreen(
             onNavigateToRegister = onNavigateToRegister,
-            onLoginSuccess = onLoginSuccess
+            onLoginSuccess = onLoginSuccess,
+            onNavigateBack = onNavigateBack
         )
     }
 
     composable<AuthDestinations.Register> {
         RegisterScreen(
             onNavigateToLogin = onNavigateToLogin,
-            onRegisterSuccess = onRegisterSuccess
+            onRegisterSuccess = onRegisterSuccess,
+            onNavigateBack = onNavigateBack
         )
     }
 }

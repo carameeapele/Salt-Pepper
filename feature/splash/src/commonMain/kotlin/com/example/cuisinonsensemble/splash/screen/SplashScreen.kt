@@ -16,17 +16,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.cuisinonsensemble.splash.viewmodel.SplashScreenUiState
 import com.example.cuisinonsensemble.splash.viewmodel.SplashScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SplashScreen(
-    onNavigateToLogin: () -> Unit,
-    viewModel: SplashScreenViewModel = koinViewModel()
+    viewModel: SplashScreenViewModel = koinViewModel(),
+    onNavigateToLanding: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(state) {
         if (state is SplashScreenUiState.Success) {
-            onNavigateToLogin()
+            onNavigateToLanding()
         }
     }
 

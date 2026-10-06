@@ -23,6 +23,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":data:authentication"))
             implementation(project(":feature:shared"))
+            implementation(project(":core:ui"))
 
             // Koin
             implementation(libs.koin.core)
@@ -38,6 +39,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.material.icons.extended)
 
             // Coroutines & Serialization
             implementation(libs.kotlinx.coroutines.core)
@@ -50,8 +52,14 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.compose.uiTooling)
         }
     }
+}
+
+compose.resources{
+    publicResClass = true
+    generateResClass = always
 }
 
 android {
