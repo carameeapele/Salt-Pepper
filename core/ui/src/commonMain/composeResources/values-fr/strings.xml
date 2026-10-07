@@ -18,7 +18,7 @@
     <string name="password_placeholder">••••••••••••</string>
     <string name="login_button_text">Se connecter</string>
     <string name="no_account_helper_text">Pas encore de compte ?</string>
-    <string name="register_redirection_button_text">S\'inscrire</string>
+    <string name="register_redirection_button_text">S'inscrire</string>
     <string name="forgot_your_password_button">Mot de passe oublié ?</string>
 
     // RegisterScreen
@@ -32,4 +32,20 @@
     <string name="register_button_text">Enregistrer</string>
     <string name="already_registered_helper_text">Vous avez déjà un compte ?</string>
     <string name="signin_redirection_button_text">Se connecter</string>
+
+    // Navigation principale
+    <string name="home_tab">Accueil</string>
+    <string name="recipes_tab">Recettes</string>
+    <string name="menu_tab">Menu</string>
+    <string name="profile_tab">Profil</string>
+    <string name="home_welcome_title">La bonne cuisine, à partager.</string>
+    <string name="home_welcome_subtitle">Votre cuisine commence ici.</string>
+    <string name="browse_recipes_action">Parcourir les recettes</string>
+    <string name="plan_meals_action">Planifier vos repas</string>
+    <string name="recipes_screen_title">Recettes</string>
+    <string name="recipes_empty_message">Vos recettes apparaîtront ici.</string>
+    <string name="menu_screen_title">Menu</string>
+    <string name="menu_empty_message">Vos menus apparaîtront ici.</string>
+    <string name="profile_screen_title">Profil</string>
+    <string name="profile_empty_message">Les détails de votre profil apparaîtront ici.</string>
 </resources>

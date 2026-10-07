@@ -46,7 +46,7 @@ compose.resources{
 }
 
 android {
-    namespace = "com.example.cuisinonsensemble.core.ui"
+    namespace = "com.example.saltpepper.core.ui"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

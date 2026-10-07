@@ -56,7 +56,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.cuisinonsensemble.feature.splash"
+    namespace = "com.example.saltpepper.feature.splash"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

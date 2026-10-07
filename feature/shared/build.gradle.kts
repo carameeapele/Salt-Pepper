@@ -41,7 +41,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.cuisinonsensemble.feature.shared"
+    namespace = "com.example.saltpepper.feature.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

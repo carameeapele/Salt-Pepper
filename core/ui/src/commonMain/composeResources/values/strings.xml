@@ -31,4 +31,20 @@
     <string name="register_button_text">Register</string>
     <string name="already_registered_helper_text">Already have an account?</string>
     <string name="signin_redirection_button_text">Log in</string>
+
+    // Home navigation
+    <string name="home_tab">Home</string>
+    <string name="recipes_tab">Recipes</string>
+    <string name="menu_tab">Menu</string>
+    <string name="profile_tab">Profile</string>
+    <string name="home_welcome_title">Good food, shared.</string>
+    <string name="home_welcome_subtitle">Your kitchen starts here.</string>
+    <string name="browse_recipes_action">Browse recipes</string>
+    <string name="plan_meals_action">Plan your meals</string>
+    <string name="recipes_screen_title">Recipes</string>
+    <string name="recipes_empty_message">Your recipes will appear here.</string>
+    <string name="menu_screen_title">Menu</string>
+    <string name="menu_empty_message">Your meal plans will appear here.</string>
+    <string name="profile_screen_title">Profile</string>
+    <string name="profile_empty_message">Your profile details will appear here.</string>
 </resources>

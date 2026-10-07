@@ -1,4 +1,4 @@
-rootProject.name = "CuisinonsEnsemble"
+rootProject.name = "SaltPepper"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -34,3 +34,4 @@ include(":feature:shared")
 include(":feature:splash")
 include(":data:authentication")
 include(":core:ui")
+include(":feature:home")

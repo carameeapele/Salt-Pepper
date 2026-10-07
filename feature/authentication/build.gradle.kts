@@ -63,7 +63,7 @@ compose.resources{
 }
 
 android {
-    namespace = "com.example.cuisinonsensemble.feature.authentication"
+    namespace = "com.example.saltpepper.feature.authentication"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		458C3EC799F4FEC780BD0AAD /* CuisinonsEnsemble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CuisinonsEnsemble.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		458C3EC799F4FEC780BD0AAD /* SaltPepper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaltPepper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -59,7 +59,7 @@
 		5158036CE6FCC886128D1E56 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				458C3EC799F4FEC780BD0AAD /* CuisinonsEnsemble.app */,
+				458C3EC799F4FEC780BD0AAD /* SaltPepper.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = 458C3EC799F4FEC780BD0AAD /* CuisinonsEnsemble.app */;
+			productReference = 458C3EC799F4FEC780BD0AAD /* SaltPepper.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

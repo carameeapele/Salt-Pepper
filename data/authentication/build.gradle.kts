@@ -50,7 +50,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.cuisinonsensemble.data.authentication"
+    namespace = "com.example.saltpepper.data.authentication"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
