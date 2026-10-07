@@ -1,4 +1,4 @@
-package com.example.saltpepper.home
+package com.example.saltpepper.home.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -14,7 +14,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "HomeFeature"
+            baseName = "MenuFeature"
             isStatic = true
         }
     }
@@ -22,7 +22,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":feature:shared"))
-            implementation(project(":feature:authentication"))
             implementation(project(":core:ui"))
 
             // Koin
@@ -63,7 +62,7 @@ compose.resources{
 }
 
 android {
-    namespace = "com.example.saltpepper.feature.home"
+    namespace = "com.example.saltpepper.feature.menu"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
