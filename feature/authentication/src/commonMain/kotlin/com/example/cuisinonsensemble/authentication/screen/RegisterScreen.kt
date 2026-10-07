@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,8 +37,6 @@ import cuisinonsensemble.core.ui.generated.resources.confirm_password_label
 import cuisinonsensemble.core.ui.generated.resources.email_label
 import cuisinonsensemble.core.ui.generated.resources.email_placeholder
 import cuisinonsensemble.core.ui.generated.resources.error_dialog_title
-import cuisinonsensemble.core.ui.generated.resources.full_name_label
-import cuisinonsensemble.core.ui.generated.resources.full_name_placeholder
 import cuisinonsensemble.core.ui.generated.resources.ok
 import cuisinonsensemble.core.ui.generated.resources.password_label
 import cuisinonsensemble.core.ui.generated.resources.password_placeholder
@@ -130,17 +127,6 @@ fun RegisterScreenContent(
             )
 
             Spacer(modifier = modifier.height(52.dp))
-
-            CustomOutlinedTextField(
-                value = uiModel.name,
-                onValueChange = onNameChange,
-                label = stringResource(Res.string.full_name_label),
-                placeholder = stringResource(Res.string.full_name_placeholder),
-                leadingIcon = Icons.Outlined.Face,
-                enabled = !isLoading
-            )
-
-            Spacer(modifier = modifier.height(16.dp))
 
             CustomOutlinedTextField(
                 value = uiModel.email,

@@ -5,9 +5,15 @@
 
     // LoginScreen
     <string name="login_title">Bon retour</string>
-    <string name="login_subtitle">Connectez-vous pour continuer</string>
+    <string name="login_subtitle">Entre ton email, on t'envoie un code.</string>
     <string name="email_label">Email</string>
     <string name="email_placeholder">jean.dupont@mail.fr</string>
+    <string name="verification_code_label">Code de vérification</string>
+    <string name="verification_code_placeholder">123456</string>
+    <string name="send_code_button_text">Envoyer le code</string>
+    <string name="verify_code_button_text">Vérifier le code</string>
+    <string name="code_sent_subtitle">Saisissez le code envoyé par e-mail</string>
+    <string name="change_email_button_text">Changer d’adresse e-mail</string>
     <string name="password_label">Mot de passe</string>
     <string name="password_placeholder">••••••••••••</string>
     <string name="login_button_text">Se connecter</string>

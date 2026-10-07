@@ -1,77 +1,70 @@
 package com.example.cuisinonsensemble.data.repositoryImpl
 
 import com.example.cuisinonsensemble.data.model.User
+import com.example.cuisinonsensemble.data.client.BackendAuthClient
 import com.example.cuisinonsensemble.data.repository.AuthRepository
 import com.example.cuisinonsensemble.data.repository.AuthState
-import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AuthRepositoryImpl(
-    private val supabaseClient: SupabaseClient
+    private val backendClient: BackendAuthClient
 ) : AuthRepository {
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
     override val authState: StateFlow<AuthState> = _authState.asStateFlow()
 
-    override suspend fun login(email: String, password: String): Result<Unit> {
+    override suspend fun requestEmailCode(email: String): Result<Unit> {
         return try {
             _authState.value = AuthState.Loading
-            supabaseClient.auth.signInWith(Email) {
-                this.email = email
-                this.password = password
-            }
-            _authState.value = AuthState.Authenticated(
-                User(
-                    id = supabaseClient.auth.currentUserOrNull()?.id ?: "",
-                    email = email
-                )
-            )
+            backendClient.requestEmailCode(email)
+            _authState.value = AuthState.Unauthenticated
             Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            _authState.value = AuthState.Error(e.message ?: "Login failed")
+            _authState.value = AuthState.Error(e.message ?: "Could not send verification code")
             Result.failure(e)
         }
     }
 
-    override suspend fun register(email: String, password: String): Result<Unit> {
+    override suspend fun register(
+        email: String,
+        password: String
+    ): Result<Unit> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun verifyEmailCode(email: String, code: String): Result<User> {
         return try {
             _authState.value = AuthState.Loading
-            supabaseClient.auth.signUpWith(Email) {
-                this.email = email
-                this.password = password
-            }
-            _authState.value = AuthState.Authenticated(User(
-                id = supabaseClient.auth.currentUserOrNull()?.id ?: "",
-                email = email
-            ))
-            Result.success(Unit)
+            val user = backendClient.verifyEmailCode(email, code)
+            _authState.value = AuthState.Authenticated(user)
+            Result.success(user)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            _authState.value = AuthState.Error(e.message ?: "Registration failed")
+            _authState.value = AuthState.Error(e.message ?: "Verification failed")
             Result.failure(e)
         }
     }
 
     override suspend fun logout(): Result<Unit> {
         return try {
-            supabaseClient.auth.signOut()
-            _authState.value = AuthState.Unauthenticated
+            backendClient.logout()
             Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            _authState.value = AuthState.Error(e.message ?: "Logout failed")
             Result.failure(e)
+        } finally {
+            _authState.value = AuthState.Unauthenticated
         }
     }
 
     override suspend fun getCurrentUser(): Result<User?> {
-        return try {
-            val user = supabaseClient.auth.currentUserOrNull()
-            Result.success(user?.let { User(it.id, it.email ?: "") })
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return Result.success(backendClient.currentUser)
     }
 }
