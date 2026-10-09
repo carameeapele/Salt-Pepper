@@ -61,16 +61,15 @@ class BackendAuthClientTest {
     }
 
     @Test
-    fun verifyAcceptsSuccessfulResponseWithoutJsonSession() = runTest {
+    fun verifyRejectsSuccessfulResponseWithoutJsonSession() = runTest {
         val engine = MockEngine {
             respond("", HttpStatusCode.NoContent)
         }
         val httpClient = HttpClient(engine)
         try {
             val client = BackendAuthClient(httpClient)
-            val user = client.verifyEmailCode("user@example.com", "527673")
-            assertEquals("user@example.com", user.id)
-            assertEquals("user@example.com", user.email)
+            val result = runCatching { client.verifyEmailCode("user@example.com", "527673") }
+            assertEquals("The backend returned no access token", result.exceptionOrNull()?.message)
             assertNull(client.accessToken)
         } finally {
             httpClient.close()

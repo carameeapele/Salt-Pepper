@@ -22,6 +22,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":feature:shared"))
+            implementation(project(":data:authentication"))
+            implementation(project(":core:ui"))
 
             // Koin
             implementation(libs.koin.core)
@@ -51,6 +53,15 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${libs.versions.kotlinxCoroutines.get()}")
+        }
+
+        androidUnitTest.dependencies {
+            implementation(libs.kotlin.testJunit)
         }
     }
 }

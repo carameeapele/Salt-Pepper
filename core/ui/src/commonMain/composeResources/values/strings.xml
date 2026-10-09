@@ -2,6 +2,8 @@
     <string name="back">Back</string>
     <string name="ok">OK</string>
     <string name="error_dialog_title">Something went wrong</string>
+    <string name="session_restore_error">Unable to restore your session. Please try again.</string>
+    <string name="retry_action">Retry</string>
 
     // LoginScreen
     <string name="login_title">Welcome back</string>

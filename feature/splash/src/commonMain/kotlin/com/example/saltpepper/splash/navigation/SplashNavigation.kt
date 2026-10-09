@@ -5,11 +5,13 @@ import androidx.navigation.compose.composable
 import com.example.saltpepper.splash.screen.SplashScreen
 
 fun NavGraphBuilder.splashNavigation(
-    onNavigateToLanding: () -> Unit
+    onNavigateToLanding: () -> Unit,
+    onNavigateToMain: () -> Unit
 ) {
     composable<SplashDestination> {
         SplashScreen(
             onNavigateToLanding = onNavigateToLanding,
+            onNavigateToMain = onNavigateToMain,
         )
     }
 }

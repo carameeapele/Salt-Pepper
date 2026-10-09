@@ -55,13 +55,20 @@ kotlin {
 
             implementation(libs.ktor.client.core)
 
-            // Feature & data modules
-            implementation(projects.feature.authentication)
-            implementation(projects.feature.home)
+            // Core
+            implementation(projects.core.ui)
+
+            // Data
+            implementation(projects.data.authentication)
+
+            // Feature
             implementation(projects.feature.shared)
             implementation(projects.feature.splash)
-            implementation(projects.data.authentication)
-            implementation(projects.core.ui)
+            implementation(projects.feature.authentication)
+            implementation(projects.feature.home)
+            implementation(projects.feature.menu)
+            implementation(projects.feature.profile)
+            implementation(projects.feature.recipes)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

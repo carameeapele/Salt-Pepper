@@ -1,7 +1,7 @@
 package com.example.saltpepper.data.repositoryImpl
 
-import com.example.saltpepper.data.model.User
 import com.example.saltpepper.data.client.BackendAuthClient
+import com.example.saltpepper.data.model.User
 import com.example.saltpepper.data.repository.AuthRepository
 import com.example.saltpepper.data.repository.AuthState
 import kotlinx.coroutines.CancellationException
@@ -66,5 +66,17 @@ class AuthRepositoryImpl(
 
     override suspend fun getCurrentUser(): Result<User?> {
         return Result.success(backendClient.currentUser)
+    }
+
+    override suspend fun restoreSession(): Result<User?> {
+        return try {
+            val user = backendClient.restoreSession()
+            _authState.value = user?.let { AuthState.Authenticated(it) } ?: AuthState.Unauthenticated
+            Result.success(user)
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: Exception) {
+            Result.failure(error)
+        }
     }
 }

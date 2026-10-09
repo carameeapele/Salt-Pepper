@@ -3,16 +3,22 @@ package com.example.saltpepper.navigation
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.saltpepper.HomeDestination
 import com.example.saltpepper.authentication.navigation.AuthDestinations
 import com.example.saltpepper.authentication.navigation.authNavigation
-import com.example.saltpepper.home.HomeScreen
+import com.example.saltpepper.data.repository.AuthRepository
 import com.example.saltpepper.splash.navigation.SplashDestination
 import com.example.saltpepper.splash.navigation.splashNavigation
+import com.example.saltpepper.ui.MainScreen
+import kotlinx.coroutines.delay
+import org.koin.compose.koinInject
 
 @Composable
 fun RootNavigation(
@@ -26,13 +32,14 @@ fun RootNavigation(
         popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
         popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) }
     ) {
-        composable<HomeDestination> {
-            HomeScreen()
-        }
-
         splashNavigation(
             onNavigateToLanding = {
                 navController.navigate(AuthDestinations.Landing) {
+                    popUpTo(SplashDestination) { inclusive = true }
+                }
+            },
+            onNavigateToMain = {
+                navController.navigate(MainDestination) {
                     popUpTo(SplashDestination) { inclusive = true }
                 }
             }
@@ -52,12 +59,12 @@ fun RootNavigation(
                 navController.navigate(AuthDestinations.VerifyEmailCode(email))
             },
             onLoginSuccess = {
-                navController.navigate(HomeDestination) {
+                navController.navigate(MainDestination) {
                     popUpTo(AuthDestinations.Landing) { inclusive = true }
                 }
             },
             onRegisterSuccess = {
-                navController.navigate(HomeDestination) {
+                navController.navigate(MainDestination) {
                     popUpTo(AuthDestinations.Landing) { inclusive = true }
                 }
             },
@@ -66,5 +73,24 @@ fun RootNavigation(
                 navController.popBackStack()
             }
         )
+        composable<MainDestination> {
+            val lifecycleOwner = LocalLifecycleOwner.current
+            val authRepository = koinInject<AuthRepository>()
+            LaunchedEffect(lifecycleOwner) {
+                lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    while (true) {
+                        val result = authRepository.restoreSession()
+                        if (result.isSuccess && result.getOrNull() == null) {
+                            navController.navigate(AuthDestinations.Landing) {
+                                popUpTo(MainDestination) { inclusive = true }
+                            }
+                            return@repeatOnLifecycle
+                        }
+                        delay(30_000)
+                    }
+                }
+            }
+            MainScreen()
+        }
     }
 }

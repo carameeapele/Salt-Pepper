@@ -30,6 +30,8 @@ import com.example.saltpepper.core.ui.component.button.CustomTextButton
 import com.example.saltpepper.core.ui.component.popup.CustomPopUp
 import com.example.saltpepper.core.ui.component.textfield.CustomOutlinedTextField
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.already_registered_helper_text
 import saltpepper.core.ui.generated.resources.back
@@ -44,8 +46,6 @@ import saltpepper.core.ui.generated.resources.register_button_text
 import saltpepper.core.ui.generated.resources.register_subtitle
 import saltpepper.core.ui.generated.resources.register_title
 import saltpepper.core.ui.generated.resources.signin_redirection_button_text
-import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun RegisterScreen(
