@@ -22,7 +22,29 @@ connect to Supabase directly. Both sign-in and account creation use the same flo
 
 The API URL is public configuration in the shared client. No Supabase keys or
 local secrets file are needed by the mobile app. The verification endpoint's
-response determines any session token or user data returned to the app.
+response returns an access token, its lifetime, the user, and a rotating
+`sp_refresh` cookie.
+
+### Persistent Mobile Sessions
+
+The refresh cookie is saved in Android Keystore-encrypted, non-backed-up storage
+or iOS Keychain (`AfterFirstUnlockThisDeviceOnly`). Access tokens stay in memory.
+On launch, splash calls `POST /auth/refresh` to restore the user and securely save
+the rotated cookie before entering Main. Refreshes are serialized, with no
+automatic replay of a consumed refresh token.
+
+Main checks the session every 30 seconds while foregrounded. Checks update the
+last-use timestamp and refresh access tokens near expiry. After 14 days without
+foreground use, or when the cookie expires or the server rejects the session,
+sign-in is required. Network failures retain the credential; startup offers a
+retry. Logout calls the backend and clears local credentials even if that call
+fails; failed remote revocation cannot be guaranteed until the server expires it.
+
+The backend's `refresh_token_days` must be at least 14 to allow the requested
+two-week window. Its cookie expiration is always respected, even if earlier.
+The local inactivity cutoff is not a replacement for server-side enforcement.
+No refreshes run in the background. Existing installs require one successful
+sign-in to populate the new secure store.
 
 ### Build and Run Android Application
 

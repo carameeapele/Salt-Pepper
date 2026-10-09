@@ -2,6 +2,8 @@
     <string name="back">Retour</string>
     <string name="ok">OK</string>
     <string name="error_dialog_title">Une erreur est survenue</string>
+    <string name="session_restore_error">Impossible de restaurer votre session. Veuillez réessayer.</string>
+    <string name="retry_action">Réessayer</string>
 
     // LoginScreen
     <string name="login_title">Bon retour</string>

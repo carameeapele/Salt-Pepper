@@ -6,7 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import saltpepper.core.ui.generated.resources.NanumPenScript_Regular
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.Font
+import saltpepper.core.ui.generated.resources.Geist_VariableFont_wght
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.RobotoMono_Bold
 import saltpepper.core.ui.generated.resources.RobotoMono_Light
@@ -14,13 +16,16 @@ import saltpepper.core.ui.generated.resources.RobotoMono_Medium
 import saltpepper.core.ui.generated.resources.RobotoMono_Regular
 import saltpepper.core.ui.generated.resources.RobotoMono_SemiBold
 import saltpepper.core.ui.generated.resources.RobotoMono_Thin
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.Font
+import saltpepper.core.ui.generated.resources.Unbounded_VariableFont_wght
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
-private fun nanumFont() = FontFamily(
-    Font(Res.font.NanumPenScript_Regular , weight = FontWeight.Normal)
+private fun unboundedFont() = FontFamily(
+    Font(Res.font.Unbounded_VariableFont_wght)
+)
+
+@Composable
+private fun geistFont() = FontFamily(
+    Font(Res.font.Geist_VariableFont_wght)
 )
 
 @OptIn(ExperimentalResourceApi::class)
@@ -38,16 +43,17 @@ private fun robotoMonoFont() = FontFamily(
 @Composable
 fun SaltPepperTypography() = Typography().run {
     val robotoFont = robotoMonoFont()
-    val nanumFont = nanumFont()
+    val unboundedFont = unboundedFont()
+    val geistFont = geistFont()
 
     copy(
         displayLarge = displayLarge.copy(
-            fontFamily = nanumFont,
+            fontFamily = unboundedFont,
             fontWeight = FontWeight.Bold,
             fontSize = 46.sp
         ),
         displayMedium = displayMedium.copy(
-            fontFamily = robotoFont,
+            fontFamily = geistFont,
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp
         ),
@@ -56,33 +62,37 @@ fun SaltPepperTypography() = Typography().run {
         headlineMedium = headlineMedium.copy(fontFamily = robotoFont),
         headlineSmall = headlineSmall.copy(fontFamily = robotoFont),
         titleLarge = titleLarge.copy(
-            fontFamily = robotoFont,
+            fontFamily = geistFont,
             fontSize = 18.sp
             ),
         titleLargeEmphasized = titleLargeEmphasized.copy(
-            fontFamily = robotoFont,
+            fontFamily = geistFont,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp
         ),
         titleMedium = titleMedium.copy(
-            fontFamily = robotoFont,
+            fontFamily = geistFont,
             fontSize = 16.sp
             ),
         titleMediumEmphasized = titleMedium.copy(
-            fontFamily = robotoFont,
+            fontFamily = geistFont,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp
         ),
         titleSmall = titleSmall.copy(fontFamily = robotoFont),
         bodyLarge = bodyLarge.copy(fontFamily =  robotoFont),
         bodyLargeEmphasized = bodyLargeEmphasized.copy(
-            fontFamily = robotoFont,
+            fontFamily = geistFont,
             fontWeight = FontWeight.Bold
         ),
         bodyMedium = bodyMedium.copy(fontFamily = robotoFont),
         bodySmall = bodySmall.copy(fontFamily = robotoFont),
         labelLarge = labelLarge.copy(fontFamily = robotoFont),
         labelMedium = labelMedium.copy(fontFamily = robotoFont),
-        labelSmall = labelSmall.copy(fontFamily = robotoFont)
+        labelSmall = labelSmall.copy(
+            fontFamily = geistFont,
+            fontWeight = FontWeight.Medium,
+            fontSize = 12.sp
+            )
     )
 }

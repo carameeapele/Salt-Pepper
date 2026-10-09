@@ -11,6 +11,7 @@ interface AuthRepository {
     suspend fun verifyEmailCode(email: String, code: String): Result<User>
     suspend fun logout(): Result<Unit>
     suspend fun getCurrentUser(): Result<User?>
+    suspend fun restoreSession(): Result<User?>
 }
 
 sealed class AuthState {

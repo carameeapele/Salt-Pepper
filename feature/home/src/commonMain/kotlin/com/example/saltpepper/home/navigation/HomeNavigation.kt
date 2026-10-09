@@ -4,8 +4,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.saltpepper.home.screen.HomeScreen
 
-fun NavGraphBuilder.homeNavigation() {
+fun NavGraphBuilder.homeNavigation(
+    onBrowseRecipes: () -> Unit,
+    onPlanMeals: () -> Unit
+) {
     composable<HomeDestinations.Home> {
-        HomeScreen()
+        HomeScreen(onBrowseRecipes = onBrowseRecipes, onPlanMeals = onPlanMeals)
     }
 }
