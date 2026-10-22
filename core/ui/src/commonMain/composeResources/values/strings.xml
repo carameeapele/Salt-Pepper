@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Salt&amp;Pepper</string>
     <string name="back">Back</string>
     <string name="ok">OK</string>
     <string name="error_dialog_title">Something went wrong</string>
@@ -49,4 +50,6 @@
     <string name="menu_empty_message">Your meal plans will appear here.</string>
     <string name="profile_screen_title">Profile</string>
     <string name="profile_empty_message">Your profile details will appear here.</string>
+    <string name="logout_button_text">Log out</string>
+    <string name="logout_error_message">You were signed out locally, but the server could not be notified.</string>
 </resources>

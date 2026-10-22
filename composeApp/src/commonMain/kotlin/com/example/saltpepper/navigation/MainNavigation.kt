@@ -26,6 +26,7 @@ object MainDestination
 @Composable
 fun MainNavigation(
     navController: NavHostController,
+    onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -63,7 +64,7 @@ fun MainNavigation(
         )
         recipesNavigation()
         menuNavigation()
-        profileNavigation()
+        profileNavigation(onLogout = onLogout)
     }
 }
 

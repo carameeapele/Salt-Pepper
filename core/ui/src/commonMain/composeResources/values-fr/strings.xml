@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Salt&amp;Pepper</string>
     <string name="back">Retour</string>
     <string name="ok">OK</string>
     <string name="error_dialog_title">Une erreur est survenue</string>
@@ -50,4 +51,6 @@
     <string name="menu_empty_message">Vos menus apparaîtront ici.</string>
     <string name="profile_screen_title">Profil</string>
     <string name="profile_empty_message">Les détails de votre profil apparaîtront ici.</string>
+    <string name="logout_button_text">Se déconnecter</string>
+    <string name="logout_error_message">Vous avez été déconnecté localement, mais le serveur n’a pas pu être averti.</string>
 </resources>

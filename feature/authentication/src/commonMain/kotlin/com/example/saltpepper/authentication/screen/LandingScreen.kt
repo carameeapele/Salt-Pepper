@@ -5,14 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,9 +20,11 @@ import com.example.saltpepper.core.ui.component.button.ButtonVariant
 import com.example.saltpepper.core.ui.component.button.CustomOutlinedButton
 import com.example.saltpepper.core.ui.component.button.PrimaryButton
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
-import saltpepper.feature.authentication.generated.resources.Res
-import saltpepper.feature.authentication.generated.resources.logosp
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import saltpepper.core.ui.generated.resources.Res
+import saltpepper.core.ui.generated.resources.app_name
+import saltpepper.core.ui.generated.resources.logomark
 
 @Composable
 fun LandingScreen(
@@ -55,18 +54,11 @@ fun LandingScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(Res.drawable.logosp),
-                contentDescription = "Logo",
-                modifier = Modifier.size(160.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "salt & pepper",
-                color = MaterialTheme.colorScheme.background,
-                style = MaterialTheme.typography.displayLarge
+                painter = painterResource(Res.drawable.logomark),
+                contentDescription = stringResource(Res.string.app_name),
+                modifier = Modifier.size(200.dp)
             )
         }
-
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -79,7 +71,6 @@ fun LandingScreenContent(
                 onClick = onNavigateToLogin,
                 text = "Se connecter"
             )
-
             CustomOutlinedButton(
                 modifier = modifier.fillMaxWidth(),
                 buttonVariant = ButtonVariant.GIANT,

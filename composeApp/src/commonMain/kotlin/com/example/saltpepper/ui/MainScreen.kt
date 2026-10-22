@@ -28,6 +28,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MainScreen(
+	onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
@@ -44,6 +45,7 @@ fun MainScreen(
     ) { contentPadding ->
         MainNavigation(
             navController = navController,
+            onLogout = onLogout,
             modifier = Modifier.fillMaxSize()
                 .padding(contentPadding)
                 .consumeWindowInsets(contentPadding)

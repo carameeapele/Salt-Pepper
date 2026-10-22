@@ -53,14 +53,14 @@ fun SaltPepperTypography() = Typography().run {
             fontSize = 46.sp
         ),
         displayMedium = displayMedium.copy(
-            fontFamily = geistFont,
+            fontFamily = unboundedFont,
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp
         ),
         displaySmall = displaySmall.copy(fontFamily = robotoFont),
-        headlineLarge = headlineLarge.copy(fontFamily = robotoFont),
-        headlineMedium = headlineMedium.copy(fontFamily = robotoFont),
-        headlineSmall = headlineSmall.copy(fontFamily = robotoFont),
+        headlineLarge = headlineLarge.copy(fontFamily = unboundedFont),
+        headlineMedium = headlineMedium.copy(fontFamily = unboundedFont),
+        headlineSmall = headlineSmall.copy(fontFamily = unboundedFont),
         titleLarge = titleLarge.copy(
             fontFamily = geistFont,
             fontSize = 18.sp
@@ -79,14 +79,14 @@ fun SaltPepperTypography() = Typography().run {
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp
         ),
-        titleSmall = titleSmall.copy(fontFamily = robotoFont),
-        bodyLarge = bodyLarge.copy(fontFamily =  robotoFont),
+        titleSmall = titleSmall.copy(fontFamily = unboundedFont),
+        bodyLarge = bodyLarge.copy(fontFamily =  geistFont),
         bodyLargeEmphasized = bodyLargeEmphasized.copy(
             fontFamily = geistFont,
             fontWeight = FontWeight.Bold
         ),
-        bodyMedium = bodyMedium.copy(fontFamily = robotoFont),
-        bodySmall = bodySmall.copy(fontFamily = robotoFont),
+        bodyMedium = bodyMedium.copy(fontFamily = geistFont),
+        bodySmall = bodySmall.copy(fontFamily = geistFont),
         labelLarge = labelLarge.copy(fontFamily = robotoFont),
         labelMedium = labelMedium.copy(fontFamily = robotoFont),
         labelSmall = labelSmall.copy(
