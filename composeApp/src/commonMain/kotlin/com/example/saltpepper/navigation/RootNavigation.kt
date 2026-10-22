@@ -76,6 +76,9 @@ fun RootNavigation(
                 onNavigateToVerifyCode = { email ->
                     navController.navigate(AuthDestinations.VerifyEmailCode(email))
                 },
+                onNavigateToRegistrationVerification = { email ->
+                    navController.navigate(AuthDestinations.VerifyRegistrationCode(email))
+                },
                 onLoginSuccess = {
                     navController.navigate(MainDestination) {
                         popUpTo(AuthDestinations.Landing) { inclusive = true }

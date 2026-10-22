@@ -16,6 +16,7 @@
     <string name="send_code_button_text">Send code</string>
     <string name="verify_code_button_text">Verify code</string>
     <string name="code_sent_subtitle">Enter the code we sent to your email</string>
+    <string name="registration_verification_title">Verify your email</string>
     <string name="change_email_button_text">Change email</string>
     <string name="password_label">Password</string>
     <string name="password_placeholder">••••••••••••</string>

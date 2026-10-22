@@ -105,6 +105,9 @@ class SplashScreenViewModelTest {
         override suspend fun verifyEmailCode(email: String, code: String): Result<User> =
             error("Unexpected verifyEmailCode call")
 
+        override suspend fun verifyRegistrationCode(email: String, code: String): Result<User> =
+            error("Unexpected verifyRegistrationCode call")
+
         override suspend fun logout(): Result<Unit> =
             error("Unexpected logout call")
 

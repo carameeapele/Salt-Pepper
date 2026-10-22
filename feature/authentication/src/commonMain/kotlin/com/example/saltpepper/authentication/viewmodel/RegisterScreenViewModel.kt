@@ -84,13 +84,14 @@ class RegisterScreenViewModel(
             result.fold(
                 onSuccess = {
                     _uiModel.update { it.copy(isLoading = false) }
-                    _events.send(RegisterScreenEvent.RegisterSucceeded)
+                    _events.send(RegisterScreenEvent.RegisterSucceeded(currentModel.email.trim()))
                 },
-                onFailure = {
+                onFailure = { error ->
                     _uiModel.update {
                         it.copy(
                             isLoading = false,
-                            submitErrorMessage = "The service is currently unavailable. Please try again later."
+                            submitErrorMessage = error.message
+                                ?: "The service is currently unavailable. Please try again later."
                         )
                     }
                 }
@@ -149,5 +150,5 @@ class RegisterScreenViewModel(
 }
 
 sealed interface RegisterScreenEvent {
-    data object RegisterSucceeded : RegisterScreenEvent
+    data class RegisterSucceeded(val email: String) : RegisterScreenEvent
 }

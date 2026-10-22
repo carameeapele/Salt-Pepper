@@ -29,7 +29,7 @@ class VerifyEmailCodeViewModel(
         }
     }
 
-    fun verify(email: String) {
+    fun verify(email: String, isRegistration: Boolean = false) {
         val code = _uiState.value.code
         if (_uiState.value.isLoading) return
         if (code.length != 6) {
@@ -40,7 +40,11 @@ class VerifyEmailCodeViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
-                authRepository.verifyEmailCode(email, code).getOrThrow()
+                if (isRegistration) {
+                    authRepository.verifyRegistrationCode(email, code).getOrThrow()
+                } else {
+                    authRepository.verifyEmailCode(email, code).getOrThrow()
+                }
                 _uiState.update { it.copy(isLoading = false, isVerified = true) }
             } catch (e: CancellationException) {
                 throw e

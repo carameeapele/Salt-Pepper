@@ -42,8 +42,23 @@ class BackendAuthClient(
         request("email/start", buildJsonObject { put("email", email) })
     }
 
+    suspend fun register(email: String, password: String) {
+        request("register", buildJsonObject {
+            put("email", email)
+            put("password", password)
+        })
+    }
+
     suspend fun verifyEmailCode(email: String, code: String): User = sessionMutex.withLock {
         val response = request("email/verify", buildJsonObject {
+            put("email", email)
+            put("code", code)
+        })
+        readSession(response)
+    }
+
+    suspend fun verifyRegistrationCode(email: String, code: String): User = sessionMutex.withLock {
+        val response = request("register/verify", buildJsonObject {
             put("email", email)
             put("code", code)
         })
