@@ -26,6 +26,8 @@ import com.example.saltpepper.core.ui.component.button.ButtonVariant
 import com.example.saltpepper.core.ui.component.button.CustomTextButton
 import com.example.saltpepper.core.ui.component.textfield.CustomOutlinedTextField
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.back
 import saltpepper.core.ui.generated.resources.email_label
@@ -34,9 +36,7 @@ import saltpepper.core.ui.generated.resources.login_subtitle
 import saltpepper.core.ui.generated.resources.login_title
 import saltpepper.core.ui.generated.resources.no_account_helper_text
 import saltpepper.core.ui.generated.resources.register_redirection_button_text
-import saltpepper.core.ui.generated.resources.send_code_button_text
-import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
+import saltpepper.core.ui.generated.resources.verify_code_button_text
 
 @Composable
 fun LoginScreen(
@@ -119,7 +119,7 @@ fun LoginScreenContent(
                 .fillMaxWidth()
         ) {
             AuthBottomButtons(
-                mainButtonText = stringResource(Res.string.send_code_button_text),
+                mainButtonText = stringResource(Res.string.verify_code_button_text),
                 onMainButtonClick = onSendCodeClick,
                 helperText = stringResource(Res.string.no_account_helper_text),
                 redirectionButtonText = stringResource(Res.string.register_redirection_button_text),
