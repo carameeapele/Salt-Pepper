@@ -24,7 +24,9 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.app_name
+import saltpepper.core.ui.generated.resources.login_button_text
 import saltpepper.core.ui.generated.resources.logomark
+import saltpepper.core.ui.generated.resources.register_redirection_button_text
 
 @Composable
 fun LandingScreen(
@@ -69,13 +71,13 @@ fun LandingScreenContent(
                 modifier = modifier.fillMaxWidth(),
                 buttonVariant = ButtonVariant.GIANT,
                 onClick = onNavigateToLogin,
-                text = "Se connecter"
+                text = stringResource(Res.string.login_button_text)
             )
             CustomOutlinedButton(
                 modifier = modifier.fillMaxWidth(),
                 buttonVariant = ButtonVariant.GIANT,
                 onClick = onNavigateToRegister,
-                text = "S'inscrire",
+                text = stringResource(Res.string.register_redirection_button_text),
                 borderColor = MaterialTheme.colorScheme.onPrimary,
             )
         }
