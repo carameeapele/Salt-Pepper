@@ -52,14 +52,14 @@ fun RegisterScreen(
     viewModel: RegisterScreenViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onRegisterSuccess: () -> Unit
+    onRegisterSuccess: (String) -> Unit
 ) {
     val uiModel by viewModel.uiModel.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                RegisterScreenEvent.RegisterSucceeded -> onRegisterSuccess()
+                is RegisterScreenEvent.RegisterSucceeded -> onRegisterSuccess(event.email)
             }
         }
     }

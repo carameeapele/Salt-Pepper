@@ -34,7 +34,17 @@ class AuthRepositoryImpl(
         email: String,
         password: String
     ): Result<Unit> {
-        TODO("Not yet implemented")
+        return try {
+            _authState.value = AuthState.Loading
+            backendClient.register(email, password)
+            _authState.value = AuthState.Unauthenticated
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            _authState.value = AuthState.Error(e.message ?: "Registration failed")
+            Result.failure(e)
+        }
     }
 
     override suspend fun verifyEmailCode(email: String, code: String): Result<User> {
@@ -47,6 +57,20 @@ class AuthRepositoryImpl(
             throw e
         } catch (e: Exception) {
             _authState.value = AuthState.Error(e.message ?: "Verification failed")
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun verifyRegistrationCode(email: String, code: String): Result<User> {
+        return try {
+            _authState.value = AuthState.Loading
+            val user = backendClient.verifyRegistrationCode(email, code)
+            _authState.value = AuthState.Authenticated(user)
+            Result.success(user)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            _authState.value = AuthState.Error(e.message ?: "Registration verification failed")
             Result.failure(e)
         }
     }

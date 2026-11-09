@@ -3,21 +3,21 @@ package com.example.saltpepper.authentication.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
+import org.jetbrains.compose.resources.stringResource
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.login_subtitle
 import saltpepper.core.ui.generated.resources.login_title
-import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AuthHeadline(
     modifier: Modifier = Modifier,
@@ -36,12 +36,11 @@ fun AuthHeadline(
                 stepSize = 2.sp
             ),
             maxLines = 1,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
+            style = MaterialTheme.typography.displayLarge
         )
         Text(
             text = subtitle,
-            fontSize = 16.sp,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline
         )
     }

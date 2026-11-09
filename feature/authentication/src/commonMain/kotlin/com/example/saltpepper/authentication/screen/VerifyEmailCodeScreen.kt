@@ -37,26 +37,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.saltpepper.authentication.component.AuthBottomButtons
 import com.example.saltpepper.authentication.component.AuthHeadline
+import com.example.saltpepper.authentication.viewmodel.VerifyEmailCodeViewModel
 import com.example.saltpepper.core.ui.component.button.ButtonVariant
 import com.example.saltpepper.core.ui.component.button.CustomTextButton
-import com.example.saltpepper.core.ui.component.button.PrimaryButton
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
-import com.example.saltpepper.authentication.viewmodel.VerifyEmailCodeViewModel
-import saltpepper.core.ui.generated.resources.Res
-import saltpepper.core.ui.generated.resources.back
-import saltpepper.core.ui.generated.resources.code_sent_subtitle
-import saltpepper.core.ui.generated.resources.login_title
-import saltpepper.core.ui.generated.resources.send_code_button_text
-import saltpepper.core.ui.generated.resources.verify_code_button_text
-import saltpepper.core.ui.generated.resources.verification_code_label
-import saltpepper.core.ui.generated.resources.change_email_button_text
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import saltpepper.core.ui.generated.resources.Res
+import saltpepper.core.ui.generated.resources.back
+import saltpepper.core.ui.generated.resources.change_email_button_text
+import saltpepper.core.ui.generated.resources.code_sent_subtitle
+import saltpepper.core.ui.generated.resources.login_title
+import saltpepper.core.ui.generated.resources.no_code_received_helper_text
+import saltpepper.core.ui.generated.resources.registration_verification_title
+import saltpepper.core.ui.generated.resources.resend_code_button_text
+import saltpepper.core.ui.generated.resources.verification_code_label
+import saltpepper.core.ui.generated.resources.verify_code_button_text
 
 @Composable
 fun VerifyEmailCodeScreen(
     email: String,
+    isRegistration: Boolean = false,
     viewModel: VerifyEmailCodeViewModel = koinViewModel(),
     onVerified: () -> Unit,
     onBack: () -> Unit
@@ -72,8 +75,9 @@ fun VerifyEmailCodeScreen(
         code = state.code,
         isLoading = state.isLoading,
         errorMessage = state.errorMessage,
+        isRegistration = isRegistration,
         onCodeChange = viewModel::onCodeChange,
-        onVerify = { viewModel.verify(email) },
+        onVerify = { viewModel.verify(email, isRegistration) },
         onResendCode = { viewModel.resend(email) },
         onBack = onBack
     )
@@ -85,6 +89,7 @@ fun VerifyEmailCodeContent(
     code: String,
     isLoading: Boolean,
     errorMessage: String?,
+    isRegistration: Boolean = false,
     onCodeChange: (String) -> Unit,
     onVerify: () -> Unit,
     onResendCode: () -> Unit,
@@ -114,7 +119,10 @@ fun VerifyEmailCodeContent(
         Spacer(Modifier.height(46.dp))
 
         AuthHeadline(
-            title = stringResource(Res.string.login_title),
+            title = stringResource(
+                if (isRegistration) Res.string.registration_verification_title
+                else Res.string.login_title
+            ),
             subtitle = stringResource(Res.string.code_sent_subtitle)
         )
 
@@ -129,7 +137,7 @@ fun VerifyEmailCodeContent(
 
         Text(
             text = stringResource(Res.string.verification_code_label),
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.bodyLarge
         )
 
         Spacer(Modifier.height(12.dp))
@@ -208,21 +216,17 @@ fun VerifyEmailCodeContent(
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                TextButton(onClick = onResendCode, enabled = !isLoading) {
-                    Text(stringResource(Res.string.send_code_button_text))
-                }
                 TextButton(onClick = onBack, enabled = !isLoading) {
                     Text(stringResource(Res.string.change_email_button_text))
                 }
             }
-            Spacer(Modifier.height(8.dp))
-            PrimaryButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onVerify,
-                text = stringResource(Res.string.verify_code_button_text),
-                enabled = !isLoading && code.length == 6,
+            AuthBottomButtons(
+                mainButtonText = stringResource(Res.string.verify_code_button_text),
+                onMainButtonClick = onVerify,
                 isLoading = isLoading,
-                buttonVariant = ButtonVariant.LARGE
+                helperText = stringResource(Res.string.no_code_received_helper_text),
+                redirectionButtonText = stringResource(Res.string.resend_code_button_text),
+                onRedirectionButtonClick = onResendCode
             )
         }
     }
