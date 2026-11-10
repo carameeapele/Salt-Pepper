@@ -29,6 +29,7 @@ class RegisterScreenViewModel(
     }
 
     private enum class Field {
+        NAME,
         EMAIL,
         PASSWORD,
         CONFIRM_PASSWORD
@@ -40,7 +41,7 @@ class RegisterScreenViewModel(
     )
 
     fun onNameChange(value: String) {
-        _uiModel.update { it.copy(name = value) }
+        _uiModel.update { it.copy(name = value, nameErrorMessage = null) }
     }
 
     fun onEmailChange(value: String) {
@@ -68,6 +69,7 @@ class RegisterScreenViewModel(
             _uiModel.update {
                 it.copy(
                     emailErrorMessage = validationError.messageFor(Field.EMAIL),
+                    nameErrorMessage = validationError.messageFor(Field.NAME),
                     passwordErrorMessage = validationError.messageFor(Field.PASSWORD),
                     confirmPasswordErrorMessage = validationError.messageFor(Field.CONFIRM_PASSWORD),
                     submitErrorMessage = null
@@ -84,7 +86,12 @@ class RegisterScreenViewModel(
             result.fold(
                 onSuccess = {
                     _uiModel.update { it.copy(isLoading = false) }
-                    _events.send(RegisterScreenEvent.RegisterSucceeded(currentModel.email.trim()))
+                    _events.send(
+                        RegisterScreenEvent.RegistrationStarted(
+                            email = currentModel.email.trim(),
+                            name = currentModel.name.trim()
+                        )
+                    )
                 },
                 onFailure = { error ->
                     _uiModel.update {
@@ -103,6 +110,7 @@ class RegisterScreenViewModel(
         message.takeIf { field == target }
 
     private fun validateInput(state: RegisterScreenUiModel): ValidationError? {
+        if (state.name.isBlank()) return ValidationError(Field.NAME, "Name is required")
         val email = state.email.trim()
         val password = state.password
 
@@ -150,5 +158,5 @@ class RegisterScreenViewModel(
 }
 
 sealed interface RegisterScreenEvent {
-    data class RegisterSucceeded(val email: String) : RegisterScreenEvent
+    data class RegistrationStarted(val email: String, val name: String) : RegisterScreenEvent
 }

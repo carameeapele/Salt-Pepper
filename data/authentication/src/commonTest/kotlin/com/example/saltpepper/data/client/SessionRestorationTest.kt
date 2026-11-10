@@ -1,5 +1,7 @@
 package com.example.saltpepper.data.client
 
+import com.example.saltpepper.data.repository.AuthState
+import com.example.saltpepper.data.repositoryImpl.AuthRepositoryImpl
 import com.example.saltpepper.data.session.PersistentSession
 import com.example.saltpepper.data.session.SecureSessionStore
 import io.ktor.client.HttpClient
@@ -279,6 +281,94 @@ class SessionRestorationTest {
             assertNull(fixture.client.restoreSession())
             fixture.client.logout()
             assertEquals(2, requests)
+        } finally {
+            fixture.close()
+        }
+    }
+
+    @Test
+    fun deletionRequestsCodeThenClearsSessionOnlyAfterConfirmedDeletion() = runTest {
+        var requests = 0
+        val fixture = Fixture(MockEngine { request ->
+            requests++
+            if (requests == 1) {
+                request.assertEndpointAndCookie("refresh", "synthetic-old")
+                respond(sessionBody, headers = jsonHeaders)
+            } else {
+                assertEquals(HttpMethod.Post, request.method)
+                assertEquals("Bearer synthetic-access", request.headers[HttpHeaders.Authorization])
+                when (requests) {
+                    2 -> {
+                        assertEquals("$baseUrl/me/delete/code", request.url.toString())
+                        respond("", HttpStatusCode.Accepted)
+                    }
+                    3 -> {
+                        assertEquals("$baseUrl/me/delete", request.url.toString())
+                        val payload = Json.parseToJsonElement(
+                            (request.body as io.ktor.http.content.TextContent).text
+                        ).jsonObject
+                        assertEquals("462947", payload["code"]?.jsonPrimitive?.content)
+                        assertEquals("true", payload["delete_created_recipes"]?.jsonPrimitive?.content)
+                        respond("", HttpStatusCode.NoContent)
+                    }
+                    else -> error("Unexpected request")
+                }
+            }
+        })
+        try {
+            fixture.seedCookie()
+            val repository = AuthRepositoryImpl(fixture.client)
+            repository.restoreSession().getOrThrow()
+            repository.requestAccountDeletionCode().getOrThrow()
+            assertNotNull(fixture.store.read())
+            assertNotNull(fixture.client.currentUser)
+            repository.deleteAccount("462947", true).getOrThrow()
+            assertEquals(AuthState.Unauthenticated, repository.authState.value)
+            assertNull(fixture.store.read())
+            assertNull(fixture.client.accessToken)
+            assertNull(fixture.client.currentUser)
+            assertNull(repository.restoreSession().getOrThrow())
+            assertEquals(3, requests)
+        } finally {
+            fixture.close()
+        }
+    }
+
+    @Test
+    fun failedDeletionPreservesSessionAndCanBeRetriedWithoutDeletingRecipes() = runTest {
+        var requests = 0
+        val fixture = Fixture(MockEngine { request ->
+            requests++
+            if (requests == 1) {
+                respond(sessionBody, headers = jsonHeaders)
+            } else {
+                assertEquals("$baseUrl/me/delete", request.url.toString())
+                val payload = Json.parseToJsonElement(
+                    (request.body as io.ktor.http.content.TextContent).text
+                ).jsonObject
+                assertEquals("false", payload["delete_created_recipes"]?.jsonPrimitive?.content)
+                if (requests == 2) {
+                    respond("""{"detail":"Invalid or expired code"}""", HttpStatusCode.BadRequest, jsonHeaders)
+                } else {
+                    respond("", HttpStatusCode.NoContent)
+                }
+            }
+        })
+        try {
+            fixture.seedCookie()
+            val repository = AuthRepositoryImpl(fixture.client)
+            val user = assertNotNull(repository.restoreSession().getOrThrow())
+            val stored = fixture.store.read()
+            val result = repository.deleteAccount("000000", false)
+            assertEquals("Invalid or expired code", result.exceptionOrNull()?.message)
+            assertEquals(AuthState.Authenticated(user), repository.authState.value)
+            assertEquals(stored, fixture.store.read())
+            assertNotNull(fixture.client.accessToken)
+            assertEquals(user, fixture.client.currentUser)
+            repository.deleteAccount("462947", false).getOrThrow()
+            assertNull(fixture.store.read())
+            assertEquals(AuthState.Unauthenticated, repository.authState.value)
+            assertEquals(3, requests)
         } finally {
             fixture.close()
         }

@@ -14,16 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.saltpepper.core.ui.component.button.ButtonVariant
 import com.example.saltpepper.core.ui.component.button.CustomTextButton
 import com.example.saltpepper.core.ui.component.button.PrimaryButton
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
+import org.jetbrains.compose.resources.stringResource
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.login_button_text
 import saltpepper.core.ui.generated.resources.no_account_helper_text
 import saltpepper.core.ui.generated.resources.register_redirection_button_text
-import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -55,10 +54,10 @@ fun AuthBottomButtons(
         ){
             Text(
                 text = helperText,
-                color = MaterialTheme.colorScheme.outline,
-                fontSize = 16.sp
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             CustomTextButton(
                 buttonVariant = ButtonVariant.MEDIUM,
                 onClick = onRedirectionButtonClick,

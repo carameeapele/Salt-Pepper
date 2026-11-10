@@ -22,8 +22,9 @@
     // RegisterScreen
     <string name="register_title">Create an account</string>
     <string name="register_subtitle">Start your culinary adventure</string>
-    <string name="full_name_label">Full name</string>
-    <string name="full_name_placeholder">Jean Dupont</string>
+    <string name="name_label">Name</string>
+    <string name="name_placeholder">Camille</string>
+    <string name="save_name_button_text">Save name</string>
     <string name="confirm_password_label">Confirm password</string>
     <string name="accept_terms_of_use_label">I accept the</string>
     <string name="terms_of_use_button">Terms of Use</string>
@@ -52,8 +53,17 @@
     <string name="recipes_empty_message">Your recipes will appear here.</string>
     <string name="menu_screen_title">Menu</string>
     <string name="menu_empty_message">Your meal plans will appear here.</string>
+
+    // Profile
     <string name="profile_screen_title">Profile</string>
     <string name="profile_empty_message">Your profile details will appear here.</string>
     <string name="logout_button_text">Log out</string>
+    <string name="delete_account_popup_title">Delete your account</string>
+    <string name="cancel_account_delete_button">Keep account</string>
+    <string name="delete_account_button">Delete account</string>
+    <string name="send_deletion_code_action">Send confirmation code</string>
+    <string name="delete_account_warning">Deleting your account is permanent. Published video recipes remain public.</string>
+    <string name="delete_account_code_sent">Enter the six-digit code sent to your email to permanently delete your account.</string>
+    <string name="delete_created_recipes_label">Also delete recipes I created</string>
     <string name="logout_error_message">You were signed out locally, but the server could not be notified.</string>
 </resources>

@@ -4,10 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material3.BasicAlertDialog
@@ -20,9 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.example.saltpepper.core.ui.component.button.CustomOutlinedButton
 import com.example.saltpepper.core.ui.component.button.PrimaryButton
 import com.example.saltpepper.core.ui.component.textfield.CustomOutlinedTextField
@@ -37,11 +42,22 @@ fun CustomPopUp(
     icon: ImageVector? = null,
     message: String,
     hasTextField: Boolean = false,
+    textFieldValue: String = "",
+    textFieldPlaceholder: String = "",
+    onValueChange: (String) -> Unit = {},
+    keyboardType: KeyboardType = KeyboardType.Text,
     confirmButtonText: String,
     onConfirm: () -> Unit,
     dismissButtonText: String? = null,
     onDismiss: () -> Unit = {},
+    confirmEnabled: Boolean = true,
+    isLoading: Boolean = false,
+    isDestructive: Boolean = false,
+    content: @Composable ColumnScope.() -> Unit = {}
 ) {
+    val accentColor = if (isDestructive) MaterialTheme.colorScheme.error
+        else MaterialTheme.colorScheme.primary
+
     BasicAlertDialog(
         modifier = modifier
             .border(
@@ -54,9 +70,14 @@ fun CustomPopUp(
                 shape = RoundedCornerShape(size = 12.dp)
             )
             .padding(24.dp),
-        onDismissRequest = onDismiss,
+        onDismissRequest = { if (!isLoading) onDismiss() },
+        properties = DialogProperties(
+            dismissOnBackPress = !isLoading,
+            dismissOnClickOutside = !isLoading
+        )
     ) {
         Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -64,13 +85,13 @@ fun CustomPopUp(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = accentColor,
                 )
             }
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLargeEmphasized,
-                color = MaterialTheme.colorScheme.primary
+                color = accentColor
             )
             Text(
                 text = message,
@@ -81,11 +102,14 @@ fun CustomPopUp(
             if (hasTextField) {
                 CustomOutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = { },
-                    placeholder = "Placeholder"
+                    value = textFieldValue,
+                    onValueChange = onValueChange,
+                    keyboardType = keyboardType,
+                    enabled = !isLoading,
+                    placeholder = textFieldPlaceholder
                 )
             }
+            content()
             if (popUpVariant == PopUpVariant.HORIZONTAL_BUTTONS) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -96,6 +120,7 @@ fun CustomPopUp(
                             modifier = Modifier.weight(1f),
                             onClick = onDismiss,
                             text = dismissButtonText,
+                            enabled = !isLoading,
                             borderColor = MaterialTheme.colorScheme.outline
                         )
                     }
@@ -103,6 +128,11 @@ fun CustomPopUp(
                         modifier = Modifier.weight(1f),
                         onClick = onConfirm,
                         text = confirmButtonText,
+                        enabled = confirmEnabled && !isLoading,
+                        isLoading = isLoading,
+                        containerColor = accentColor,
+                        contentColor = if (isDestructive) MaterialTheme.colorScheme.onError
+                            else MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             } else {
@@ -111,6 +141,7 @@ fun CustomPopUp(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = onDismiss,
                         text = dismissButtonText,
+                        enabled = !isLoading,
                         borderColor = MaterialTheme.colorScheme.outline
                     )
                 }
@@ -118,6 +149,11 @@ fun CustomPopUp(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = onConfirm,
                     text = confirmButtonText,
+                    enabled = confirmEnabled && !isLoading,
+                    isLoading = isLoading,
+                    containerColor = accentColor,
+                    contentColor = if (isDestructive) MaterialTheme.colorScheme.onError
+                        else MaterialTheme.colorScheme.onPrimary,
                 )
             }
         }

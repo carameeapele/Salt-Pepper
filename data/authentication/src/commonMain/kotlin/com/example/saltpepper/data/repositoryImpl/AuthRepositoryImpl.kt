@@ -75,6 +75,40 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun updateDisplayName(displayName: String): Result<Unit> {
+        return try {
+            backendClient.updateDisplayName(displayName)
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun requestAccountDeletionCode(): Result<Unit> {
+        return try {
+            backendClient.requestAccountDeletionCode()
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteAccount(code: String, deleteCreatedRecipes: Boolean): Result<Unit> {
+        return try {
+            backendClient.deleteAccount(code, deleteCreatedRecipes)
+            _authState.value = AuthState.Unauthenticated
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     override suspend fun logout(): Result<Unit> {
         return try {
             backendClient.logout()

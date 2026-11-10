@@ -1,3 +1,5 @@
+# Salt&Pepper
+
 This is a Kotlin Multiplatform project targeting Android, iOS.
 
 * [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
@@ -11,6 +13,10 @@ This is a Kotlin Multiplatform project targeting Android, iOS.
 
 * [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
   you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+
+### Test Accounts
+ilincatestsp@yopmail.com / Parola1234
+ceyaqueuvaddo-9785@yopmail.com / Parola1234
 
 ### Email-Code Authentication
 
@@ -45,6 +51,16 @@ two-week window. Its cookie expiration is always respected, even if earlier.
 The local inactivity cutoff is not a replacement for server-side enforcement.
 No refreshes run in the background. Existing installs require one successful
 sign-in to populate the new secure store.
+
+### Account Deletion
+
+Profile offers permanent account deletion with email confirmation:
+`POST /me/delete/code` sends the code, then `POST /me/delete` submits the
+six-digit code and `delete_created_recipes`. Both requests use the access token.
+Deleting created recipes is opt-in; published video recipes remain public.
+Failed requests keep the session and show an error so the user can retry.
+After successful deletion, local credentials are cleared and the app returns to
+the welcome screen without an additional logout request.
 
 ### Build and Run Android Application
 

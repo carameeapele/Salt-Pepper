@@ -76,8 +76,8 @@ fun RootNavigation(
                 onNavigateToVerifyCode = { email ->
                     navController.navigate(AuthDestinations.VerifyEmailCode(email))
                 },
-                onNavigateToRegistrationVerification = { email ->
-                    navController.navigate(AuthDestinations.VerifyRegistrationCode(email))
+                onNavigateToRegistrationVerification = { email, name ->
+                    navController.navigate(AuthDestinations.VerifyRegistrationCode(email, name))
                 },
                 onLoginSuccess = {
                     navController.navigate(MainDestination) {
@@ -113,6 +113,11 @@ fun RootNavigation(
                     }
                 }
                 MainScreen(
+                    onAccountDeleted = {
+                        navController.navigate(AuthDestinations.Landing) {
+                            popUpTo(MainDestination) { inclusive = true }
+                        }
+                    },
                     onLogout = {
                         coroutineScope.launch {
                             logoutError = authRepository.logout().isFailure

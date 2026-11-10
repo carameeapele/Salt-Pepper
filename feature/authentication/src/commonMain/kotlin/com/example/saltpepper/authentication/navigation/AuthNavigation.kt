@@ -13,7 +13,7 @@ fun NavGraphBuilder.authNavigation(
     onNavigateToRegister: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToVerifyCode: (String) -> Unit,
-    onNavigateToRegistrationVerification: (String) -> Unit,
+    onNavigateToRegistrationVerification: (String, String) -> Unit,
     onLoginSuccess: () -> Unit,
     onRegisterSuccess: () -> Unit,
     onNavigateBack: () -> Unit,
@@ -47,6 +47,7 @@ fun NavGraphBuilder.authNavigation(
         val destination = backStackEntry.toRoute<AuthDestinations.VerifyRegistrationCode>()
         VerifyEmailCodeScreen(
             email = destination.email,
+            displayName = destination.name,
             isRegistration = true,
             onVerified = onRegisterSuccess,
             onBack = onNavigateBackFromVerification
@@ -56,7 +57,7 @@ fun NavGraphBuilder.authNavigation(
     composable<AuthDestinations.Register> {
         RegisterScreen(
             onNavigateToLogin = onNavigateToLogin,
-            onRegisterSuccess = onNavigateToRegistrationVerification,
+            onRegistrationStarted = onNavigateToRegistrationVerification,
             onNavigateBack = onNavigateBack
         )
     }

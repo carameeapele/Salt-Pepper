@@ -79,6 +79,43 @@ class BackendAuthClientTest {
     }
 
     @Test
+    fun displayNameUsesAuthenticatedPatchAfterRegistrationVerification() = runTest {
+        var requestCount = 0
+        val engine = MockEngine { request ->
+            requestCount++
+            when (requestCount) {
+                1 -> {
+                    assertEquals("https://getsaltpepper.fr/api/auth/register/verify", request.url.toString())
+                    respond(
+                        """{"access_token":"access-123","user":{"id":"user-123","email":"user@example.com"}}""",
+                        headers = jsonHeaders
+                    )
+                }
+                2 -> {
+                    assertEquals("https://getsaltpepper.fr/api/me", request.url.toString())
+                    assertEquals(HttpMethod.Patch, request.method)
+                    assertEquals("Bearer access-123", request.headers[HttpHeaders.Authorization])
+                    assertEquals(
+                        "Jean Dupont",
+                        request.jsonBody()["display_name"]?.jsonPrimitive?.content
+                    )
+                    respond("""{"display_name":"Jean Dupont"}""", headers = jsonHeaders)
+                }
+                else -> error("Unexpected HTTP request: ${request.url}")
+            }
+        }
+        val httpClient = HttpClient(engine)
+        try {
+            val client = BackendAuthClient(httpClient)
+            client.verifyRegistrationCode("user@example.com", "508114")
+            client.updateDisplayName("Jean Dupont")
+            assertEquals(2, requestCount)
+        } finally {
+            httpClient.close()
+        }
+    }
+
+    @Test
     fun verifyPostsEmailAndCodeAndReadsReturnedSession() = runTest {
         val engine = MockEngine { request ->
             assertEquals("https://getsaltpepper.fr/api/auth/email/verify", request.url.toString())

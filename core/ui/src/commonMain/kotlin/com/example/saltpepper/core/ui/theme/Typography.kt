@@ -85,7 +85,11 @@ fun SaltPepperTypography() = Typography().run {
             fontFamily = geistFont,
             fontWeight = FontWeight.Bold
         ),
-        bodyMedium = bodyMedium.copy(fontFamily = geistFont),
+        bodyMedium = bodyMedium.copy(
+            fontFamily = geistFont,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal
+        ),
         bodySmall = bodySmall.copy(fontFamily = geistFont),
         labelLarge = labelLarge.copy(fontFamily = robotoFont),
         labelMedium = labelMedium.copy(fontFamily = robotoFont),

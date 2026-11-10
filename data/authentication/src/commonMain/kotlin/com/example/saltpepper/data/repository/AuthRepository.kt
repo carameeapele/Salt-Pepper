@@ -10,6 +10,9 @@ interface AuthRepository {
     suspend fun register(email: String, password: String): Result<Unit>
     suspend fun verifyEmailCode(email: String, code: String): Result<User>
     suspend fun verifyRegistrationCode(email: String, code: String): Result<User>
+    suspend fun updateDisplayName(displayName: String): Result<Unit>
+    suspend fun requestAccountDeletionCode(): Result<Unit>
+    suspend fun deleteAccount(code: String, deleteCreatedRecipes: Boolean): Result<Unit>
     suspend fun logout(): Result<Unit>
     suspend fun getCurrentUser(): Result<User?>
     suspend fun restoreSession(): Result<User?>

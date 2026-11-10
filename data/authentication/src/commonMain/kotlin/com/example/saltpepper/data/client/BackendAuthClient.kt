@@ -3,8 +3,10 @@ package com.example.saltpepper.data.client
 import com.example.saltpepper.data.model.User
 import com.example.saltpepper.data.session.PersistentSession
 import io.ktor.client.HttpClient
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -30,7 +32,8 @@ class BackendAuthClient(
     private val session: PersistentSession? = null,
     private val nowMillis: () -> Long = { Clock.System.now().toEpochMilliseconds() }
 ) {
-    private val authUrl = "${baseUrl.trimEnd('/')}/auth"
+    private val apiUrl = baseUrl.trimEnd('/')
+    private val authUrl = "$apiUrl/auth"
     private val sessionMutex = Mutex()
     private var accessExpiresAt = 0L
     var accessToken: String? = null
@@ -63,6 +66,44 @@ class BackendAuthClient(
             put("code", code)
         })
         readSession(response)
+    }
+
+    suspend fun updateDisplayName(displayName: String) {
+        val token = requireNotNull(accessToken) { "No authenticated session is available" }
+        val response = httpClient.patch("$apiUrl/me") {
+            headers.append(HttpHeaders.Authorization, "Bearer $token")
+            contentType(ContentType.Application.Json)
+            setBody(buildJsonObject { put("display_name", displayName) }.toString())
+        }
+        readResponse(response)
+    }
+
+    suspend fun requestAccountDeletionCode() = sessionMutex.withLock {
+        authenticatedPost("me/delete/code")
+        Unit
+    }
+
+    suspend fun deleteAccount(code: String, deleteCreatedRecipes: Boolean) = sessionMutex.withLock {
+        authenticatedPost("me/delete", buildJsonObject {
+            put("code", code)
+            put("delete_created_recipes", deleteCreatedRecipes)
+        })
+        clearSession()
+    }
+
+    private suspend fun authenticatedPost(endpoint: String, payload: JsonObject? = null) {
+        if (nowMillis() >= accessExpiresAt - 30_000 && session?.refreshToken() != null) {
+            readSession(request("refresh"))
+        }
+        val token = requireNotNull(accessToken) { "No authenticated session is available" }
+        val response = httpClient.post("$apiUrl/$endpoint") {
+            headers.append(HttpHeaders.Authorization, "Bearer $token")
+            if (payload != null) {
+                contentType(ContentType.Application.Json)
+                setBody(payload.toString())
+            }
+        }
+        readResponse(response)
     }
 
     suspend fun restoreSession(): User? = sessionMutex.withLock {
@@ -135,6 +176,10 @@ class BackendAuthClient(
                 setBody(payload.toString())
             }
         }
+        return readResponse(response)
+    }
+
+    private suspend fun readResponse(response: HttpResponse): JsonObject {
         if (response.status.value in 200..299) {
             response.headers.getAll(HttpHeaders.SetCookie)?.forEach { header ->
                 val cookie = parseServerSetCookieHeader(header)

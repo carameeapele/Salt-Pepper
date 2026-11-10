@@ -27,6 +27,7 @@ object MainDestination
 fun MainNavigation(
     navController: NavHostController,
     onLogout: () -> Unit,
+    onAccountDeleted: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -64,7 +65,7 @@ fun MainNavigation(
         )
         recipesNavigation()
         menuNavigation()
-        profileNavigation(onLogout = onLogout)
+        profileNavigation(onLogout = onLogout, onAccountDeleted = onAccountDeleted)
     }
 }
 

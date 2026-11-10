@@ -2,6 +2,7 @@ package com.example.saltpepper.authentication.model
 
 data class RegisterScreenUiModel(
     val name: String = "",
+    val nameErrorMessage: String? = null,
     val email: String = "",
     val emailErrorMessage: String? = null,
     val password: String = "",

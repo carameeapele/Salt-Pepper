@@ -108,6 +108,15 @@ class SplashScreenViewModelTest {
         override suspend fun verifyRegistrationCode(email: String, code: String): Result<User> =
             error("Unexpected verifyRegistrationCode call")
 
+        override suspend fun updateDisplayName(displayName: String): Result<Unit> =
+            error("Unexpected updateDisplayName call")
+
+        override suspend fun requestAccountDeletionCode(): Result<Unit> =
+            error("Unexpected requestAccountDeletionCode call")
+
+        override suspend fun deleteAccount(code: String, deleteCreatedRecipes: Boolean): Result<Unit> =
+            error("Unexpected deleteAccount call")
+
         override suspend fun logout(): Result<Unit> =
             error("Unexpected logout call")
 
