@@ -4,8 +4,16 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.saltpepper.profile.screen.ProfileScreen
 
-fun NavGraphBuilder.profileNavigation(onLogout: () -> Unit, onAccountDeleted: () -> Unit) {
+fun NavGraphBuilder.profileNavigation(
+    onLogout: () -> Unit,
+    onAccountDeleted: () -> Unit,
+    onProfileSetup: () -> Unit
+) {
     composable<ProfileDestinations.Profile> {
-        ProfileScreen(onLogout = onLogout, onAccountDeleted = onAccountDeleted)
+        ProfileScreen(
+            onLogout = onLogout,
+            onAccountDeleted = onAccountDeleted,
+            onProfileSetup = onProfileSetup
+        )
     }
 }

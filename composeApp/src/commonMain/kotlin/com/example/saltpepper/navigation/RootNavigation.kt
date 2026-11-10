@@ -22,25 +22,34 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.saltpepper.authentication.navigation.AuthDestinations
 import com.example.saltpepper.authentication.navigation.authNavigation
 import com.example.saltpepper.data.repository.AuthRepository
+import com.example.saltpepper.profile.screen.ProfileSetupScreen
+import com.example.saltpepper.profile.viewmodel.ProfileSetupViewModel
 import com.example.saltpepper.splash.navigation.SplashDestination
 import com.example.saltpepper.splash.navigation.splashNavigation
 import com.example.saltpepper.ui.MainScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.logout_error_message
 import saltpepper.core.ui.generated.resources.ok
+
+@Serializable
+private data class ProfileSetupDestination(val fromProfile: Boolean = false)
 
 @Composable
 fun RootNavigation(
     navController: NavHostController = rememberNavController()
 ) {
     var logoutError by remember { mutableStateOf(false) }
+    val setupViewModel: ProfileSetupViewModel = koinViewModel()
     Box(Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
@@ -80,12 +89,14 @@ fun RootNavigation(
                     navController.navigate(AuthDestinations.VerifyRegistrationCode(email, name))
                 },
                 onLoginSuccess = {
+                    setupViewModel.reset()
                     navController.navigate(MainDestination) {
                         popUpTo(AuthDestinations.Landing) { inclusive = true }
                     }
                 },
                 onRegisterSuccess = {
-                    navController.navigate(MainDestination) {
+                    setupViewModel.reset()
+                    navController.navigate(ProfileSetupDestination()) {
                         popUpTo(AuthDestinations.Landing) { inclusive = true }
                     }
                 },
@@ -94,6 +105,21 @@ fun RootNavigation(
                     navController.popBackStack()
                 }
             )
+            composable<ProfileSetupDestination> { entry ->
+                val destination = entry.toRoute<ProfileSetupDestination>()
+                ProfileSetupScreen(
+                    viewModel = setupViewModel,
+                    onExit = {
+                        if (destination.fromProfile) {
+                            navController.popBackStack()
+                        } else {
+                            navController.navigate(MainDestination) {
+                                popUpTo<ProfileSetupDestination> { inclusive = true }
+                            }
+                        }
+                    }
+                )
+            }
             composable<MainDestination> {
                 val lifecycleOwner = LocalLifecycleOwner.current
                 val authRepository = koinInject<AuthRepository>()
@@ -103,6 +129,7 @@ fun RootNavigation(
                         while (true) {
                             val result = authRepository.restoreSession()
                             if (result.isSuccess && result.getOrNull() == null) {
+                                setupViewModel.reset()
                                 navController.navigate(AuthDestinations.Landing) {
                                     popUpTo(MainDestination) { inclusive = true }
                                 }
@@ -113,7 +140,12 @@ fun RootNavigation(
                     }
                 }
                 MainScreen(
+                    onProfileSetup = {
+                        setupViewModel.start()
+                        navController.navigate(ProfileSetupDestination(fromProfile = true))
+                    },
                     onAccountDeleted = {
+                        setupViewModel.reset()
                         navController.navigate(AuthDestinations.Landing) {
                             popUpTo(MainDestination) { inclusive = true }
                         }
@@ -121,6 +153,7 @@ fun RootNavigation(
                     onLogout = {
                         coroutineScope.launch {
                             logoutError = authRepository.logout().isFailure
+                            setupViewModel.reset()
                             navController.navigate(AuthDestinations.Landing) {
                                 popUpTo(MainDestination) { inclusive = true }
                             }

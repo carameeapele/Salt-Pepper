@@ -30,6 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 fun MainScreen(
 	onLogout: () -> Unit,
     onAccountDeleted: () -> Unit,
+    onProfileSetup: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
@@ -48,6 +49,7 @@ fun MainScreen(
             navController = navController,
             onLogout = onLogout,
             onAccountDeleted = onAccountDeleted,
+            onProfileSetup = onProfileSetup,
             modifier = Modifier.fillMaxSize()
                 .padding(contentPadding)
                 .consumeWindowInsets(contentPadding)

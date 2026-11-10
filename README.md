@@ -52,6 +52,15 @@ The local inactivity cutoff is not a replacement for server-side enforcement.
 No refreshes run in the background. Existing installs require one successful
 sign-in to populate the new secure store.
 
+### Profile Setup Preview
+
+After registration, a skippable three-step flow collects household size, dietary
+and health preferences, allergies, and preferred cuisines. It can be reopened
+from Profile. Choices are held only in memory for the current signed-in session
+and reset on logout, account deletion, or a new sign-in. They are not yet sent
+to the household API or used to filter recipes. Backend saving is intentionally
+deferred until the accepted preference IDs are available.
+
 ### Account Deletion
 
 Profile offers permanent account deletion with email confirmation:

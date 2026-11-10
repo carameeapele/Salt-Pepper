@@ -28,12 +28,14 @@ import saltpepper.core.ui.generated.resources.delete_account_button
 import saltpepper.core.ui.generated.resources.logout_button_text
 import saltpepper.core.ui.generated.resources.profile_empty_message
 import saltpepper.core.ui.generated.resources.profile_screen_title
+import saltpepper.core.ui.generated.resources.setup_entry
 
 @Composable
 fun ProfileScreen(
 	modifier: Modifier = Modifier,
 	onLogout: () -> Unit,
     onAccountDeleted: () -> Unit,
+    onProfileSetup: () -> Unit,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -44,6 +46,7 @@ fun ProfileScreen(
         modifier = modifier,
         state = state,
         onLogout = onLogout,
+        onProfileSetup = onProfileSetup,
         onDeleteClick = viewModel::openDeletionDialog,
         onDismissDeletion = viewModel::dismissDeletionDialog,
         onCodeChange = viewModel::onCodeChange,
@@ -58,6 +61,7 @@ private fun ProfileScreenContent(
     modifier: Modifier = Modifier,
     state: ProfileUiState = ProfileUiState(),
     onLogout: () -> Unit = {},
+    onProfileSetup: () -> Unit = {},
     onDeleteClick: () -> Unit = {},
     onDismissDeletion: () -> Unit = {},
     onCodeChange: (String) -> Unit = {},
@@ -77,7 +81,13 @@ private fun ProfileScreenContent(
 			color = MaterialTheme.colorScheme.onSurfaceVariant
 		)
 		Spacer(Modifier.height(24.dp))
-		PrimaryButton(
+        PrimaryButton(
+            onClick = onProfileSetup,
+            text = stringResource(Res.string.setup_entry),
+            enabled = !state.isLoading
+        )
+        Spacer(Modifier.height(16.dp))
+        PrimaryButton(
             buttonVariant = ButtonVariant.MEDIUM,
             onClick = onLogout,
             text = stringResource(Res.string.logout_button_text),
