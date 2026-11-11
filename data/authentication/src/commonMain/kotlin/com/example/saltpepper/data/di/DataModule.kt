@@ -2,6 +2,8 @@ package com.example.saltpepper.data.di
 
 import com.example.saltpepper.data.client.BackendAuthClient
 import com.example.saltpepper.data.repository.AuthRepository
+import com.example.saltpepper.data.repository.BackendProfileRepository
+import com.example.saltpepper.data.repository.ProfileRepository
 import com.example.saltpepper.data.repositoryImpl.AuthRepositoryImpl
 import com.example.saltpepper.data.session.PersistentSession
 import com.example.saltpepper.data.session.createSecureSessionStore
@@ -22,4 +24,5 @@ val dataModule = module {
     single { PersistentSession(createSecureSessionStore()) }
     single { BackendAuthClient(get(), session = get()) }
     single<AuthRepository> { AuthRepositoryImpl(get()) }
+    single<ProfileRepository> { BackendProfileRepository(get()) }
 }

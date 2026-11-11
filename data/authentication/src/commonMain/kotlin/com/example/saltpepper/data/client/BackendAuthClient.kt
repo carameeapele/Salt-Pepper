@@ -1,8 +1,11 @@
 package com.example.saltpepper.data.client
 
+import com.example.saltpepper.data.model.MemberProfile
+import com.example.saltpepper.data.model.ProfileRecipe
 import com.example.saltpepper.data.model.User
 import com.example.saltpepper.data.session.PersistentSession
 import io.ktor.client.HttpClient
+import io.ktor.client.request.get
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -22,9 +25,11 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.put
 import kotlin.time.Clock
+import kotlin.time.Instant
 
 class BackendAuthClient(
     private val httpClient: HttpClient,
@@ -81,6 +86,44 @@ class BackendAuthClient(
     suspend fun requestAccountDeletionCode() = sessionMutex.withLock {
         authenticatedPost("me/delete/code")
         Unit
+    }
+
+    suspend fun getProfile(): MemberProfile = sessionMutex.withLock {
+        val profile = authenticatedGet("me") as? JsonObject
+            ?: error("The backend returned an invalid profile")
+        val createdAt = requireNotNull(profile.stringValue("created_at")) {
+            "The backend returned no membership date"
+        }
+        MemberProfile(
+            displayName = profile.stringValue("display_name"),
+            email = requireNotNull(profile.stringValue("email")) { "The backend returned no user email" },
+            memberSince = Instant.parse(createdAt).toString().substringBefore('T')
+        )
+    }
+
+    suspend fun getProfileRecipes(favorites: Boolean): List<ProfileRecipe> = sessionMutex.withLock {
+        val recipes = authenticatedGet(if (favorites) "recipes/favorites" else "recipes") as? JsonArray
+            ?: error("The backend returned an invalid recipe list")
+        recipes.map { element ->
+            val recipe = element.jsonObject
+            ProfileRecipe(
+                id = requireNotNull(recipe.stringValue("id")) { "The backend returned no recipe ID" },
+                title = requireNotNull(recipe.stringValue("title")) { "The backend returned no recipe title" },
+                totalTimeMinutes = (recipe["total_time_min"] as? JsonPrimitive)?.intOrNull
+            )
+        }
+    }
+
+    private suspend fun authenticatedGet(endpoint: String): JsonElement {
+        if (nowMillis() >= accessExpiresAt - 30_000 && session?.refreshToken() != null) {
+            readSession(request("refresh"))
+        }
+        val token = requireNotNull(accessToken) { "No authenticated session is available" }
+        val response = httpClient.get("$apiUrl/$endpoint") {
+            headers.append(HttpHeaders.Authorization, "Bearer $token")
+        }
+        return readJsonResponse(response)
+            ?: error("The backend returned an invalid JSON response")
     }
 
     suspend fun deleteAccount(code: String, deleteCreatedRecipes: Boolean) = sessionMutex.withLock {
@@ -180,6 +223,10 @@ class BackendAuthClient(
     }
 
     private suspend fun readResponse(response: HttpResponse): JsonObject {
+        return readJsonResponse(response) as? JsonObject ?: buildJsonObject {}
+    }
+
+    private suspend fun readJsonResponse(response: HttpResponse): JsonElement? {
         if (response.status.value in 200..299) {
             response.headers.getAll(HttpHeaders.SetCookie)?.forEach { header ->
                 val cookie = parseServerSetCookieHeader(header)
@@ -187,19 +234,18 @@ class BackendAuthClient(
             }
         }
         val body = response.bodyAsText()
-        val parsed = runCatching { Json.parseToJsonElement(body) as? JsonObject }.getOrNull()
+        val parsed = runCatching { Json.parseToJsonElement(body) }.getOrNull()
         if (response.status.value !in 200..299) {
-            val message = parsed?.get("error")?.errorMessage()
-                ?: parsed?.get("detail")?.errorMessage()
-                ?: parsed?.entries?.joinToString("\n") { (field, value) ->
+            val errorBody = parsed as? JsonObject
+            val message = errorBody?.get("error")?.errorMessage()
+                ?: errorBody?.get("detail")?.errorMessage()
+                ?: errorBody?.entries?.joinToString("\n") { (field, value) ->
                     "$field: ${value.errorMessage()}"
                 }?.takeIf { it.isNotBlank() }
                 ?: "Backend request failed (HTTP ${response.status.value})"
             throw BackendRequestException(response.status.value, message)
         }
-        return parsed ?: if (response.status.value in 200..299) buildJsonObject {} else {
-            error("The backend returned an invalid JSON response")
-        }
+        return parsed
     }
 
     private fun JsonObject.stringValue(name: String): String? =

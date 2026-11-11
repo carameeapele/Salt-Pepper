@@ -61,9 +61,20 @@ and reset on logout, account deletion, or a new sign-in. They are not yet sent
 to the household API or used to filter recipes. Backend saving is intentionally
 deferred until the accepted preference IDs are available.
 
+### Profile Recipes
+
+Profile loads the display name and membership date from `GET /me`, favorites
+from `GET /recipes/favorites`, and authored/imported recipes from `GET /recipes`.
+The screen has explicit Loading, Success, and Error states. Success contains the
+profile and both recipe lists; any failed request shows an error with a retry
+action. Returning to Profile refreshes its content. An empty favorites list offers Browse recipes
+to Home; empty personal recipes show disabled import/write actions until those
+features are implemented.
+
 ### Account Deletion
 
-Profile offers permanent account deletion with email confirmation:
+The settings icon beside the profile name opens Settings, which contains logout
+and permanent account deletion with email confirmation:
 `POST /me/delete/code` sends the code, then `POST /me/delete` submits the
 six-digit code and `delete_created_recipes`. Both requests use the access token.
 Deleting created recipes is opt-in; published video recipes remain public.

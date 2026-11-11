@@ -1,8 +1,12 @@
 package com.example.saltpepper.profile.viewmodel
 
+import com.example.saltpepper.data.model.MemberProfile
+import com.example.saltpepper.data.model.ProfileRecipe
 import com.example.saltpepper.data.model.User
 import com.example.saltpepper.data.repository.AuthRepository
 import com.example.saltpepper.data.repository.AuthState
+import com.example.saltpepper.data.repository.ProfileRepository
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +18,7 @@ import kotlinx.coroutines.test.setMain
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -23,7 +28,7 @@ class ProfileViewModelTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
         try {
             val repository = FakeRepository()
-            val viewModel = ProfileViewModel(repository)
+            val viewModel = ProfileViewModel(repository, FakeProfileRepository())
             viewModel.openDeletionDialog()
             viewModel.onCodeChange("123456")
             viewModel.deleteAccount()
@@ -54,7 +59,7 @@ class ProfileViewModelTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
         try {
             val repository = FakeRepository()
-            val viewModel = ProfileViewModel(repository)
+            val viewModel = ProfileViewModel(repository, FakeProfileRepository())
             viewModel.openDeletionDialog()
             repository.failure = Exception("Try later")
             viewModel.requestDeletionCode()
@@ -73,6 +78,70 @@ class ProfileViewModelTest {
             assertEquals("Invalid or expired code", viewModel.uiState.value.errorMessage)
             viewModel.dismissDeletionDialog()
             assertEquals(ProfileUiState(), viewModel.uiState.value)
+        } finally {
+            Dispatchers.resetMain()
+        }
+    }
+
+    private class FakeProfileRepository : ProfileRepository {
+        var failFavorites = false
+        var gate: CompletableDeferred<Unit>? = null
+        var profileCalls = 0
+        override suspend fun getProfile() =
+            Result.success(MemberProfile("Camille", "user@example.test", "2026-11-10")).also {
+                profileCalls++
+                gate?.await()
+            }
+        override suspend fun getFavorites(): Result<List<ProfileRecipe>> =
+            if (failFavorites) Result.failure(Exception("Favorites unavailable"))
+            else Result.success(emptyList())
+        override suspend fun getMyRecipes() =
+            Result.success(listOf(ProfileRecipe("recipe-1", "Soup", 20)))
+    }
+
+    @Test
+    fun profileErrorCanBeRetriedAndSuccessSurvivesDeletionDialogDismissal() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val profileRepository = FakeProfileRepository().apply { failFavorites = true }
+            val viewModel = ProfileViewModel(FakeRepository(), profileRepository)
+            assertIs<ProfileScreenUiState.Loading>(viewModel.uiState.value.screenState)
+            viewModel.refresh()
+            runCurrent()
+            val error = assertIs<ProfileScreenUiState.Error>(viewModel.uiState.value.screenState)
+            assertEquals("Favorites unavailable", error.message)
+            profileRepository.failFavorites = false
+            viewModel.refresh()
+            assertIs<ProfileScreenUiState.Loading>(viewModel.uiState.value.screenState)
+            runCurrent()
+            val success = assertIs<ProfileScreenUiState.Success>(viewModel.uiState.value.screenState)
+            assertEquals("Camille", success.profile.displayName)
+            assertEquals("2026-11-10", success.profile.memberSince)
+            assertEquals("Soup", success.myRecipes.single().title)
+            assertEquals(emptyList(), success.favorites)
+            viewModel.openDeletionDialog()
+            viewModel.dismissDeletionDialog()
+            assertEquals(success, viewModel.uiState.value.screenState)
+        } finally {
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun loadingWaitsForAllRequestsAndPreventsDuplicateRefreshes() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val gate = CompletableDeferred<Unit>()
+            val repository = FakeProfileRepository().apply { this.gate = gate }
+            val viewModel = ProfileViewModel(FakeRepository(), repository)
+            viewModel.refresh()
+            viewModel.refresh()
+            runCurrent()
+            assertIs<ProfileScreenUiState.Loading>(viewModel.uiState.value.screenState)
+            assertEquals(1, repository.profileCalls)
+            gate.complete(Unit)
+            runCurrent()
+            assertIs<ProfileScreenUiState.Success>(viewModel.uiState.value.screenState)
         } finally {
             Dispatchers.resetMain()
         }

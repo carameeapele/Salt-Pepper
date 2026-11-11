@@ -123,4 +123,27 @@
     <string name="setup_thai">Thaïlandaise</string>
     <string name="setup_mexican">Mexicaine</string>
     <string name="setup_middle_eastern">Moyen-orientale</string>
+    <string name="profile_member_since">Membre depuis le %1$s</string>
+    <string name="profile_favorites">Recettes favorites</string>
+    <string name="profile_my_recipes">Mes recettes</string>
+    <string name="profile_no_favorites">Pas encore de favoris</string>
+    <string name="profile_no_recipes">Pas encore de recettes</string>
+    <string name="profile_import_recipe">Importer une recette depuis une vidéo</string>
+    <string name="profile_write_recipe">Écrire une recette</string>
+    <string name="profile_creation_coming_soon">L’importation et la création de recettes arrivent bientôt.</string>
+    <string name="profile_recipe_minutes">%1$d min</string>
+    <string name="month_year">%1$s %2$s</string>
+    <string name="month_january">janvier</string>
+    <string name="month_february">février</string>
+    <string name="month_march">mars</string>
+    <string name="month_april">avril</string>
+    <string name="month_may">mai</string>
+    <string name="month_june">juin</string>
+    <string name="month_july">juillet</string>
+    <string name="month_august">août</string>
+    <string name="month_september">septembre</string>
+    <string name="month_october">octobre</string>
+    <string name="month_november">novembre</string>
+    <string name="month_december">décembre</string>
+    <string name="settings_title">Paramètres</string>
 </resources>

@@ -122,4 +122,27 @@
     <string name="setup_thai">Thai</string>
     <string name="setup_mexican">Mexican</string>
     <string name="setup_middle_eastern">Middle Eastern</string>
+    <string name="profile_member_since">Member since %1$s</string>
+    <string name="profile_favorites">Favorite recipes</string>
+    <string name="profile_my_recipes">My recipes</string>
+    <string name="profile_no_favorites">No favorites yet</string>
+    <string name="profile_no_recipes">No recipes yet</string>
+    <string name="profile_import_recipe">Import a recipe from a video</string>
+    <string name="profile_write_recipe">Write a recipe</string>
+    <string name="profile_creation_coming_soon">Importing and writing recipes are coming soon.</string>
+    <string name="profile_recipe_minutes">%1$d min</string>
+    <string name="month_year">%1$s %2$s</string>
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
+    <string name="month_april">April</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_october">October</string>
+    <string name="month_november">November</string>
+    <string name="month_december">December</string>
+    <string name="settings_title">Settings</string>
 </resources>

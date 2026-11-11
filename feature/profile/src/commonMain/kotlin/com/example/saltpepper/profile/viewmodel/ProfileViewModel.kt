@@ -2,13 +2,29 @@ package com.example.saltpepper.profile.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.saltpepper.data.model.MemberProfile
+import com.example.saltpepper.data.model.ProfileRecipe
 import com.example.saltpepper.data.repository.AuthRepository
+import com.example.saltpepper.data.repository.ProfileRepository
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+sealed interface ProfileScreenUiState {
+    data object Loading : ProfileScreenUiState
+    data class Success(
+        val profile: MemberProfile,
+        val favorites: List<ProfileRecipe>,
+        val myRecipes: List<ProfileRecipe>
+    ) : ProfileScreenUiState
+    data class Error(val message: String) : ProfileScreenUiState
+}
+
 data class ProfileUiState(
+    val screenState: ProfileScreenUiState = ProfileScreenUiState.Loading,
     val showDeletionDialog: Boolean = false,
     val codeSent: Boolean = false,
     val code: String = "",
@@ -18,9 +34,39 @@ data class ProfileUiState(
     val accountDeleted: Boolean = false
 )
 
-class ProfileViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class ProfileViewModel(
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository
+) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState = _uiState.asStateFlow()
+    private var refreshJob: Job? = null
+
+    fun refresh() {
+        if (refreshJob?.isActive == true || _uiState.value.accountDeleted) return
+        _uiState.update { it.copy(screenState = ProfileScreenUiState.Loading) }
+        refreshJob = viewModelScope.launch {
+            val profileRequest = async { profileRepository.getProfile() }
+            val favoritesRequest = async { profileRepository.getFavorites() }
+            val recipesRequest = async { profileRepository.getMyRecipes() }
+            val profile = profileRequest.await()
+            val favorites = favoritesRequest.await()
+            val recipes = recipesRequest.await()
+            val errors = listOfNotNull(
+                profile.exceptionOrNull()?.let { it.message ?: "Could not load profile" },
+                favorites.exceptionOrNull()?.let { it.message ?: "Could not load favorites" },
+                recipes.exceptionOrNull()?.let { it.message ?: "Could not load recipes" }
+            )
+            val screenState = if (errors.isEmpty()) {
+                ProfileScreenUiState.Success(
+                    profile.getOrThrow(), favorites.getOrThrow(), recipes.getOrThrow()
+                )
+            } else {
+                ProfileScreenUiState.Error(errors.distinct().joinToString("\n"))
+            }
+            _uiState.update { if (it.accountDeleted) it else it.copy(screenState = screenState) }
+        }
+    }
 
     fun openDeletionDialog() {
         if (!_uiState.value.isLoading) {
@@ -30,7 +76,10 @@ class ProfileViewModel(private val authRepository: AuthRepository) : ViewModel()
 
     fun dismissDeletionDialog() {
         if (!_uiState.value.isLoading) {
-            _uiState.value = ProfileUiState()
+            _uiState.update {
+                it.copy(showDeletionDialog = false, codeSent = false, code = "",
+                    deleteCreatedRecipes = false, errorMessage = null)
+            }
         }
     }
 
@@ -69,6 +118,7 @@ class ProfileViewModel(private val authRepository: AuthRepository) : ViewModel()
         viewModelScope.launch {
             authRepository.deleteAccount(state.code, state.deleteCreatedRecipes).fold(
                 onSuccess = {
+                    refreshJob?.cancel()
                     _uiState.value = ProfileUiState(accountDeleted = true)
                 },
                 onFailure = { error ->

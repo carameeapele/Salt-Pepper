@@ -5,4 +5,7 @@ import kotlinx.serialization.Serializable
 sealed class ProfileDestinations {
     @Serializable
     data object Profile : ProfileDestinations()
+
+    @Serializable
+    data object Settings : ProfileDestinations()
 }

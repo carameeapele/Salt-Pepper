@@ -58,7 +58,10 @@ fun SaltPepperTypography() = Typography().run {
             fontSize = 40.sp
         ),
         displaySmall = displaySmall.copy(fontFamily = robotoFont),
-        headlineLarge = headlineLarge.copy(fontFamily = unboundedFont),
+        headlineLarge = headlineLarge.copy(
+            fontFamily = unboundedFont,
+            fontWeight = FontWeight.Black,
+        ),
         headlineMedium = headlineMedium.copy(fontFamily = unboundedFont),
         headlineSmall = headlineSmall.copy(fontFamily = unboundedFont),
         titleLarge = titleLarge.copy(
@@ -91,7 +94,7 @@ fun SaltPepperTypography() = Typography().run {
             fontWeight = FontWeight.Normal
         ),
         bodySmall = bodySmall.copy(fontFamily = geistFont),
-        labelLarge = labelLarge.copy(fontFamily = robotoFont),
+        labelLarge = labelLarge.copy(fontFamily = geistFont),
         labelMedium = labelMedium.copy(fontFamily = robotoFont),
         labelSmall = labelSmall.copy(
             fontFamily = geistFont,

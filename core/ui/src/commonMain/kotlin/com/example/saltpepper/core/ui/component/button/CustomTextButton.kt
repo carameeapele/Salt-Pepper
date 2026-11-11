@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -23,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
+import org.jetbrains.compose.resources.stringResource
+import saltpepper.core.ui.generated.resources.Res
+import saltpepper.core.ui.generated.resources.back
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -44,10 +49,7 @@ fun CustomTextButton(
             containerColor = Color.Transparent,
             contentColor = color
         ),
-        contentPadding = PaddingValues(
-            horizontal = 4.dp,
-            vertical = 2.dp
-        ),
+        contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp),
         enabled = enabled
     ) {
         Row(
@@ -60,7 +62,7 @@ fun CustomTextButton(
                     contentDescription = null,
                     modifier = Modifier.size(buttonVariant.iconSize)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(4.dp))
             }
             Text(
                 text = text,
@@ -68,7 +70,7 @@ fun CustomTextButton(
                 fontWeight = FontWeight.SemiBold
             )
             if (rightIcon != null) {
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 Icon(
                     imageVector = rightIcon,
                     contentDescription = null,
@@ -81,12 +83,26 @@ fun CustomTextButton(
 
 @Preview
 @Composable
-fun CustomTextButtonPreview() {
+fun CustomTextButtonGiantPreview() {
     SaltPepperTheme {
         CustomTextButton(
             buttonVariant = ButtonVariant.GIANT,
             onClick = { },
-            text = "Button"
+            text = stringResource(Res.string.back),
+            leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CustomTextButtonMediumPreview() {
+    SaltPepperTheme {
+        CustomTextButton(
+            buttonVariant = ButtonVariant.MEDIUM,
+            onClick = { },
+            text = stringResource(Res.string.back),
+            leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
         )
     }
 }
