@@ -66,7 +66,7 @@
     <string name="delete_account_code_sent">Enter the six-digit code sent to your email to permanently delete your account.</string>
     <string name="delete_created_recipes_label">Also delete recipes I created</string>
     <string name="logout_error_message">You were signed out locally, but the server could not be notified.</string>
-    <string name="setup_entry">Household and food preferences</string>
+    <string name="setup_settings">Edit household</string>
     <string name="setup_skip">Skip for now</string>
     <string name="setup_next">Continue</string>
     <string name="setup_finish">Finish</string>
@@ -123,9 +123,11 @@
     <string name="setup_mexican">Mexican</string>
     <string name="setup_middle_eastern">Middle Eastern</string>
     <string name="profile_member_since">Member since %1$s</string>
-    <string name="profile_favorites">Favorite recipes</string>
-    <string name="profile_my_recipes">My recipes</string>
-    <string name="profile_no_favorites">No favorites yet</string>
+    <string name="profile_favorites_card_title">Favorite recipes</string>
+    <string name="profile_my_recipes_card_title">My recipes</string>
+    <string name="profile_no_favorites">No favourites yet</string>
+    <string name="favorites_card_description">All the recipes you saved</string>
+    <string name="favorites_empty_description">Tap the heart on a recipe to find it here in no time.</string>
     <string name="profile_no_recipes">No recipes yet</string>
     <string name="profile_import_recipe">Import a recipe from a video</string>
     <string name="profile_write_recipe">Write a recipe</string>

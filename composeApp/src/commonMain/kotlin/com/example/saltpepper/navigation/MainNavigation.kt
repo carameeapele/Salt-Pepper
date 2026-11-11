@@ -72,6 +72,7 @@ fun MainNavigation(
             onProfileSetup = onProfileSetup,
             onBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.HOME) },
             onSettings = { navController.navigate(ProfileDestinations.Settings) { launchSingleTop = true } },
+            onFavorites = { navController.navigate(ProfileDestinations.Favorites) { launchSingleTop = true } },
             onBack = { navController.popBackStack() }
         )
     }
@@ -85,6 +86,7 @@ internal fun NavDestination.mainSection(): MainNavigationDestinations? =
             destination.hasRoute<MenuDestinations.Menu>() -> MainNavigationDestinations.MENU
             destination.hasRoute<ProfileDestinations.Profile>() -> MainNavigationDestinations.PROFILE
             destination.hasRoute<ProfileDestinations.Settings>() -> MainNavigationDestinations.PROFILE
+            destination.hasRoute<ProfileDestinations.Favorites>() -> MainNavigationDestinations.PROFILE
             else -> null
         }
     }

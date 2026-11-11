@@ -8,4 +8,7 @@ sealed class ProfileDestinations {
 
     @Serializable
     data object Settings : ProfileDestinations()
+
+    @Serializable
+    data object Favorites : ProfileDestinations()
 }

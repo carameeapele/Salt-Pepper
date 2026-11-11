@@ -2,6 +2,7 @@ package com.example.saltpepper.profile.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.saltpepper.profile.screen.FavoritesScreen
 import com.example.saltpepper.profile.screen.ProfileScreen
 import com.example.saltpepper.profile.screen.SettingsScreen
 
@@ -11,13 +12,14 @@ fun NavGraphBuilder.profileNavigation(
     onProfileSetup: () -> Unit,
     onBrowseRecipes: () -> Unit,
     onSettings: () -> Unit,
+    onFavorites: () -> Unit,
     onBack: () -> Unit
 ) {
     composable<ProfileDestinations.Profile> {
         ProfileScreen(
             onSettings = onSettings,
             onProfileSetup = onProfileSetup,
-            onBrowseRecipes = onBrowseRecipes
+            onFavorites = onFavorites
         )
     }
     composable<ProfileDestinations.Settings> {
@@ -26,5 +28,8 @@ fun NavGraphBuilder.profileNavigation(
             onLogout = onLogout,
             onAccountDeleted = onAccountDeleted
         )
+    }
+    composable<ProfileDestinations.Favorites> {
+        FavoritesScreen(onBack = onBack, onBrowseRecipes = onBrowseRecipes)
     }
 }

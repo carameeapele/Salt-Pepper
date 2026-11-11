@@ -84,17 +84,17 @@ class ProfileViewModelTest {
     }
 
     private class FakeProfileRepository : ProfileRepository {
-        var failFavorites = false
+        var failProfile = false
         var gate: CompletableDeferred<Unit>? = null
         var profileCalls = 0
         override suspend fun getProfile() =
-            Result.success(MemberProfile("Camille", "user@example.test", "2026-11-10")).also {
+            (if (failProfile) Result.failure(Exception("Profile unavailable"))
+            else Result.success(MemberProfile("Camille", "user@example.test", "2026-11-10"))).also {
                 profileCalls++
                 gate?.await()
             }
         override suspend fun getFavorites(): Result<List<ProfileRecipe>> =
-            if (failFavorites) Result.failure(Exception("Favorites unavailable"))
-            else Result.success(emptyList())
+            error("Profile must not load favorites")
         override suspend fun getMyRecipes() =
             Result.success(listOf(ProfileRecipe("recipe-1", "Soup", 20)))
     }
@@ -103,14 +103,14 @@ class ProfileViewModelTest {
     fun profileErrorCanBeRetriedAndSuccessSurvivesDeletionDialogDismissal() = runTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
         try {
-            val profileRepository = FakeProfileRepository().apply { failFavorites = true }
+            val profileRepository = FakeProfileRepository().apply { failProfile = true }
             val viewModel = ProfileViewModel(FakeRepository(), profileRepository)
             assertIs<ProfileScreenUiState.Loading>(viewModel.uiState.value.screenState)
             viewModel.refresh()
             runCurrent()
             val error = assertIs<ProfileScreenUiState.Error>(viewModel.uiState.value.screenState)
-            assertEquals("Favorites unavailable", error.message)
-            profileRepository.failFavorites = false
+            assertEquals("Profile unavailable", error.message)
+            profileRepository.failProfile = false
             viewModel.refresh()
             assertIs<ProfileScreenUiState.Loading>(viewModel.uiState.value.screenState)
             runCurrent()
@@ -118,7 +118,6 @@ class ProfileViewModelTest {
             assertEquals("Camille", success.profile.displayName)
             assertEquals("2026-11-10", success.profile.memberSince)
             assertEquals("Soup", success.myRecipes.single().title)
-            assertEquals(emptyList(), success.favorites)
             viewModel.openDeletionDialog()
             viewModel.dismissDeletionDialog()
             assertEquals(success, viewModel.uiState.value.screenState)

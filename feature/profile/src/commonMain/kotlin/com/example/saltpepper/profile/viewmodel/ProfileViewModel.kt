@@ -17,7 +17,6 @@ sealed interface ProfileScreenUiState {
     data object Loading : ProfileScreenUiState
     data class Success(
         val profile: MemberProfile,
-        val favorites: List<ProfileRecipe>,
         val myRecipes: List<ProfileRecipe>
     ) : ProfileScreenUiState
     data class Error(val message: String) : ProfileScreenUiState
@@ -47,19 +46,16 @@ class ProfileViewModel(
         _uiState.update { it.copy(screenState = ProfileScreenUiState.Loading) }
         refreshJob = viewModelScope.launch {
             val profileRequest = async { profileRepository.getProfile() }
-            val favoritesRequest = async { profileRepository.getFavorites() }
             val recipesRequest = async { profileRepository.getMyRecipes() }
             val profile = profileRequest.await()
-            val favorites = favoritesRequest.await()
             val recipes = recipesRequest.await()
             val errors = listOfNotNull(
                 profile.exceptionOrNull()?.let { it.message ?: "Could not load profile" },
-                favorites.exceptionOrNull()?.let { it.message ?: "Could not load favorites" },
                 recipes.exceptionOrNull()?.let { it.message ?: "Could not load recipes" }
             )
             val screenState = if (errors.isEmpty()) {
                 ProfileScreenUiState.Success(
-                    profile.getOrThrow(), favorites.getOrThrow(), recipes.getOrThrow()
+                    profile.getOrThrow(), recipes.getOrThrow()
                 )
             } else {
                 ProfileScreenUiState.Error(errors.distinct().joinToString("\n"))

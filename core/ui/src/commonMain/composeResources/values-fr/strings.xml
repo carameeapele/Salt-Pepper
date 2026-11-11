@@ -67,7 +67,7 @@
     <string name="delete_account_code_sent">Saisissez le code à six chiffres reçu par e-mail pour supprimer définitivement votre compte.</string>
     <string name="delete_created_recipes_label">Supprimer aussi les recettes que j’ai créées</string>
     <string name="logout_error_message">Vous avez été déconnecté localement, mais le serveur n’a pas pu être averti.</string>
-    <string name="setup_entry">Foyer et préférences alimentaires</string>
+    <string name="setup_settings">Modifier le foyer</string>
     <string name="setup_skip">Plus tard</string>
     <string name="setup_next">Continuer</string>
     <string name="setup_finish">Terminer</string>
@@ -124,9 +124,11 @@
     <string name="setup_mexican">Mexicaine</string>
     <string name="setup_middle_eastern">Moyen-orientale</string>
     <string name="profile_member_since">Membre depuis le %1$s</string>
-    <string name="profile_favorites">Recettes favorites</string>
-    <string name="profile_my_recipes">Mes recettes</string>
+    <string name="profile_favorites_card_title">Recettes favorites</string>
+    <string name="profile_my_recipes_card_title">Mes recettes</string>
     <string name="profile_no_favorites">Pas encore de favoris</string>
+    <string name="favorites_card_description">Toutes les recettes que vous avez enregistrées</string>
+    <string name="favorites_empty_description">Appuyez sur le cœur d’une recette pour la retrouver ici en un instant.</string>
     <string name="profile_no_recipes">Pas encore de recettes</string>
     <string name="profile_import_recipe">Importer une recette depuis une vidéo</string>
     <string name="profile_write_recipe">Écrire une recette</string>

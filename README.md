@@ -63,13 +63,14 @@ deferred until the accepted preference IDs are available.
 
 ### Profile Recipes
 
-Profile loads the display name and membership date from `GET /me`, favorites
-from `GET /recipes/favorites`, and authored/imported recipes from `GET /recipes`.
-The screen has explicit Loading, Success, and Error states. Success contains the
-profile and both recipe lists; any failed request shows an error with a retry
-action. Returning to Profile refreshes its content. An empty favorites list offers Browse recipes
-to Home; empty personal recipes show disabled import/write actions until those
-features are implemented.
+Profile loads the display name and membership date from `GET /me` and
+authored/imported recipes from `GET /recipes`. Its Favorite recipes card opens a
+dedicated Favorites screen, which loads `GET /recipes/favorites` and displays a
+vertical list of recipe cards. Both screens have Loading, Success, and Error
+states with retry, and refresh when resumed. Favorites failures do not block
+Profile. Empty favorites show guidance and Browse recipes to Home; empty
+personal recipes show disabled import/write actions until those features are
+implemented.
 
 ### Account Deletion
 

@@ -17,14 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
+import org.jetbrains.compose.resources.stringResource
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.login_button_text
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CustomOutlinedButton(
@@ -33,8 +33,8 @@ fun CustomOutlinedButton(
     onClick: () -> Unit,
     text: String,
     borderColor: Color = MaterialTheme.colorScheme.primary,
-    leftIcon: Painter? = null,
-    rightIcon: Painter? = null,
+    leftIcon: ImageVector? = null,
+    rightIcon: ImageVector? = null,
     enabled: Boolean = true,
     isLoading: Boolean = false
 ) {
@@ -67,10 +67,10 @@ fun CustomOutlinedButton(
                     Icon(
                         modifier = Modifier.size(buttonVariant.iconSize),
                         tint = borderColor,
-                        painter = leftIcon,
+                        imageVector = leftIcon,
                         contentDescription = null
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
                 }
                 Text(
                     text = text,
@@ -79,11 +79,11 @@ fun CustomOutlinedButton(
                     fontWeight = FontWeight.SemiBold
                 )
                 if (rightIcon != null) {
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
                     Icon(
                         modifier = Modifier.size(buttonVariant.iconSize),
                         tint = borderColor,
-                        painter = rightIcon,
+                        imageVector = rightIcon,
                         contentDescription = null
                     )
                 }

@@ -45,9 +45,9 @@ enum class ButtonVariant(
         height = 32.dp,
         textOnlyHeight = 18.dp,
         textSize = 14.sp,
-        iconSize = 16.dp,
-        horizontalPadding = 12.dp,
-        verticalPadding = 8.dp,
+        iconSize = 18.dp,
+        horizontalPadding = 8.dp,
+        verticalPadding = 6.dp,
         cornerRadius = 8.dp
     ),
     TINY(
