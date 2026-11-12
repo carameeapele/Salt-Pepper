@@ -28,7 +28,7 @@ fun MainNavigation(
     navController: NavHostController,
     onLogout: () -> Unit,
     onAccountDeleted: () -> Unit,
-    onProfileSetup: () -> Unit,
+    onHouseholdEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -69,7 +69,7 @@ fun MainNavigation(
         profileNavigation(
             onLogout = onLogout,
             onAccountDeleted = onAccountDeleted,
-            onProfileSetup = onProfileSetup,
+            onHouseholdEdit = onHouseholdEdit,
             onBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.HOME) },
             onSettings = { navController.navigate(ProfileDestinations.Settings) { launchSingleTop = true } },
             onFavorites = { navController.navigate(ProfileDestinations.Favorites) { launchSingleTop = true } },

@@ -60,9 +60,9 @@ import saltpepper.core.ui.generated.resources.setup_settings
 
 @Composable
 fun ProfileScreen(
-	modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,
     onSettings: () -> Unit,
-    onProfileSetup: () -> Unit,
+    onHouseholdEdit: () -> Unit,
     onFavorites: () -> Unit,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
@@ -74,7 +74,7 @@ fun ProfileScreen(
         modifier = modifier,
         state = state,
         onSettings = onSettings,
-        onProfileSetup = onProfileSetup,
+        onHouseholdEdit = onHouseholdEdit,
         onFavorites = onFavorites,
         onRetry = viewModel::refresh
     )
@@ -86,7 +86,7 @@ private fun ProfileScreenContent(
     modifier: Modifier = Modifier,
     state: ProfileUiState = ProfileUiState(),
     onSettings: () -> Unit = {},
-    onProfileSetup: () -> Unit = {},
+    onHouseholdEdit: () -> Unit = {},
     onFavorites: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
@@ -133,7 +133,7 @@ private fun ProfileScreenContent(
             item(key = "household-setup") {
                 CustomOutlinedButton(
                     buttonVariant = ButtonVariant.SMALL,
-                    onClick = onProfileSetup,
+                    onClick = onHouseholdEdit,
                     text = stringResource(Res.string.setup_settings),
                     leftIcon = Icons.Outlined.Home,
                     enabled = !state.isLoading

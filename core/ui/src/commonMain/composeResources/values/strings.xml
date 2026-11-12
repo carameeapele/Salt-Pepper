@@ -71,12 +71,12 @@
     <string name="setup_next">Continue</string>
     <string name="setup_finish">Finish</string>
     <string name="setup_step">Step %1$d of %2$d</string>
-    <string name="setup_household_title">Who are we cooking for?</string>
+    <string name="setup_household_title">Who are you cooking for?</string>
     <string name="setup_household_description">Tell us how many adults and children are in your household.</string>
-    <string name="setup_adults">Adults</string>
-    <string name="setup_children">Children</string>
-    <string name="setup_increase">Increase %1$s</string>
-    <string name="setup_decrease">Decrease %1$s</string>
+    <string name="household_setup_counter_adults">Adults</string>
+    <string name="household_setup_counter_children">Children</string>
+    <string name="household_setup_counter_increase">Increase %1$s</string>
+    <string name="household_setup_counter_decrease">Decrease %1$s</string>
     <string name="setup_diet_title">Your dietary preferences</string>
     <string name="setup_taste_title">What do you love to eat?</string>
     <string name="setup_multiple">Choose any that apply, or leave empty for no preference.</string>

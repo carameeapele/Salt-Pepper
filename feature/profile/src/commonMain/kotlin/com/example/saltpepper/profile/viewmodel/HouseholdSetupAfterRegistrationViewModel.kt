@@ -44,9 +44,8 @@ import saltpepper.core.ui.generated.resources.setup_vegetarian
 import saltpepper.core.ui.generated.resources.setup_vietnamese
 import saltpepper.core.ui.generated.resources.setup_vitamins
 
+// TO DO : replace with backend provided values
 enum class SetupGroup { DIET, HEALTH, ALLERGY, CUISINE }
-
-// UI choices only: these names are not backend enum values.
 enum class SetupOption(val group: SetupGroup, val label: StringResource) {
     VEGAN(SetupGroup.DIET, Res.string.setup_vegan),
     VEGETARIAN(SetupGroup.DIET, Res.string.setup_vegetarian),
@@ -87,15 +86,15 @@ enum class SetupOption(val group: SetupGroup, val label: StringResource) {
     MIDDLE_EASTERN(SetupGroup.CUISINE, Res.string.setup_middle_eastern)
 }
 
-data class ProfileSetupUiState(
+data class HouseholdSetupAfterRegistrationUiState(
     val step: Int = 0,
     val adults: Int = 1,
     val children: Int = 0,
     val selections: Set<SetupOption> = emptySet()
 )
 
-class ProfileSetupViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(ProfileSetupUiState())
+class HouseholdSetupAfterRegistrationViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(HouseholdSetupAfterRegistrationUiState())
     val uiState = _uiState.asStateFlow()
 
     fun start() {
@@ -103,7 +102,7 @@ class ProfileSetupViewModel : ViewModel() {
     }
 
     fun reset() {
-        _uiState.value = ProfileSetupUiState()
+        _uiState.value = HouseholdSetupAfterRegistrationUiState()
     }
 
     fun next() {

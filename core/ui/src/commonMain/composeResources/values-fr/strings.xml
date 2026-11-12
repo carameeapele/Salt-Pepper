@@ -72,12 +72,12 @@
     <string name="setup_next">Continuer</string>
     <string name="setup_finish">Terminer</string>
     <string name="setup_step">Étape %1$d sur %2$d</string>
-    <string name="setup_household_title">Pour qui cuisinons-nous ?</string>
+    <string name="setup_household_title">Pour qui cuisinez-vous ?</string>
     <string name="setup_household_description">Indiquez le nombre d’adultes et d’enfants dans votre foyer.</string>
-    <string name="setup_adults">Adultes</string>
-    <string name="setup_children">Enfants</string>
-    <string name="setup_increase">Augmenter : %1$s</string>
-    <string name="setup_decrease">Diminuer : %1$s</string>
+    <string name="household_setup_counter_adults">Adultes</string>
+    <string name="household_setup_counter_children">Enfants</string>
+    <string name="household_setup_counter_increase">Augmenter : %1$s</string>
+    <string name="household_setup_counter_decrease">Diminuer : %1$s</string>
     <string name="setup_diet_title">Vos préférences alimentaires</string>
     <string name="setup_taste_title">Qu’aimez-vous manger ?</string>
     <string name="setup_multiple">Sélectionnez les options qui vous correspondent, ou aucune si vous n’avez pas de préférence.</string>

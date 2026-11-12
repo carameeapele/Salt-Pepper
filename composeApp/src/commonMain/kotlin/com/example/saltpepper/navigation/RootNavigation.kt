@@ -26,8 +26,8 @@ import androidx.navigation.toRoute
 import com.example.saltpepper.authentication.navigation.AuthDestinations
 import com.example.saltpepper.authentication.navigation.authNavigation
 import com.example.saltpepper.data.repository.AuthRepository
-import com.example.saltpepper.profile.screen.ProfileSetupScreen
-import com.example.saltpepper.profile.viewmodel.ProfileSetupViewModel
+import com.example.saltpepper.profile.screen.HouseholdSetupAfterRegistrationScreen
+import com.example.saltpepper.profile.viewmodel.HouseholdSetupAfterRegistrationViewModel
 import com.example.saltpepper.splash.navigation.SplashDestination
 import com.example.saltpepper.splash.navigation.splashNavigation
 import com.example.saltpepper.ui.MainScreen
@@ -42,14 +42,14 @@ import saltpepper.core.ui.generated.resources.logout_error_message
 import saltpepper.core.ui.generated.resources.ok
 
 @Serializable
-private data class ProfileSetupDestination(val fromProfile: Boolean = false)
+private data class HouseholdSetupDestination(val fromProfile: Boolean = false)
 
 @Composable
 fun RootNavigation(
     navController: NavHostController = rememberNavController()
 ) {
     var logoutError by remember { mutableStateOf(false) }
-    val setupViewModel: ProfileSetupViewModel = koinViewModel()
+    val setupViewModel: HouseholdSetupAfterRegistrationViewModel = koinViewModel()
     Box(Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
@@ -96,7 +96,7 @@ fun RootNavigation(
                 },
                 onRegisterSuccess = {
                     setupViewModel.reset()
-                    navController.navigate(ProfileSetupDestination()) {
+                    navController.navigate(HouseholdSetupDestination()) {
                         popUpTo(AuthDestinations.Landing) { inclusive = true }
                     }
                 },
@@ -105,16 +105,16 @@ fun RootNavigation(
                     navController.popBackStack()
                 }
             )
-            composable<ProfileSetupDestination> { entry ->
-                val destination = entry.toRoute<ProfileSetupDestination>()
-                ProfileSetupScreen(
+            composable<HouseholdSetupDestination> { entry ->
+                val destination = entry.toRoute<HouseholdSetupDestination>()
+                HouseholdSetupAfterRegistrationScreen(
                     viewModel = setupViewModel,
                     onExit = {
                         if (destination.fromProfile) {
                             navController.popBackStack()
                         } else {
                             navController.navigate(MainDestination) {
-                                popUpTo<ProfileSetupDestination> { inclusive = true }
+                                popUpTo<HouseholdSetupDestination> { inclusive = true }
                             }
                         }
                     }
@@ -140,9 +140,9 @@ fun RootNavigation(
                     }
                 }
                 MainScreen(
-                    onProfileSetup = {
+                    onHouseholdEdit = {
                         setupViewModel.start()
-                        navController.navigate(ProfileSetupDestination(fromProfile = true))
+                        navController.navigate(HouseholdSetupDestination(fromProfile = true))
                     },
                     onAccountDeleted = {
                         setupViewModel.reset()

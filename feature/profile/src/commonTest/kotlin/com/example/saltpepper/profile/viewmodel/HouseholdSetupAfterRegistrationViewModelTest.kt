@@ -4,10 +4,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ProfileSetupViewModelTest {
+class HouseholdSetupAfterRegistrationViewModelTest {
     @Test
     fun householdCountsHaveSafeMinimums() {
-        val viewModel = ProfileSetupViewModel()
+        val viewModel = HouseholdSetupAfterRegistrationViewModel()
         repeat(3) {
             viewModel.changeAdults(false)
             viewModel.changeChildren(false)
@@ -22,7 +22,7 @@ class ProfileSetupViewModelTest {
 
     @Test
     fun navigationPreservesSelectionsAndReopeningStartsAtHousehold() {
-        val viewModel = ProfileSetupViewModel()
+        val viewModel = HouseholdSetupAfterRegistrationViewModel()
         viewModel.changeChildren(true)
         viewModel.next()
         viewModel.toggle(SetupOption.VEGAN)
@@ -48,11 +48,11 @@ class ProfileSetupViewModelTest {
 
     @Test
     fun resetClearsSessionPreferences() {
-        val viewModel = ProfileSetupViewModel()
+        val viewModel = HouseholdSetupAfterRegistrationViewModel()
         viewModel.next()
         viewModel.changeAdults(true)
         viewModel.toggle(SetupOption.PEANUTS)
         viewModel.reset()
-        assertEquals(ProfileSetupUiState(), viewModel.uiState.value)
+        assertEquals(HouseholdSetupAfterRegistrationUiState(), viewModel.uiState.value)
     }
 }

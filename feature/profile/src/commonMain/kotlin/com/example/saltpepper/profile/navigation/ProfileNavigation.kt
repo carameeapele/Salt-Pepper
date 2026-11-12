@@ -9,7 +9,7 @@ import com.example.saltpepper.profile.screen.SettingsScreen
 fun NavGraphBuilder.profileNavigation(
     onLogout: () -> Unit,
     onAccountDeleted: () -> Unit,
-    onProfileSetup: () -> Unit,
+    onHouseholdEdit: () -> Unit,
     onBrowseRecipes: () -> Unit,
     onSettings: () -> Unit,
     onFavorites: () -> Unit,
@@ -18,7 +18,7 @@ fun NavGraphBuilder.profileNavigation(
     composable<ProfileDestinations.Profile> {
         ProfileScreen(
             onSettings = onSettings,
-            onProfileSetup = onProfileSetup,
+            onHouseholdEdit = onHouseholdEdit,
             onFavorites = onFavorites
         )
     }
