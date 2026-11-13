@@ -1,5 +1,8 @@
 package com.example.saltpepper.ui
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,14 +19,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.saltpepper.core.ui.component.topbar.NavigationTopBar
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
+import com.example.saltpepper.navigation.AppScreenPadding
 import com.example.saltpepper.navigation.MainNavigation
 import com.example.saltpepper.navigation.MainNavigationDestinations
 import com.example.saltpepper.navigation.mainSection
 import com.example.saltpepper.navigation.navigateToSection
+import com.example.saltpepper.navigation.nestedScreenTitle
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -36,8 +43,18 @@ fun MainScreen(
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
 
+    val nestedTitle = backStackEntry?.destination?.nestedScreenTitle()
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
+        topBar = {
+            if (nestedTitle != null) {
+                NavigationTopBar(
+                    title = stringResource(nestedTitle),
+                    onBack = { navController.popBackStack() }
+                )
+            }
+        },
         bottomBar = {
             MainNavigationBottomBar(
                 selectedSection = backStackEntry?.destination?.mainSection(),
@@ -52,6 +69,15 @@ fun MainScreen(
             onHouseholdEdit = onHouseholdEdit,
             modifier = Modifier.fillMaxSize()
                 .padding(contentPadding)
+                .padding(
+                    if (nestedTitle != null) {
+                        PaddingValues(
+                            start = AppScreenPadding.calculateStartPadding(LayoutDirection.Ltr),
+                            end = AppScreenPadding.calculateEndPadding(LayoutDirection.Ltr),
+                            bottom = AppScreenPadding.calculateBottomPadding()
+                        )
+                    } else AppScreenPadding
+                )
                 .consumeWindowInsets(contentPadding)
         )
     }

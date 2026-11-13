@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
 import org.jetbrains.compose.resources.stringResource
 import saltpepper.core.ui.generated.resources.Res
-import saltpepper.core.ui.generated.resources.setup_decrease
-import saltpepper.core.ui.generated.resources.setup_increase
+import saltpepper.core.ui.generated.resources.household_setup_counter_decrease
+import saltpepper.core.ui.generated.resources.household_setup_counter_increase
 
 @Composable
 fun HouseholdMemberCounter(
@@ -42,7 +42,7 @@ fun HouseholdMemberCounter(
         ) {
             Icon(
                 imageVector = Icons.Default.Remove,
-                contentDescription = stringResource(Res.string.setup_decrease, label)
+                contentDescription = stringResource(Res.string.household_setup_counter_decrease, label)
             )
         }
         Text(
@@ -55,7 +55,7 @@ fun HouseholdMemberCounter(
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = stringResource(Res.string.setup_increase, label)
+                contentDescription = stringResource(Res.string.household_setup_counter_increase, label)
             )
         }
     }

@@ -2,13 +2,9 @@ package com.example.saltpepper.profile.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,8 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import com.example.saltpepper.core.ui.component.button.ButtonVariant
-import com.example.saltpepper.core.ui.component.button.CustomTextButton
 import com.example.saltpepper.core.ui.component.button.PrimaryButton
 import com.example.saltpepper.core.ui.component.screen.ErrorScreen
 import com.example.saltpepper.core.ui.component.screen.LoadingScreen
@@ -34,46 +28,37 @@ import com.example.saltpepper.profile.viewmodel.FavoritesViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import saltpepper.core.ui.generated.resources.Res
-import saltpepper.core.ui.generated.resources.back
 import saltpepper.core.ui.generated.resources.browse_recipes_action
 import saltpepper.core.ui.generated.resources.favorites_empty_description
-import saltpepper.core.ui.generated.resources.profile_favorites_card_title
 import saltpepper.core.ui.generated.resources.profile_no_favorites
 
 @Composable
 fun FavoritesScreen(
-    onBack: () -> Unit,
-    onBrowseRecipes: () -> Unit,
+    onNavigateToBrowseRecipes: () -> Unit,
     viewModel: FavoritesViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
+
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refresh() }
-    FavoritesScreenContent(state, onBack, onBrowseRecipes, viewModel::refresh)
+
+    FavoritesScreenContent(
+        state = state,
+        onNavigateToBrowseRecipes = onNavigateToBrowseRecipes,
+        onRetry = viewModel::refresh
+    )
 }
 
 @Composable
 private fun FavoritesScreenContent(
+    modifier: Modifier = Modifier,
     state: FavoritesUiState,
-    onBack: () -> Unit = {},
-    onBrowseRecipes: () -> Unit = {},
+    onNavigateToBrowseRecipes: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            CustomTextButton(
-                buttonVariant = ButtonVariant.MEDIUM,
-                text = stringResource(Res.string.back),
-                leftIcon = Icons.AutoMirrored.Filled.ArrowBack,
-                onClick = onBack
-            )
-            Text(
-                stringResource(Res.string.profile_favorites_card_title),
-                style = MaterialTheme.typography.headlineLarge
-            )
-        }
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
         when (state) {
             FavoritesUiState.Loading -> LoadingScreen(modifier = Modifier.weight(1f))
             is FavoritesUiState.Error -> ErrorScreen(
@@ -83,7 +68,6 @@ private fun FavoritesScreenContent(
             )
             is FavoritesUiState.Success -> LazyColumn(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 if (state.recipes.isEmpty()) {
@@ -102,7 +86,7 @@ private fun FavoritesScreenContent(
                             )
                             PrimaryButton(
                                 text = stringResource(Res.string.browse_recipes_action),
-                                onClick = onBrowseRecipes
+                                onClick = onNavigateToBrowseRecipes
                             )
                         }
                     }
@@ -117,7 +101,11 @@ private fun FavoritesScreenContent(
 @Preview
 @Composable
 private fun EmptyFavoritesPreview() {
-    SaltPepperTheme { FavoritesScreenContent(FavoritesUiState.Success(emptyList())) }
+    SaltPepperTheme {
+        FavoritesScreenContent(
+            state = FavoritesUiState.Success(emptyList())
+        )
+    }
 }
 
 @Preview
@@ -125,7 +113,13 @@ private fun EmptyFavoritesPreview() {
 private fun FavoritesPreview() {
     SaltPepperTheme {
         FavoritesScreenContent(
-            FavoritesUiState.Success(listOf(ProfileRecipe("1", "Vegetable curry", 35)))
+            state = FavoritesUiState.Success(
+                recipes = listOf( ProfileRecipe(
+                    id = "1",
+                    title = "Vegetable curry",
+                    totalTimeMinutes = 35)
+                )
+            )
         )
     }
 }

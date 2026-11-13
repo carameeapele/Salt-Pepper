@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LinearProgressIndicator
@@ -31,9 +30,9 @@ import com.example.saltpepper.profile.viewmodel.SetupOption
 import org.jetbrains.compose.resources.stringResource
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.back
-import saltpepper.core.ui.generated.resources.setup_adults
+import saltpepper.core.ui.generated.resources.household_setup_counter_adults
+import saltpepper.core.ui.generated.resources.household_setup_counter_children
 import saltpepper.core.ui.generated.resources.setup_allergies
-import saltpepper.core.ui.generated.resources.setup_children
 import saltpepper.core.ui.generated.resources.setup_cuisines
 import saltpepper.core.ui.generated.resources.setup_diet_title
 import saltpepper.core.ui.generated.resources.setup_diets
@@ -79,12 +78,11 @@ private fun HouseholdSetupAfterRegistrationContent(
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 24.dp),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             CustomTextButton(
@@ -134,13 +132,13 @@ private fun HouseholdSetupAfterRegistrationContent(
                             text = stringResource(Res.string.setup_household_description)
                         )
                         HouseholdMemberCounter(
-                            label = stringResource(Res.string.setup_adults),
+                            label = stringResource(Res.string.household_setup_counter_adults),
                             count = state.adults,
                             minimum = 1,
                             onChange = onAdultsChange
                         )
                         HouseholdMemberCounter(
-                            label = stringResource(Res.string.setup_children),
+                            label = stringResource(Res.string.household_setup_counter_children),
                             count = state.children,
                             minimum = 0,
                             onChange = onChildrenChange

@@ -2,7 +2,6 @@ package com.example.saltpepper.profile.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,10 +59,9 @@ import saltpepper.core.ui.generated.resources.setup_settings
 
 @Composable
 fun ProfileScreen(
-    modifier: Modifier = Modifier,
-    onSettings: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     onHouseholdEdit: () -> Unit,
-    onFavorites: () -> Unit,
+    onNavigateToFavoriteRecipes: () -> Unit,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -71,11 +69,10 @@ fun ProfileScreen(
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refresh() }
 
     ProfileScreenContent(
-        modifier = modifier,
         state = state,
-        onSettings = onSettings,
+        onNavigateToSettings = onNavigateToSettings,
         onHouseholdEdit = onHouseholdEdit,
-        onFavorites = onFavorites,
+        onNavigateToFavoriteRecipes = onNavigateToFavoriteRecipes,
         onRetry = viewModel::refresh
     )
 }
@@ -85,9 +82,9 @@ fun ProfileScreen(
 private fun ProfileScreenContent(
     modifier: Modifier = Modifier,
     state: ProfileUiState = ProfileUiState(),
-    onSettings: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
     onHouseholdEdit: () -> Unit = {},
-    onFavorites: () -> Unit = {},
+    onNavigateToFavoriteRecipes: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     when (val screenState = state.screenState) {
@@ -99,7 +96,6 @@ private fun ProfileScreenContent(
         )
         is ProfileScreenUiState.Success -> LazyColumn(
             modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 24.dp, vertical = 32.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item(key = "header") {
@@ -113,7 +109,9 @@ private fun ProfileScreenContent(
                             modifier = Modifier.weight(1f),
                             style = MaterialTheme.typography.headlineLarge
                         )
-                        IconButton(onClick = onSettings) {
+                        IconButton(
+                            onClick = onNavigateToSettings
+                        ) {
                             Icon(
                                 imageVector = Icons.Outlined.Settings,
                                 contentDescription = stringResource(Res.string.settings_title)
@@ -144,7 +142,7 @@ private fun ProfileScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                     ,
-                    onClick = onFavorites
+                    onClick = onNavigateToFavoriteRecipes
                 ) {
                     Row(
                         modifier = Modifier
@@ -235,7 +233,11 @@ private fun ProfileScreenPreview() {
 		ProfileScreenContent(
             state = ProfileUiState(
                 screenState = ProfileScreenUiState.Success(
-                    profile = MemberProfile("Camille", "camille@example.test", "2026-11-10"),
+                    profile = MemberProfile(
+                        displayName = "Camille",
+                        email = "camille@example.test",
+                        memberSince = "2026-11-10"
+                    ),
                     myRecipes = emptyList()
                 )
             )
@@ -250,8 +252,18 @@ private fun ProfileRecipesPreview() {
         ProfileScreenContent(
             state = ProfileUiState(
                 screenState = ProfileScreenUiState.Success(
-                    profile = MemberProfile("Camille", "camille@example.test", "2026-11-10"),
-                    myRecipes = listOf(ProfileRecipe("recipe-1", "Tomato soup", 20))
+                    profile = MemberProfile(
+                        displayName = "Camille",
+                        email = "camille@example.test",
+                        memberSince = "2026-11-10"
+                    ),
+                    myRecipes = listOf(
+                        ProfileRecipe(
+                            id = "recipe-1",
+                            title = "Tomato soup",
+                            totalTimeMinutes = 20
+                        )
+                    )
                 )
             )
         )

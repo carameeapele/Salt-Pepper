@@ -3,7 +3,9 @@ package com.example.saltpepper.navigation
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -15,12 +17,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.saltpepper.authentication.navigation.AuthDestinations
@@ -44,16 +49,21 @@ import saltpepper.core.ui.generated.resources.ok
 @Serializable
 private data class HouseholdSetupDestination(val fromProfile: Boolean = false)
 
+val AppScreenPadding = PaddingValues(horizontal = 24.dp, vertical = 32.dp)
+
 @Composable
 fun RootNavigation(
     navController: NavHostController = rememberNavController()
 ) {
     var logoutError by remember { mutableStateOf(false) }
     val setupViewModel: HouseholdSetupAfterRegistrationViewModel = koinViewModel()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val isMainDestination = backStackEntry?.destination?.hasRoute<MainDestination>() == true
     Box(Modifier.fillMaxSize()) {
         NavHost(
             navController = navController,
             startDestination = SplashDestination,
+            modifier = if (isMainDestination) Modifier else Modifier.padding(AppScreenPadding),
             enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },
             popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },

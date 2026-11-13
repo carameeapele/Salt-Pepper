@@ -19,6 +19,10 @@ import com.example.saltpepper.profile.navigation.profileNavigation
 import com.example.saltpepper.recipes.navigation.RecipesDestinations
 import com.example.saltpepper.recipes.navigation.recipesNavigation
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.StringResource
+import saltpepper.core.ui.generated.resources.Res
+import saltpepper.core.ui.generated.resources.profile_favorites_card_title
+import saltpepper.core.ui.generated.resources.settings_title
 
 @Serializable
 object MainDestination
@@ -61,7 +65,7 @@ fun MainNavigation(
         }
     ) {
         homeNavigation(
-            onBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.RECIPES) },
+            onNavigateToBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.RECIPES) },
             onPlanMeals = { navController.navigateToSection(MainNavigationDestinations.MENU) }
         )
         recipesNavigation()
@@ -70,10 +74,9 @@ fun MainNavigation(
             onLogout = onLogout,
             onAccountDeleted = onAccountDeleted,
             onHouseholdEdit = onHouseholdEdit,
-            onBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.HOME) },
-            onSettings = { navController.navigate(ProfileDestinations.Settings) { launchSingleTop = true } },
-            onFavorites = { navController.navigate(ProfileDestinations.Favorites) { launchSingleTop = true } },
-            onBack = { navController.popBackStack() }
+            onNavigateToBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.HOME) },
+            onNavigateToSettings = { navController.navigate(ProfileDestinations.Settings) { launchSingleTop = true } },
+            onNavigateToFavoriteRecipes = { navController.navigate(ProfileDestinations.Favorites) { launchSingleTop = true } }
         )
     }
 }
@@ -90,6 +93,12 @@ internal fun NavDestination.mainSection(): MainNavigationDestinations? =
             else -> null
         }
     }
+
+internal fun NavDestination.nestedScreenTitle(): StringResource? = when {
+    hasRoute<ProfileDestinations.Settings>() -> Res.string.settings_title
+    hasRoute<ProfileDestinations.Favorites>() -> Res.string.profile_favorites_card_title
+    else -> null
+}
 
 internal fun sectionTransitionDirection(
     from: MainNavigationDestinations?,

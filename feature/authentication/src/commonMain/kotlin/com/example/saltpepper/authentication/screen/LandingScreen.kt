@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -49,7 +48,6 @@ fun LandingScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xff263710))
-            .padding(horizontal = 24.dp, vertical = 48.dp)
     ) {
         Column(
             modifier = modifier.align(Alignment.Center),

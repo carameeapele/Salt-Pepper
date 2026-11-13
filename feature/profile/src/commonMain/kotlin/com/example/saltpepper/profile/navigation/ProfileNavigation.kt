@@ -10,26 +10,26 @@ fun NavGraphBuilder.profileNavigation(
     onLogout: () -> Unit,
     onAccountDeleted: () -> Unit,
     onHouseholdEdit: () -> Unit,
-    onBrowseRecipes: () -> Unit,
-    onSettings: () -> Unit,
-    onFavorites: () -> Unit,
-    onBack: () -> Unit
+    onNavigateToBrowseRecipes: () -> Unit,
+    onNavigateToSettings: () -> Unit,
+    onNavigateToFavoriteRecipes: () -> Unit
 ) {
     composable<ProfileDestinations.Profile> {
         ProfileScreen(
-            onSettings = onSettings,
+            onNavigateToSettings = onNavigateToSettings,
             onHouseholdEdit = onHouseholdEdit,
-            onFavorites = onFavorites
+            onNavigateToFavoriteRecipes = onNavigateToFavoriteRecipes
         )
     }
     composable<ProfileDestinations.Settings> {
         SettingsScreen(
-            onBack = onBack,
             onLogout = onLogout,
             onAccountDeleted = onAccountDeleted
         )
     }
     composable<ProfileDestinations.Favorites> {
-        FavoritesScreen(onBack = onBack, onBrowseRecipes = onBrowseRecipes)
+        FavoritesScreen(
+            onNavigateToBrowseRecipes = onNavigateToBrowseRecipes
+        )
     }
 }
