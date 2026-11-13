@@ -23,14 +23,17 @@ import saltpepper.core.ui.generated.resources.retry_action
 
 @Composable
 fun ErrorScreen(
-    message: String,
-    onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(Res.string.error_dialog_title),
+    message: String,
+    onRetry: () -> Unit,
     retryButtonText: String = stringResource(Res.string.retry_action)
 ) {
     Column(
-        modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -44,7 +47,10 @@ fun ErrorScreen(
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.Center
         )
-        PrimaryButton(text = retryButtonText, onClick = onRetry)
+        PrimaryButton(
+            text = retryButtonText,
+            onClick = onRetry
+        )
     }
 }
 
@@ -52,6 +58,9 @@ fun ErrorScreen(
 @Composable
 private fun ErrorScreenPreview() {
     SaltPepperTheme {
-        ErrorScreen(message = "Unable to load this page. Please try again.", onRetry = {})
+        ErrorScreen(
+            message = "Unable to load this page. Please try again.",
+            onRetry = {}
+        )
     }
 }

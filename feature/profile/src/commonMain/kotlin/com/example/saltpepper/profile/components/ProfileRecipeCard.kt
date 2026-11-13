@@ -10,13 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.saltpepper.data.model.ProfileRecipe
+import com.example.saltpepper.data.recipe.model.Recipe
 import org.jetbrains.compose.resources.stringResource
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.profile_recipe_minutes
 
 @Composable
-fun ProfileRecipeCard(recipe: ProfileRecipe, modifier: Modifier = Modifier) {
+fun ProfileRecipeCard(recipe: Recipe, modifier: Modifier = Modifier) {
     Card(modifier = modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(16.dp),

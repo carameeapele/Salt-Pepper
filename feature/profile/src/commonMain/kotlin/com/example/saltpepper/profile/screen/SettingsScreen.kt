@@ -19,8 +19,7 @@ import com.example.saltpepper.core.ui.component.button.CustomOutlinedButton
 import com.example.saltpepper.core.ui.component.button.PrimaryButton
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
 import com.example.saltpepper.profile.components.SendCodeToDeleteAccountPopUp
-import com.example.saltpepper.profile.viewmodel.ProfileUiState
-import com.example.saltpepper.profile.viewmodel.ProfileViewModel
+import com.example.saltpepper.profile.viewmodel.SettingsViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import saltpepper.core.ui.generated.resources.Res
@@ -31,22 +30,24 @@ import saltpepper.core.ui.generated.resources.logout_button_text
 fun SettingsScreen(
     onLogout: () -> Unit,
     onAccountDeleted: () -> Unit,
-    viewModel: ProfileViewModel = koinViewModel()
+    viewModel: SettingsViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     LaunchedEffect(state.accountDeleted) {
         if (state.accountDeleted) onAccountDeleted()
     }
 
     SettingsScreenContent(
-        state = state,
+        isLoading = isLoading,
         onLogout = onLogout,
         onDeleteClick = viewModel::openDeletionDialog
     )
     if (state.showDeletionDialog) {
         SendCodeToDeleteAccountPopUp(
             state = state,
+            isLoading = isLoading,
             onDismissDeletion = viewModel::dismissDeletionDialog,
             onRequestCode = viewModel::requestDeletionCode,
             onConfirmDeletion = viewModel::deleteAccount,
@@ -59,7 +60,7 @@ fun SettingsScreen(
 @Composable
 private fun SettingsScreenContent(
     modifier: Modifier = Modifier,
-    state: ProfileUiState = ProfileUiState(),
+    isLoading: Boolean = false,
     onLogout: () -> Unit = {},
     onDeleteClick: () -> Unit = {}
 ) {
@@ -75,7 +76,7 @@ private fun SettingsScreenContent(
             text = stringResource(Res.string.logout_button_text),
             borderColor = MaterialTheme.colorScheme.error,
             onClick = onLogout,
-            enabled = !state.isLoading
+            enabled = !isLoading
         )
         PrimaryButton(
             modifier = modifier.fillMaxWidth(),
@@ -83,7 +84,7 @@ private fun SettingsScreenContent(
             text = stringResource(Res.string.delete_account_button),
             containerColor = MaterialTheme.colorScheme.error,
             onClick = onDeleteClick,
-            enabled = !state.isLoading
+            enabled = !isLoading
         )
     }
 }

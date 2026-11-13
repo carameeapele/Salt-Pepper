@@ -1,8 +1,8 @@
 package com.example.saltpepper.splash.viewmodel
 
-import com.example.saltpepper.data.model.User
-import com.example.saltpepper.data.repository.AuthRepository
-import com.example.saltpepper.data.repository.AuthState
+import com.example.saltpepper.data.authentication.model.User
+import com.example.saltpepper.data.authentication.repository.AuthRepository
+import com.example.saltpepper.data.authentication.repository.AuthState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,15 +107,6 @@ class SplashScreenViewModelTest {
 
         override suspend fun verifyRegistrationCode(email: String, code: String): Result<User> =
             error("Unexpected verifyRegistrationCode call")
-
-        override suspend fun updateDisplayName(displayName: String): Result<Unit> =
-            error("Unexpected updateDisplayName call")
-
-        override suspend fun requestAccountDeletionCode(): Result<Unit> =
-            error("Unexpected requestAccountDeletionCode call")
-
-        override suspend fun deleteAccount(code: String, deleteCreatedRecipes: Boolean): Result<Unit> =
-            error("Unexpected deleteAccount call")
 
         override suspend fun logout(): Result<Unit> =
             error("Unexpected logout call")

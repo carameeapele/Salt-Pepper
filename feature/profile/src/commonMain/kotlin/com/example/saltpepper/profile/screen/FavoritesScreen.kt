@@ -21,7 +21,7 @@ import com.example.saltpepper.core.ui.component.button.PrimaryButton
 import com.example.saltpepper.core.ui.component.screen.ErrorScreen
 import com.example.saltpepper.core.ui.component.screen.LoadingScreen
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
-import com.example.saltpepper.data.model.ProfileRecipe
+import com.example.saltpepper.data.recipe.model.Recipe
 import com.example.saltpepper.profile.components.ProfileRecipeCard
 import com.example.saltpepper.profile.viewmodel.FavoritesUiState
 import com.example.saltpepper.profile.viewmodel.FavoritesViewModel
@@ -114,7 +114,7 @@ private fun FavoritesPreview() {
     SaltPepperTheme {
         FavoritesScreenContent(
             state = FavoritesUiState.Success(
-                recipes = listOf( ProfileRecipe(
+                recipes = listOf( Recipe(
                     id = "1",
                     title = "Vegetable curry",
                     totalTimeMinutes = 35)

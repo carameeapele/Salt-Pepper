@@ -2,7 +2,7 @@ package com.example.saltpepper.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.saltpepper.data.repository.AuthRepository
+import com.example.saltpepper.data.authentication.repository.AuthRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -10,8 +10,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+fun LoadingScreen(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
         CircularProgressIndicator()
     }
 }

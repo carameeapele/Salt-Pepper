@@ -1,22 +1,30 @@
 package com.example.saltpepper.data.client
 
-import com.example.saltpepper.data.repository.AuthState
-import com.example.saltpepper.data.repositoryImpl.AuthRepositoryImpl
-import com.example.saltpepper.data.session.PersistentSession
-import com.example.saltpepper.data.session.SecureSessionStore
+import com.example.saltpepper.core.network.BackendRequestException
+import com.example.saltpepper.core.network.ktor.ApiConfig
+import com.example.saltpepper.core.network.ktor.KtorAppApi
+import com.example.saltpepper.core.session.PersistentSession
+import com.example.saltpepper.core.session.SecureSessionStore
+import com.example.saltpepper.core.session.SessionManager
+import com.example.saltpepper.data.authentication.datasource.AuthenticationRemoteDataSource
+import com.example.saltpepper.data.authentication.repository.AuthRepositoryImpl
+import com.example.saltpepper.data.authentication.repository.AuthState
+import com.example.saltpepper.data.profile.datasource.ProfileRemoteDataSource
+import com.example.saltpepper.data.profile.repository.ProfileRepositoryImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.request.HttpRequestData
 import io.ktor.http.ContentType
-import io.ktor.http.Cookie
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
@@ -27,8 +35,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertSame
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SessionRestorationTest {
     private val baseUrl = "https://auth.example.test/api"
     private val refreshMaxAge = 30 * 86400
@@ -79,14 +87,16 @@ class SessionRestorationTest {
             )
 
             val recreatedSession = PersistentSession(fixture.store) { fixture.now }
-            val recreated = BackendAuthClient(fixture.httpClient, baseUrl, recreatedSession) { fixture.now }
-            assertNull(recreated.accessToken)
-            assertNull(recreated.currentUser)
+            val recreatedManager = SessionManager(recreatedSession) { fixture.now }
+            val recreated =
+                KtorAppApi(fixture.httpClient, ApiConfig(baseUrl), recreatedManager) { fixture.now }
+            assertNull(recreatedManager.accessToken)
+            assertNull(recreatedManager.user.value)
             val restored = assertNotNull(recreated.restoreSession())
             assertEquals("synthetic-user", restored.id)
             assertEquals("tester@example.test", restored.email)
-            assertSame(restored, recreated.currentUser)
-            assertEquals("synthetic-access", recreated.accessToken)
+            assertEquals(restored.id, recreatedManager.user.value?.id)
+            assertEquals("synthetic-access", recreatedManager.accessToken)
             assertEquals("synthetic-new", recreatedSession.refreshToken())
             assertEquals(
                 "synthetic-new",
@@ -95,12 +105,12 @@ class SessionRestorationTest {
             assertEquals(2, requests)
 
             fixture.now += 89_999
-            assertSame(restored, recreated.restoreSession())
+            assertEquals(restored, recreated.restoreSession())
             assertEquals(2, requests)
 
             fixture.now += 30_001
             assertEquals(restored, recreated.restoreSession())
-            assertEquals("synthetic-access-renewed", recreated.accessToken)
+            assertEquals("synthetic-access-renewed", recreatedManager.accessToken)
             assertEquals(3, requests)
         } finally {
             fixture.close()
@@ -116,8 +126,8 @@ class SessionRestorationTest {
         })
         try {
             assertNull(fixture.client.restoreSession())
-            assertNull(fixture.client.accessToken)
-            assertNull(fixture.client.currentUser)
+            assertNull(fixture.manager.accessToken)
+            assertNull(fixture.manager.user.value)
             assertNull(fixture.store.read())
             assertEquals(0, requests)
         } finally {
@@ -142,8 +152,8 @@ class SessionRestorationTest {
             assertNotNull(fixture.client.restoreSession())
             fixture.now += 120_000
             assertNull(fixture.client.restoreSession())
-            assertNull(fixture.client.currentUser)
-            assertNull(fixture.client.accessToken)
+            assertNull(fixture.manager.user.value)
+            assertNull(fixture.manager.accessToken)
             assertNull(fixture.session.refreshToken())
             assertNull(fixture.store.read())
             assertNull(fixture.client.restoreSession())
@@ -168,8 +178,8 @@ class SessionRestorationTest {
             assertEquals(503, failure.status)
             assertEquals(stored, fixture.store.read())
             assertEquals("synthetic-old", fixture.session.refreshToken())
-            assertNull(fixture.client.currentUser)
-            assertNull(fixture.client.accessToken)
+            assertNull(fixture.manager.user.value)
+            assertNull(fixture.manager.accessToken)
             assertEquals(1, requests)
         } finally {
             fixture.close()
@@ -191,8 +201,8 @@ class SessionRestorationTest {
             assertFailsWith<SyntheticNetworkFailure> { fixture.client.restoreSession() }
             assertEquals(stored, fixture.store.read())
             assertEquals("synthetic-old", fixture.session.refreshToken())
-            assertNull(fixture.client.currentUser)
-            assertNull(fixture.client.accessToken)
+            assertNull(fixture.manager.user.value)
+            assertNull(fixture.manager.accessToken)
             assertEquals(1, requests)
         } finally {
             fixture.close()
@@ -219,9 +229,9 @@ class SessionRestorationTest {
             release.complete(Unit)
             val users = restores.awaitAll()
             val user = assertNotNull(users.first())
-            users.forEach { assertSame(user, it) }
-            assertSame(user, fixture.client.currentUser)
-            assertEquals("synthetic-access", fixture.client.accessToken)
+            users.forEach { assertEquals(user, it) }
+            assertEquals(user.id, fixture.manager.user.value?.id)
+            assertEquals("synthetic-access", fixture.manager.accessToken)
             assertEquals("synthetic-new", fixture.session.refreshToken())
             assertEquals(1, requests)
         } finally {
@@ -276,8 +286,8 @@ class SessionRestorationTest {
             }
             assertNull(fixture.store.read())
             assertNull(fixture.session.refreshToken())
-            assertNull(fixture.client.accessToken)
-            assertNull(fixture.client.currentUser)
+            assertNull(fixture.manager.accessToken)
+            assertNull(fixture.manager.user.value)
             assertNull(fixture.client.restoreSession())
             fixture.client.logout()
             assertEquals(2, requests)
@@ -317,16 +327,18 @@ class SessionRestorationTest {
         })
         try {
             fixture.seedCookie()
-            val repository = AuthRepositoryImpl(fixture.client)
+            val repository = AuthRepositoryImpl(AuthenticationRemoteDataSource(fixture.client), fixture.manager, backgroundScope)
+            val profileRepository = ProfileRepositoryImpl(ProfileRemoteDataSource(fixture.client))
             repository.restoreSession().getOrThrow()
-            repository.requestAccountDeletionCode().getOrThrow()
+            profileRepository.requestAccountDeletionCode().getOrThrow()
             assertNotNull(fixture.store.read())
-            assertNotNull(fixture.client.currentUser)
-            repository.deleteAccount("462947", true).getOrThrow()
+            assertNotNull(fixture.manager.user.value)
+            profileRepository.deleteAccount("462947", true).getOrThrow()
+            runCurrent()
             assertEquals(AuthState.Unauthenticated, repository.authState.value)
             assertNull(fixture.store.read())
-            assertNull(fixture.client.accessToken)
-            assertNull(fixture.client.currentUser)
+            assertNull(fixture.manager.accessToken)
+            assertNull(fixture.manager.user.value)
             assertNull(repository.restoreSession().getOrThrow())
             assertEquals(3, requests)
         } finally {
@@ -356,19 +368,50 @@ class SessionRestorationTest {
         })
         try {
             fixture.seedCookie()
-            val repository = AuthRepositoryImpl(fixture.client)
+            val repository = AuthRepositoryImpl(AuthenticationRemoteDataSource(fixture.client), fixture.manager, backgroundScope)
+            val profileRepository = ProfileRepositoryImpl(ProfileRemoteDataSource(fixture.client))
             val user = assertNotNull(repository.restoreSession().getOrThrow())
             val stored = fixture.store.read()
-            val result = repository.deleteAccount("000000", false)
+            val result = profileRepository.deleteAccount("000000", false)
+            runCurrent()
             assertEquals("Invalid or expired code", result.exceptionOrNull()?.message)
             assertEquals(AuthState.Authenticated(user), repository.authState.value)
             assertEquals(stored, fixture.store.read())
-            assertNotNull(fixture.client.accessToken)
-            assertEquals(user, fixture.client.currentUser)
-            repository.deleteAccount("462947", false).getOrThrow()
+            assertNotNull(fixture.manager.accessToken)
+            assertEquals(user.id, fixture.manager.user.value?.id)
+            profileRepository.deleteAccount("462947", false).getOrThrow()
+            runCurrent()
             assertNull(fixture.store.read())
             assertEquals(AuthState.Unauthenticated, repository.authState.value)
             assertEquals(3, requests)
+        } finally {
+            fixture.close()
+        }
+    }
+
+    @Test
+    fun profileSessionRejectionUpdatesAuthenticationStateAndClearsCredentials() = runTest {
+        val fixture = Fixture(MockEngine { request ->
+            if (request.url.encodedPath == "/api/auth/refresh") {
+                respond(sessionBody, headers = jsonHeaders)
+            } else {
+                respond("""{"detail":"Session revoked"}""", HttpStatusCode.Unauthorized, jsonHeaders)
+            }
+        })
+        try {
+            fixture.seedCookie()
+            val repository = AuthRepositoryImpl(
+                AuthenticationRemoteDataSource(fixture.client), fixture.manager, backgroundScope
+            )
+            val profileRepository = ProfileRepositoryImpl(ProfileRemoteDataSource(fixture.client))
+            val user = assertNotNull(repository.restoreSession().getOrThrow())
+            runCurrent()
+            assertEquals(AuthState.Authenticated(user), repository.authState.value)
+            assertEquals("Session revoked", profileRepository.getProfile().exceptionOrNull()?.message)
+            runCurrent()
+            assertEquals(AuthState.Unauthenticated, repository.authState.value)
+            assertNull(fixture.store.read())
+            assertNull(fixture.manager.accessToken)
         } finally {
             fixture.close()
         }
@@ -389,10 +432,11 @@ class SessionRestorationTest {
         var now = 1_000_000L
         val store = MemoryStore()
         val session = PersistentSession(store) { now }
+        val manager = SessionManager(session) { now }
         val httpClient = HttpClient(engine)
-        val client = BackendAuthClient(httpClient, baseUrl, session) { now }
+        val client = KtorAppApi(httpClient, ApiConfig(baseUrl), manager) { now }
 
-        fun seedCookie() = session.save(Cookie("sp_refresh", "synthetic-old", maxAge = refreshMaxAge))
+        fun seedCookie() = session.save("synthetic-old", now + refreshMaxAge.toLong() * 1000)
 
         fun close() = httpClient.close()
     }

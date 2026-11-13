@@ -52,6 +52,47 @@ The local inactivity cutoff is not a replacement for server-side enforcement.
 No refreshes run in the background. Existing installs require one successful
 sign-in to populate the new secure store.
 
+### Shared Network and Data Architecture
+
+The Android and iOS apps share the same request and repository implementation:
+
+```text
+Feature ViewModel -> Repository -> RemoteDataSource -> AppApi -> KtorAppApi -> HttpClient
+```
+
+- [`core/network`](./core/network) owns the `AppApi` contract, `KtorAppApi`,
+  request/response DTOs, backend error translation, and HTTP configuration.
+  Its single client uses OkHttp on Android and Darwin on iOS. Only this module
+  performs HTTP requests.
+- [`core/session`](./core/session) owns in-memory credentials, serialized session
+  coordination, and persistent refresh credentials. Secure storage uses Android
+  Keystore or iOS Keychain. It has no dependency on network or data modules;
+  the network implementation supplies refresh operations to the session manager.
+- [`data/authentication`](./data/authentication) owns sign-in, registration,
+  restoration, logout, and observable authentication state.
+- [`data/profile`](./data/profile) owns profile details, display-name changes,
+  and account deletion.
+- [`data/recipe`](./data/recipe) owns personal recipes and favorites.
+- [`data/application`](./data/application) remains a scaffold for future app-wide
+  settings; it does not own HTTP or authentication infrastructure.
+
+Each implemented data module declares its own Koin module, remote data source,
+repository interface/implementation, and data models. Repositories map network
+DTOs into their own models and expose `Result` failures without swallowing
+coroutine cancellation. Local data sources should be added only when actual
+local persistence or caching is needed.
+
+The application composes `sessionModule`, `networkModule`,
+`authenticationDataModule`, `profileDataModule`, and `recipeDataModule`.
+All repositories share one API client and session manager. Session rejection or
+successful account deletion updates authentication state even when initiated
+outside the authentication repository. HTTP clients and authentication observer
+scopes are released when Koin closes.
+
+To add an endpoint, extend `AppApi` and `KtorAppApi`, add its DTOs, then expose it
+through the owning data module's remote data source and repository. Features
+depend on repository contracts, never on Ktor, transport DTOs, or token storage.
+
 ### Profile Setup Preview
 
 After registration, a skippable three-step flow collects household size, dietary

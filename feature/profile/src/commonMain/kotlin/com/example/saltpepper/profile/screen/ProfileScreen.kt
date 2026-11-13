@@ -36,12 +36,11 @@ import com.example.saltpepper.core.ui.component.button.PrimaryButton
 import com.example.saltpepper.core.ui.component.screen.ErrorScreen
 import com.example.saltpepper.core.ui.component.screen.LoadingScreen
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
-import com.example.saltpepper.data.model.MemberProfile
-import com.example.saltpepper.data.model.ProfileRecipe
+import com.example.saltpepper.core.ui.util.formatDate
+import com.example.saltpepper.data.recipe.model.Recipe
 import com.example.saltpepper.profile.components.ProfileRecipeCard
-import com.example.saltpepper.profile.util.formatDate
+import com.example.saltpepper.profile.model.ProfileUiModel
 import com.example.saltpepper.profile.viewmodel.ProfileScreenUiState
-import com.example.saltpepper.profile.viewmodel.ProfileUiState
 import com.example.saltpepper.profile.viewmodel.ProfileViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -66,7 +65,9 @@ fun ProfileScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refresh() }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        viewModel.refresh()
+    }
 
     ProfileScreenContent(
         state = state,
@@ -81,16 +82,15 @@ fun ProfileScreen(
 @Composable
 private fun ProfileScreenContent(
     modifier: Modifier = Modifier,
-    state: ProfileUiState = ProfileUiState(),
+    state: ProfileScreenUiState = ProfileScreenUiState.Loading,
     onNavigateToSettings: () -> Unit = {},
     onHouseholdEdit: () -> Unit = {},
     onNavigateToFavoriteRecipes: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
-    when (val screenState = state.screenState) {
-        ProfileScreenUiState.Loading -> LoadingScreen(modifier = modifier)
+    when (val screenState = state) {
+        ProfileScreenUiState.Loading -> LoadingScreen()
         is ProfileScreenUiState.Error -> ErrorScreen(
-            modifier = modifier,
             message = screenState.message,
             onRetry = onRetry
         )
@@ -105,7 +105,7 @@ private fun ProfileScreenContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            screenState.profile.displayName ?: screenState.profile.email,
+                            screenState.profile.displayName,
                             modifier = Modifier.weight(1f),
                             style = MaterialTheme.typography.headlineLarge
                         )
@@ -133,8 +133,7 @@ private fun ProfileScreenContent(
                     buttonVariant = ButtonVariant.SMALL,
                     onClick = onHouseholdEdit,
                     text = stringResource(Res.string.setup_settings),
-                    leftIcon = Icons.Outlined.Home,
-                    enabled = !state.isLoading
+                    leftIcon = Icons.Outlined.Home
                 )
             }
             item(key = "favorites") {
@@ -202,7 +201,7 @@ private fun ProfileScreenContent(
 private fun LazyListScope.recipeSection(
     key: String,
     title: @Composable () -> String,
-    recipes: List<ProfileRecipe>,
+    recipes: List<Recipe>,
     emptyContent: @Composable () -> Unit
 ) {
     item(key = "$key-title") {
@@ -231,18 +230,52 @@ private fun LazyListScope.recipeSection(
 private fun ProfileScreenPreview() {
 	SaltPepperTheme {
 		ProfileScreenContent(
-            state = ProfileUiState(
-                screenState = ProfileScreenUiState.Success(
-                    profile = MemberProfile(
+            state = ProfileScreenUiState.Success(
+                    profile = ProfileUiModel(
                         displayName = "Camille",
                         email = "camille@example.test",
                         memberSince = "2026-11-10"
                     ),
                     myRecipes = emptyList()
                 )
-            )
 		)
 	}
+}
+
+@Composable
+private fun ProfileHeader(
+    modifier: Modifier = Modifier,
+    screenState: ProfileScreenUiState.Success,
+    onNavigateToSettings: () -> Unit
+) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                screenState.profile.displayName,
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.headlineLarge
+            )
+            IconButton(
+                onClick = onNavigateToSettings
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Settings,
+                    contentDescription = stringResource(Res.string.settings_title)
+                )
+            }
+        }
+        Text(
+            text = stringResource(
+                Res.string.profile_member_since,
+                formatDate(screenState.profile.memberSince)
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }
 
 @Preview
@@ -250,22 +283,20 @@ private fun ProfileScreenPreview() {
 private fun ProfileRecipesPreview() {
     SaltPepperTheme {
         ProfileScreenContent(
-            state = ProfileUiState(
-                screenState = ProfileScreenUiState.Success(
-                    profile = MemberProfile(
+            state = ProfileScreenUiState.Success(
+                    profile = ProfileUiModel(
                         displayName = "Camille",
                         email = "camille@example.test",
                         memberSince = "2026-11-10"
                     ),
                     myRecipes = listOf(
-                        ProfileRecipe(
+                        Recipe(
                             id = "recipe-1",
                             title = "Tomato soup",
                             totalTimeMinutes = 20
                         )
                     )
                 )
-            )
         )
     }
 

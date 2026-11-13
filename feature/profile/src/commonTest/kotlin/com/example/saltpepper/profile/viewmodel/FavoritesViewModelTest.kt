@@ -1,8 +1,7 @@
 package com.example.saltpepper.profile.viewmodel
 
-import com.example.saltpepper.data.model.MemberProfile
-import com.example.saltpepper.data.model.ProfileRecipe
-import com.example.saltpepper.data.repository.ProfileRepository
+import com.example.saltpepper.data.recipe.model.Recipe
+import com.example.saltpepper.data.recipe.repository.RecipeRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,7 +32,7 @@ class FavoritesViewModelTest {
             assertIs<FavoritesUiState.Loading>(viewModel.uiState.value)
             runCurrent()
             assertEquals(FavoritesUiState.Success(emptyList()), viewModel.uiState.value)
-            val recipes = listOf(ProfileRecipe("1", "Soup", 20), ProfileRecipe("2", "Curry", 35))
+            val recipes = listOf(Recipe("1", "Soup", 20), Recipe("2", "Curry", 35))
             repository.result = Result.success(recipes)
             viewModel.refresh()
             runCurrent()
@@ -63,18 +62,17 @@ class FavoritesViewModelTest {
         }
     }
 
-    private class FakeRepository : ProfileRepository {
-        var result: Result<List<ProfileRecipe>> = Result.success(emptyList())
+    private class FakeRepository : RecipeRepository {
+        var result: Result<List<Recipe>> = Result.success(emptyList())
         var gate: CompletableDeferred<Unit>? = null
         var calls = 0
 
-        override suspend fun getFavorites(): Result<List<ProfileRecipe>> {
+        override suspend fun getFavorites(): Result<List<Recipe>> {
             calls++
             gate?.await()
             return result
         }
 
-        override suspend fun getProfile(): Result<MemberProfile> = error("Unexpected profile request")
-        override suspend fun getMyRecipes(): Result<List<ProfileRecipe>> = error("Unexpected recipes request")
+        override suspend fun getMyRecipes(): Result<List<Recipe>> = error("Unexpected recipes request")
     }
 }

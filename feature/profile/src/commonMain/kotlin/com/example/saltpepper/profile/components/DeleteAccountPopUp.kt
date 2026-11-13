@@ -21,7 +21,7 @@ import com.example.saltpepper.core.ui.component.button.CustomTextButton
 import com.example.saltpepper.core.ui.component.popup.CustomPopUp
 import com.example.saltpepper.core.ui.component.popup.PopUpVariant
 import com.example.saltpepper.core.ui.theme.SaltPepperTheme
-import com.example.saltpepper.profile.viewmodel.ProfileUiState
+import com.example.saltpepper.profile.viewmodel.SettingsUiState
 import org.jetbrains.compose.resources.stringResource
 import saltpepper.core.ui.generated.resources.Res
 import saltpepper.core.ui.generated.resources.cancel_account_delete_button
@@ -35,7 +35,8 @@ import saltpepper.core.ui.generated.resources.resend_code_button_text
 
 @Composable
 fun SendCodeToDeleteAccountPopUp(
-    state: ProfileUiState,
+    state: SettingsUiState,
+    isLoading: Boolean,
     onDismissDeletion: () -> Unit,
     onRequestCode: () -> Unit,
     onConfirmDeletion: () -> Unit,
@@ -58,7 +59,7 @@ fun SendCodeToDeleteAccountPopUp(
         keyboardType = KeyboardType.Number,
         onConfirm = if (state.codeSent) onConfirmDeletion else onRequestCode,
         confirmEnabled = !state.codeSent || state.code.length == 6,
-        isLoading = state.isLoading,
+        isLoading = isLoading,
         isDestructive = true,
         content = {
             Column(
@@ -76,7 +77,7 @@ fun SendCodeToDeleteAccountPopUp(
                             buttonVariant = ButtonVariant.MEDIUM,
                             onClick = onRequestCode,
                             text = stringResource(Res.string.resend_code_button_text),
-                            enabled = !state.isLoading
+                            enabled = !isLoading
                         )
                     }
 
@@ -84,7 +85,7 @@ fun SendCodeToDeleteAccountPopUp(
                         Checkbox(
                             checked = state.deleteCreatedRecipes,
                             onCheckedChange = onDeleteRecipesChange,
-                            enabled = !state.isLoading
+                            enabled = !isLoading
                         )
                         Text(
                             text = stringResource(Res.string.delete_created_recipes_label),
@@ -107,7 +108,8 @@ fun SendCodeToDeleteAccountPopUp(
 private fun SendCodeToDeleteAccountPopUpCodeSentPreview() {
     SaltPepperTheme {
         SendCodeToDeleteAccountPopUp(
-            state = ProfileUiState(showDeletionDialog = true, codeSent = true),
+            state = SettingsUiState(showDeletionDialog = true, codeSent = true),
+            isLoading = false,
             onDismissDeletion = {},
             onRequestCode = {},
             onConfirmDeletion = {},
@@ -122,7 +124,8 @@ private fun SendCodeToDeleteAccountPopUpCodeSentPreview() {
 private fun SendCodeToDeleteAccountPopUpCodeNotSentPreview() {
     SaltPepperTheme {
         SendCodeToDeleteAccountPopUp(
-            state = ProfileUiState(showDeletionDialog = true, codeSent = false),
+            state = SettingsUiState(showDeletionDialog = true, codeSent = false),
+            isLoading = false,
             onDismissDeletion = {},
             onRequestCode = {},
             onConfirmDeletion = {},

@@ -30,7 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.saltpepper.authentication.navigation.AuthDestinations
 import com.example.saltpepper.authentication.navigation.authNavigation
-import com.example.saltpepper.data.repository.AuthRepository
+import com.example.saltpepper.data.authentication.repository.AuthRepository
 import com.example.saltpepper.profile.screen.HouseholdSetupAfterRegistrationScreen
 import com.example.saltpepper.profile.viewmodel.HouseholdSetupAfterRegistrationViewModel
 import com.example.saltpepper.splash.navigation.SplashDestination

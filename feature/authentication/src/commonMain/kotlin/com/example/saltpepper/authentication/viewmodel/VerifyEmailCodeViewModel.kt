@@ -2,7 +2,8 @@ package com.example.saltpepper.authentication.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.saltpepper.data.repository.AuthRepository
+import com.example.saltpepper.data.authentication.repository.AuthRepository
+import com.example.saltpepper.data.profile.repository.ProfileRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +20,8 @@ data class VerifyEmailCodeUiState(
 )
 
 class VerifyEmailCodeViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(VerifyEmailCodeUiState())
     val uiState: StateFlow<VerifyEmailCodeUiState> = _uiState.asStateFlow()
@@ -46,7 +48,7 @@ class VerifyEmailCodeViewModel(
                         authRepository.verifyRegistrationCode(email, state.code).getOrThrow()
                         _uiState.update { it.copy(isRegistrationVerified = true) }
                     }
-                    authRepository.updateDisplayName(displayName.trim()).getOrThrow()
+                    profileRepository.updateDisplayName(displayName.trim()).getOrThrow()
                 } else {
                     authRepository.verifyEmailCode(email, state.code).getOrThrow()
                 }
