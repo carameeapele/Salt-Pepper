@@ -1,13 +1,13 @@
 package com.example.saltpepper.profile.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -99,37 +99,41 @@ private fun ProfileScreenContent(
             onRetry = onRetry
         )
         is ProfileScreenUiState.Success -> Column(
-            modifier = modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = modifier.fillMaxSize()
         ) {
             ProfileHeader(
                 screenState = state,
                 onNavigateToSettings = onNavigateToSettings
             )
-
+            Spacer(modifier.height(16.dp))
             CustomOutlinedButton(
+                modifier = modifier.fillMaxWidth(),
                 buttonVariant = ButtonVariant.SMALL,
                 onClick = onHouseholdEdit,
                 text = stringResource(Res.string.setup_settings),
                 leftIcon = Icons.Outlined.Home
             )
-
+            Spacer(modifier.height(20.dp))
             Text(
                 text = stringResource(Res.string.profile_my_recipes_card_title),
                 style = MaterialTheme.typography.headlineSmall
             )
-
+            Spacer(modifier.height(16.dp))
             FavoritesCard(
                 onNavigateToFavoriteRecipes = onNavigateToFavoriteRecipes
             )
+            Spacer(modifier.height(20.dp))
 
             if (state.myRecipes.isEmpty()) {
                 PrimaryButton(
+                    modifier = modifier.fillMaxWidth(),
                     text = stringResource(Res.string.profile_import_recipe),
                     onClick = {},
                     enabled = false
                 )
+                Spacer(modifier.height(16.dp))
                 PrimaryButton(
+                    modifier = modifier.fillMaxWidth(),
                     text = stringResource(Res.string.profile_write_recipe),
                     onClick = {},
                     enabled = false

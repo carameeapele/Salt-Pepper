@@ -130,7 +130,7 @@
     <string name="favorites_card_description">Toutes les recettes que vous avez enregistrées</string>
     <string name="favorites_empty_description">Appuyez sur le cœur d’une recette pour la retrouver ici en un instant.</string>
     <string name="profile_no_recipes">Pas encore de recettes</string>
-    <string name="profile_import_recipe">Importer une recette depuis une vidéo</string>
+    <string name="profile_import_recipe">Importer une recette</string>
     <string name="profile_write_recipe">Écrire une recette</string>
     <string name="profile_creation_coming_soon">L’importation et la création de recettes arrivent bientôt.</string>
     <string name="profile_recipe_minutes">%1$d min</string>
