@@ -49,43 +49,61 @@ fun SaltPepperTypography() = Typography().run {
     copy(
         displayLarge = displayLarge.copy(
             fontFamily = unboundedFont,
-            fontWeight = FontWeight.Bold,
-            fontSize = 46.sp
+            fontSize = 46.sp,
+            fontWeight = FontWeight.Bold
         ),
         displayMedium = displayMedium.copy(
             fontFamily = unboundedFont,
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp
         ),
-        displaySmall = displaySmall.copy(fontFamily = robotoFont),
+        displaySmall = displaySmall.copy(
+            fontFamily = robotoFont,
+            fontSize = 36.sp
+        ),
         headlineLarge = headlineLarge.copy(
             fontFamily = unboundedFont,
+            fontSize = 32.sp,
             fontWeight = FontWeight.Black,
         ),
-        headlineMedium = headlineMedium.copy(fontFamily = unboundedFont),
-        headlineSmall = headlineSmall.copy(fontFamily = unboundedFont),
+        headlineMedium = headlineMedium.copy(
+            fontFamily = unboundedFont,
+            fontSize = 28.sp
+        ),
+        headlineSmall = headlineSmall.copy(
+            fontFamily = unboundedFont,
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp
+        ),
         titleLarge = titleLarge.copy(
             fontFamily = geistFont,
-            fontSize = 18.sp
-            ),
+            fontSize = 22.sp
+        ),
         titleLargeEmphasized = titleLargeEmphasized.copy(
             fontFamily = geistFont,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
+            fontSize = 22.sp
         ),
         titleMedium = titleMedium.copy(
             fontFamily = geistFont,
             fontSize = 16.sp
-            ),
+        ),
         titleMediumEmphasized = titleMedium.copy(
             fontFamily = geistFont,
-            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        ),
+        titleSmall = titleSmall.copy(
+            fontFamily = unboundedFont,
+            fontSize = 14.sp
+        ),
+        bodyLarge = bodyLarge.copy(
+            fontFamily =  geistFont,
             fontSize = 16.sp
         ),
-        titleSmall = titleSmall.copy(fontFamily = unboundedFont),
-        bodyLarge = bodyLarge.copy(fontFamily =  geistFont),
         bodyLargeEmphasized = bodyLargeEmphasized.copy(
             fontFamily = geistFont,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold
         ),
         bodyMedium = bodyMedium.copy(
@@ -93,13 +111,22 @@ fun SaltPepperTypography() = Typography().run {
             fontSize = 14.sp,
             fontWeight = FontWeight.Normal
         ),
-        bodySmall = bodySmall.copy(fontFamily = geistFont),
-        labelLarge = labelLarge.copy(fontFamily = geistFont),
-        labelMedium = labelMedium.copy(fontFamily = robotoFont),
+        bodySmall = bodySmall.copy(
+            fontFamily = geistFont,
+            fontSize = 12.sp
+        ),
+        labelLarge = labelLarge.copy(
+            fontFamily = geistFont,
+            fontSize = 14.sp
+        ),
+        labelMedium = labelMedium.copy(
+            fontFamily = robotoFont,
+            fontSize = 12.sp
+        ),
         labelSmall = labelSmall.copy(
             fontFamily = geistFont,
             fontWeight = FontWeight.Medium,
-            fontSize = 12.sp
-            )
+            fontSize = 11.sp
+        )
     )
 }

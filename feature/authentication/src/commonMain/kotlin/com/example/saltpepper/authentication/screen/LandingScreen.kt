@@ -1,7 +1,6 @@
 package com.example.saltpepper.authentication.screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.saltpepper.core.ui.component.button.ButtonVariant
@@ -47,7 +45,6 @@ fun LandingScreenContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xff263710))
     ) {
         Column(
             modifier = modifier.align(Alignment.Center),
@@ -76,7 +73,7 @@ fun LandingScreenContent(
                 buttonVariant = ButtonVariant.GIANT,
                 onClick = onNavigateToRegister,
                 text = stringResource(Res.string.register_redirection_button_text),
-                borderColor = MaterialTheme.colorScheme.onPrimary,
+                borderColor = MaterialTheme.colorScheme.primary,
             )
         }
     }
