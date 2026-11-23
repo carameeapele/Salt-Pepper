@@ -22,6 +22,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":data:authentication"))
+            implementation(projects.data.profile)
             implementation(project(":feature:shared"))
             implementation(project(":core:ui"))
 

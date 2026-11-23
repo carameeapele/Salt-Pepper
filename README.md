@@ -1,3 +1,5 @@
+# Salt&Pepper
+
 This is a Kotlin Multiplatform project targeting Android, iOS.
 
 * [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
@@ -11,6 +13,10 @@ This is a Kotlin Multiplatform project targeting Android, iOS.
 
 * [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
   you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+
+### Test Accounts
+ilincatestsp@yopmail.com / Parola1234
+ceyaqueuvaddo-9785@yopmail.com / Parola1234
 
 ### Email-Code Authentication
 
@@ -45,6 +51,78 @@ two-week window. Its cookie expiration is always respected, even if earlier.
 The local inactivity cutoff is not a replacement for server-side enforcement.
 No refreshes run in the background. Existing installs require one successful
 sign-in to populate the new secure store.
+
+### Shared Network and Data Architecture
+
+The Android and iOS apps share the same request and repository implementation:
+
+```text
+Feature ViewModel -> Repository -> RemoteDataSource -> AppApi -> KtorAppApi -> HttpClient
+```
+
+- [`core/network`](./core/network) owns the `AppApi` contract, `KtorAppApi`,
+  request/response DTOs, backend error translation, and HTTP configuration.
+  Its single client uses OkHttp on Android and Darwin on iOS. Only this module
+  performs HTTP requests.
+- [`core/session`](./core/session) owns in-memory credentials, serialized session
+  coordination, and persistent refresh credentials. Secure storage uses Android
+  Keystore or iOS Keychain. It has no dependency on network or data modules;
+  the network implementation supplies refresh operations to the session manager.
+- [`data/authentication`](./data/authentication) owns sign-in, registration,
+  restoration, logout, and observable authentication state.
+- [`data/profile`](./data/profile) owns profile details, display-name changes,
+  and account deletion.
+- [`data/recipe`](./data/recipe) owns personal recipes and favorites.
+- [`data/application`](./data/application) remains a scaffold for future app-wide
+  settings; it does not own HTTP or authentication infrastructure.
+
+Each implemented data module declares its own Koin module, remote data source,
+repository interface/implementation, and data models. Repositories map network
+DTOs into their own models and expose `Result` failures without swallowing
+coroutine cancellation. Local data sources should be added only when actual
+local persistence or caching is needed.
+
+The application composes `sessionModule`, `networkModule`,
+`authenticationDataModule`, `profileDataModule`, and `recipeDataModule`.
+All repositories share one API client and session manager. Session rejection or
+successful account deletion updates authentication state even when initiated
+outside the authentication repository. HTTP clients and authentication observer
+scopes are released when Koin closes.
+
+To add an endpoint, extend `AppApi` and `KtorAppApi`, add its DTOs, then expose it
+through the owning data module's remote data source and repository. Features
+depend on repository contracts, never on Ktor, transport DTOs, or token storage.
+
+### Profile Setup Preview
+
+After registration, a skippable three-step flow collects household size, dietary
+and health preferences, allergies, and preferred cuisines. It can be reopened
+from Profile. Choices are held only in memory for the current signed-in session
+and reset on logout, account deletion, or a new sign-in. They are not yet sent
+to the household API or used to filter recipes. Backend saving is intentionally
+deferred until the accepted preference IDs are available.
+
+### Profile Recipes
+
+Profile loads the display name and membership date from `GET /me` and
+authored/imported recipes from `GET /recipes`. Its Favorite recipes card opens a
+dedicated Favorites screen, which loads `GET /recipes/favorites` and displays a
+vertical list of recipe cards. Both screens have Loading, Success, and Error
+states with retry, and refresh when resumed. Favorites failures do not block
+Profile. Empty favorites show guidance and Browse recipes to Home; empty
+personal recipes show disabled import/write actions until those features are
+implemented.
+
+### Account Deletion
+
+The settings icon beside the profile name opens Settings, which contains logout
+and permanent account deletion with email confirmation:
+`POST /me/delete/code` sends the code, then `POST /me/delete` submits the
+six-digit code and `delete_created_recipes`. Both requests use the access token.
+Deleting created recipes is opt-in; published video recipes remain public.
+Failed requests keep the session and show an error so the user can retry.
+After successful deletion, local credentials are cleared and the app returns to
+the welcome screen without an additional logout request.
 
 ### Build and Run Android Application
 

@@ -2,7 +2,8 @@ package com.example.saltpepper.authentication.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.saltpepper.data.repository.AuthRepository
+import com.example.saltpepper.data.authentication.repository.AuthRepository
+import com.example.saltpepper.data.profile.repository.ProfileRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,11 +15,13 @@ data class VerifyEmailCodeUiState(
     val code: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
+    val isRegistrationVerified: Boolean = false,
     val isVerified: Boolean = false
 )
 
 class VerifyEmailCodeViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(VerifyEmailCodeUiState())
     val uiState: StateFlow<VerifyEmailCodeUiState> = _uiState.asStateFlow()
@@ -29,10 +32,10 @@ class VerifyEmailCodeViewModel(
         }
     }
 
-    fun verify(email: String, isRegistration: Boolean = false) {
-        val code = _uiState.value.code
-        if (_uiState.value.isLoading) return
-        if (code.length != 6) {
+    fun verify(email: String, isRegistration: Boolean = false, displayName: String = "") {
+        val state = _uiState.value
+        if (state.isLoading) return
+        if (!(isRegistration && state.isRegistrationVerified) && state.code.length != 6) {
             _uiState.update { it.copy(errorMessage = "Enter all six digits") }
             return
         }
@@ -41,9 +44,13 @@ class VerifyEmailCodeViewModel(
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
                 if (isRegistration) {
-                    authRepository.verifyRegistrationCode(email, code).getOrThrow()
+                    if (!state.isRegistrationVerified) {
+                        authRepository.verifyRegistrationCode(email, state.code).getOrThrow()
+                        _uiState.update { it.copy(isRegistrationVerified = true) }
+                    }
+                    profileRepository.updateDisplayName(displayName.trim()).getOrThrow()
                 } else {
-                    authRepository.verifyEmailCode(email, code).getOrThrow()
+                    authRepository.verifyEmailCode(email, state.code).getOrThrow()
                 }
                 _uiState.update { it.copy(isLoading = false, isVerified = true) }
             } catch (e: CancellationException) {

@@ -1,8 +1,8 @@
 package com.example.saltpepper.splash.viewmodel
 
-import com.example.saltpepper.data.model.User
-import com.example.saltpepper.data.repository.AuthRepository
-import com.example.saltpepper.data.repository.AuthState
+import com.example.saltpepper.data.authentication.model.User
+import com.example.saltpepper.data.authentication.repository.AuthRepository
+import com.example.saltpepper.data.authentication.repository.AuthState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -19,6 +19,10 @@ import com.example.saltpepper.profile.navigation.profileNavigation
 import com.example.saltpepper.recipes.navigation.RecipesDestinations
 import com.example.saltpepper.recipes.navigation.recipesNavigation
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.StringResource
+import saltpepper.core.ui.generated.resources.Res
+import saltpepper.core.ui.generated.resources.profile_favorites_card_title
+import saltpepper.core.ui.generated.resources.settings_title
 
 @Serializable
 object MainDestination
@@ -27,6 +31,8 @@ object MainDestination
 fun MainNavigation(
     navController: NavHostController,
     onLogout: () -> Unit,
+    onAccountDeleted: () -> Unit,
+    onHouseholdEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -59,12 +65,19 @@ fun MainNavigation(
         }
     ) {
         homeNavigation(
-            onBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.RECIPES) },
+            onNavigateToBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.RECIPES) },
             onPlanMeals = { navController.navigateToSection(MainNavigationDestinations.MENU) }
         )
         recipesNavigation()
         menuNavigation()
-        profileNavigation(onLogout = onLogout)
+        profileNavigation(
+            onLogout = onLogout,
+            onAccountDeleted = onAccountDeleted,
+            onHouseholdEdit = onHouseholdEdit,
+            onNavigateToBrowseRecipes = { navController.navigateToSection(MainNavigationDestinations.HOME) },
+            onNavigateToSettings = { navController.navigate(ProfileDestinations.Settings) { launchSingleTop = true } },
+            onNavigateToFavoriteRecipes = { navController.navigate(ProfileDestinations.Favorites) { launchSingleTop = true } }
+        )
     }
 }
 
@@ -75,9 +88,17 @@ internal fun NavDestination.mainSection(): MainNavigationDestinations? =
             destination.hasRoute<RecipesDestinations.Recipes>() -> MainNavigationDestinations.RECIPES
             destination.hasRoute<MenuDestinations.Menu>() -> MainNavigationDestinations.MENU
             destination.hasRoute<ProfileDestinations.Profile>() -> MainNavigationDestinations.PROFILE
+            destination.hasRoute<ProfileDestinations.Settings>() -> MainNavigationDestinations.PROFILE
+            destination.hasRoute<ProfileDestinations.Favorites>() -> MainNavigationDestinations.PROFILE
             else -> null
         }
     }
+
+internal fun NavDestination.nestedScreenTitle(): StringResource? = when {
+    hasRoute<ProfileDestinations.Settings>() -> Res.string.settings_title
+    hasRoute<ProfileDestinations.Favorites>() -> Res.string.profile_favorites_card_title
+    else -> null
+}
 
 internal fun sectionTransitionDirection(
     from: MainNavigationDestinations?,

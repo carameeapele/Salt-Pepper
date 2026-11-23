@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -53,12 +52,14 @@ import saltpepper.core.ui.generated.resources.login_title
 import saltpepper.core.ui.generated.resources.no_code_received_helper_text
 import saltpepper.core.ui.generated.resources.registration_verification_title
 import saltpepper.core.ui.generated.resources.resend_code_button_text
+import saltpepper.core.ui.generated.resources.save_name_button_text
 import saltpepper.core.ui.generated.resources.verification_code_label
 import saltpepper.core.ui.generated.resources.verify_code_button_text
 
 @Composable
 fun VerifyEmailCodeScreen(
     email: String,
+    displayName: String = "",
     isRegistration: Boolean = false,
     viewModel: VerifyEmailCodeViewModel = koinViewModel(),
     onVerified: () -> Unit,
@@ -76,8 +77,9 @@ fun VerifyEmailCodeScreen(
         isLoading = state.isLoading,
         errorMessage = state.errorMessage,
         isRegistration = isRegistration,
+        isRegistrationVerified = state.isRegistrationVerified,
         onCodeChange = viewModel::onCodeChange,
-        onVerify = { viewModel.verify(email, isRegistration) },
+        onVerify = { viewModel.verify(email, isRegistration, displayName) },
         onResendCode = { viewModel.resend(email) },
         onBack = onBack
     )
@@ -90,6 +92,7 @@ fun VerifyEmailCodeContent(
     isLoading: Boolean,
     errorMessage: String?,
     isRegistration: Boolean = false,
+    isRegistrationVerified: Boolean = false,
     onCodeChange: (String) -> Unit,
     onVerify: () -> Unit,
     onResendCode: () -> Unit,
@@ -107,7 +110,6 @@ fun VerifyEmailCodeContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 60.dp)
     ) {
         CustomTextButton(
             buttonVariant = ButtonVariant.MEDIUM,
@@ -151,7 +153,7 @@ fun VerifyEmailCodeContent(
                 modifier = Modifier
                     .size(1.dp)
                     .focusRequester(focusRequester),
-                enabled = !isLoading,
+                enabled = !isLoading && !isRegistrationVerified,
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
@@ -160,7 +162,9 @@ fun VerifyEmailCodeContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(enabled = !isLoading) { focusRequester.requestFocus() },
+                    .clickable(enabled = !isLoading && !isRegistrationVerified) {
+                        focusRequester.requestFocus()
+                    },
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 repeat(6) { index ->
@@ -221,7 +225,10 @@ fun VerifyEmailCodeContent(
                 }
             }
             AuthBottomButtons(
-                mainButtonText = stringResource(Res.string.verify_code_button_text),
+                mainButtonText = stringResource(
+                    if (isRegistration && isRegistrationVerified) Res.string.save_name_button_text
+                    else Res.string.verify_code_button_text
+                ),
                 onMainButtonClick = onVerify,
                 isLoading = isLoading,
                 helperText = stringResource(Res.string.no_code_received_helper_text),

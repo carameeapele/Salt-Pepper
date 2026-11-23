@@ -16,5 +16,5 @@ sealed class AuthDestinations {
     data class VerifyEmailCode(val email: String) : AuthDestinations()
 
     @Serializable
-    data class VerifyRegistrationCode(val email: String) : AuthDestinations()
+    data class VerifyRegistrationCode(val email: String, val name: String) : AuthDestinations()
 }

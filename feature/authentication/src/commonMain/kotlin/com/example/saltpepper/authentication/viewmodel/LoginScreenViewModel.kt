@@ -2,12 +2,12 @@ package com.example.saltpepper.authentication.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.saltpepper.data.authentication.repository.AuthRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.example.saltpepper.data.repository.AuthRepository
-import kotlinx.coroutines.CancellationException
 
 data class LoginScreenUiState(
     val email: String = "",

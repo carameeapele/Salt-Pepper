@@ -1,16 +1,16 @@
 package com.example.saltpepper.authentication.screen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,6 +39,8 @@ import saltpepper.core.ui.generated.resources.confirm_password_label
 import saltpepper.core.ui.generated.resources.email_label
 import saltpepper.core.ui.generated.resources.email_placeholder
 import saltpepper.core.ui.generated.resources.error_dialog_title
+import saltpepper.core.ui.generated.resources.name_label
+import saltpepper.core.ui.generated.resources.name_placeholder
 import saltpepper.core.ui.generated.resources.ok
 import saltpepper.core.ui.generated.resources.password_label
 import saltpepper.core.ui.generated.resources.password_placeholder
@@ -52,14 +54,15 @@ fun RegisterScreen(
     viewModel: RegisterScreenViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onRegisterSuccess: (String) -> Unit
+    onRegistrationStarted: (String, String) -> Unit
 ) {
     val uiModel by viewModel.uiModel.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                is RegisterScreenEvent.RegisterSucceeded -> onRegisterSuccess(event.email)
+                is RegisterScreenEvent.RegistrationStarted ->
+                    onRegistrationStarted(event.email, event.name)
             }
         }
     }
@@ -106,11 +109,10 @@ fun RegisterScreenContent(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 40.dp)
     ) {
         Column(
-            modifier = modifier
-                .fillMaxSize()
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             CustomTextButton(
                 buttonVariant = ButtonVariant.MEDIUM,
@@ -119,61 +121,20 @@ fun RegisterScreenContent(
                 leftIcon = Icons.AutoMirrored.Filled.ArrowBack
             )
 
-            Spacer(modifier = modifier.height(28.dp))
-
             AuthHeadline(
                 title = stringResource(Res.string.register_title),
                 subtitle = stringResource(Res.string.register_subtitle)
             )
 
-            Spacer(modifier = modifier.height(52.dp))
-
-            CustomOutlinedTextField(
-                value = uiModel.email,
-                onValueChange = onEmailChange,
-                label = stringResource(Res.string.email_label),
-                placeholder = stringResource(Res.string.email_placeholder),
-                leadingIcon = Icons.Outlined.Email,
-                keyboardType = KeyboardType.Email,
-                helperText = uiModel.emailErrorMessage,
-                isError = uiModel.emailErrorMessage != null,
-                enabled = !isLoading
+            RegisterForm(
+                uiModel = uiModel,
+                onNameChange = onNameChange,
+                onEmailChange = onEmailChange,
+                onPasswordChange = onPasswordChange,
+                onConfirmPasswordChange = onConfirmPasswordChange,
+                isLoading = isLoading
             )
 
-            Spacer(modifier = modifier.height(16.dp))
-
-            CustomOutlinedTextField(
-                value = uiModel.password,
-                onValueChange = onPasswordChange,
-                label = stringResource(Res.string.password_label),
-                placeholder = stringResource(Res.string.password_placeholder),
-                leadingIcon = Icons.Outlined.Lock,
-                visibilityToggle = true,
-                keyboardType = KeyboardType.Password,
-                helperText = uiModel.passwordErrorMessage,
-                isError = uiModel.passwordErrorMessage != null,
-                enabled = !isLoading
-
-            )
-
-            Spacer(modifier = modifier.height(16.dp))
-
-            CustomOutlinedTextField(
-                value = uiModel.confirmPassword,
-                onValueChange = onConfirmPasswordChange,
-                label = stringResource(Res.string.confirm_password_label),
-                placeholder = stringResource(Res.string.password_placeholder),
-                leadingIcon = Icons.Outlined.Lock,
-                visibilityToggle = true,
-                keyboardType = KeyboardType.Password,
-                helperText = uiModel.confirmPasswordErrorMessage,
-                isError = uiModel.confirmPasswordErrorMessage != null,
-                enabled = !isLoading
-            )
-        }
-        Column(
-            modifier = modifier.align(Alignment.BottomCenter)
-        ) {
             AuthBottomButtons(
                 mainButtonText = stringResource(Res.string.register_button_text),
                 onMainButtonClick = onRegisterClick,
@@ -186,9 +147,75 @@ fun RegisterScreenContent(
     }
 }
 
+@Composable
+private fun RegisterForm(
+    uiModel: RegisterScreenUiModel = RegisterScreenUiModel(),
+    onNameChange: (String) -> Unit = {},
+    onEmailChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
+    onConfirmPasswordChange: (String) -> Unit = {},
+    isLoading: Boolean
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        CustomOutlinedTextField(
+            value = uiModel.name,
+            onValueChange = onNameChange,
+            label = stringResource(Res.string.name_label),
+            placeholder = stringResource(Res.string.name_placeholder),
+            leadingIcon = Icons.Outlined.Person,
+            helperText = uiModel.nameErrorMessage,
+            isError = uiModel.nameErrorMessage != null,
+            enabled = !isLoading
+        )
+
+        CustomOutlinedTextField(
+            value = uiModel.email,
+            onValueChange = onEmailChange,
+            label = stringResource(Res.string.email_label),
+            placeholder = stringResource(Res.string.email_placeholder),
+            leadingIcon = Icons.Outlined.Email,
+            keyboardType = KeyboardType.Email,
+            helperText = uiModel.emailErrorMessage,
+            isError = uiModel.emailErrorMessage != null,
+            enabled = !isLoading
+        )
+
+        CustomOutlinedTextField(
+            value = uiModel.password,
+            onValueChange = onPasswordChange,
+            label = stringResource(Res.string.password_label),
+            placeholder = stringResource(Res.string.password_placeholder),
+            leadingIcon = Icons.Outlined.Lock,
+            visibilityToggle = true,
+            keyboardType = KeyboardType.Password,
+            helperText = uiModel.passwordErrorMessage,
+            isError = uiModel.passwordErrorMessage != null,
+            enabled = !isLoading
+
+        )
+
+        CustomOutlinedTextField(
+            value = uiModel.confirmPassword,
+            onValueChange = onConfirmPasswordChange,
+            label = stringResource(Res.string.confirm_password_label),
+            placeholder = stringResource(Res.string.password_placeholder),
+            leadingIcon = Icons.Outlined.Lock,
+            visibilityToggle = true,
+            keyboardType = KeyboardType.Password,
+            helperText = uiModel.confirmPasswordErrorMessage,
+            isError = uiModel.confirmPasswordErrorMessage != null,
+            enabled = !isLoading
+        )
+    }
+}
+
 @Preview
 @Composable
-fun RegisterScreenPreview() {
+private fun RegisterScreenPreview() {
     SaltPepperTheme {
         RegisterScreenContent()
     }

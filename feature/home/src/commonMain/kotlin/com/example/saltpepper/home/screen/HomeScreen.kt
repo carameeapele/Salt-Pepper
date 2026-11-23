@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,21 +20,23 @@ import saltpepper.core.ui.generated.resources.plan_meals_action
 
 @Composable
 fun HomeScreen(
-    onBrowseRecipes: () -> Unit,
+    onNavigateToBrowseRecipes: () -> Unit,
     onPlanMeals: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 32.dp)
     ) {
-        HomeContent(onBrowseRecipes = onBrowseRecipes, onPlanMeals = onPlanMeals)
+        HomeContent(
+            onNavigateToBrowseRecipes = onNavigateToBrowseRecipes,
+            onPlanMeals = onPlanMeals
+        )
     }
 }
 
 @Composable
 private fun HomeContent(
-    onBrowseRecipes: () -> Unit,
+    onNavigateToBrowseRecipes: () -> Unit,
     onPlanMeals: () -> Unit
 ) {
     Text(
@@ -49,11 +50,16 @@ private fun HomeContent(
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
     Spacer(Modifier.height(36.dp))
-    Button(onClick = onBrowseRecipes, modifier = Modifier.fillMaxWidth()) {
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onNavigateToBrowseRecipes) {
         Text(stringResource(Res.string.browse_recipes_action))
     }
     Spacer(Modifier.height(12.dp))
-    Button(onClick = onPlanMeals, modifier = Modifier.fillMaxWidth()) {
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onPlanMeals
+    ) {
         Text(stringResource(Res.string.plan_meals_action))
     }
 }

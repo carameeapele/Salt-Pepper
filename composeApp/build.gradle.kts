@@ -53,13 +53,15 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
 
-            implementation(libs.ktor.client.core)
-
             // Core
             implementation(projects.core.ui)
+            implementation(projects.core.network)
+            implementation(projects.core.session)
 
             // Data
             implementation(projects.data.authentication)
+            implementation(projects.data.profile)
+            implementation(projects.data.recipe)
 
             // Feature
             implementation(projects.feature.shared)
@@ -72,14 +74,16 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.ktor.client.core)
+            implementation("io.ktor:ktor-client-mock:${libs.versions.ktorClient.get()}")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${libs.versions.kotlinxCoroutines.get()}")
+        }
+        androidUnitTest.dependencies {
+            implementation(libs.kotlin.testJunit)
         }
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.android)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
         }
     }
 }
@@ -114,4 +118,3 @@ android {
 dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
-

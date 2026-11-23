@@ -19,11 +19,13 @@ private val LightColorScheme = lightColorScheme(
 
     background = White,
     onBackground = Grey900,
+
     surface = SurfaceLight,
     onSurface = Grey900,
     surfaceVariant = Grey50,
     onSurfaceVariant = Grey700,
     surfaceTint = Grey100,
+    surfaceContainer = Primary200,
 
     error = Red500,
     onError = SurfaceLight,
@@ -52,6 +54,7 @@ private val DarkColorScheme = darkColorScheme(
     surfaceVariant = Grey900,
     onSurfaceVariant = Grey300,
     surfaceTint = Grey100,
+    surfaceContainer = Primary800,
 
     error = Red300,
     onError = Red900,
